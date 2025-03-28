@@ -12,7 +12,7 @@
     "lint": "eslint . --ext .ts --max-warnings=0",
     "lint:fix": "eslint . --ext .ts --fix",
     "pre-commit": "lint-staged",
-    "test": "jest",
+    "test": "rm -rf coverage; jest --coverage --detectOpenHandles",
     "test:watch": "jest --watchAll"
   },
   "lint-staged": {
