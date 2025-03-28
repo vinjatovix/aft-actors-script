@@ -31,7 +31,7 @@ export const Home = () => {
 
   return (
     <div className="actors-script-app">
-      <img src="/favicon.png" alt="Actors Script Logo" />
+      <img src="/favicon.png" alt="Logo feito cun libro coma nun comic" />
       <h1>Actors Script</h1>
       <a href={AFT_IG} target="_blank" rel="noreferrer">
         Powered by AFT & Studio K

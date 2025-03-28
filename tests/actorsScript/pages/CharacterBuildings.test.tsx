@@ -13,7 +13,7 @@ describe("CharacterBuildings Page", () => {
 
   it("renders the icon image", () => {
     render(<CharacterBuildings />);
-    const icon = screen.getByAltText("Icono");
+    const icon = screen.getByAltText("Icono dun obreiro e un libro");
     expect(icon).toBeInTheDocument();
     expect(icon).toHaveAttribute("src", "/src/assets/character-building.svg");
   });

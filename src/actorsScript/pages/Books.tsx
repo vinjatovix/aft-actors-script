@@ -3,7 +3,7 @@ import { books } from "../../../tests/data";
 export const Books = () => {
   return (
     <div>
-      <img src="/src/assets/script.svg" alt="Icono" width="50" height="50" />
+      <img src="/src/assets/script.svg" alt="Icono dun pergamino" width="50" height="50" />
       <h1>Books</h1>
       {books.map((book) => (
         <div key={book.id}>

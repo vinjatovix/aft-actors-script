@@ -13,7 +13,7 @@ describe("Characters Page", () => {
 
   it("renders the icon image", () => {
     render(<Characters />);
-    const icon = screen.getByAltText("Icono");
+    const icon = screen.getByAltText("Icono dun persoaxe con máscara de hockey");
     expect(icon).toBeInTheDocument();
     expect(icon).toHaveAttribute("src", "/src/assets/character.svg");
   });

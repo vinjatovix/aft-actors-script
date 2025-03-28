@@ -13,7 +13,7 @@ describe("Books Page", () => {
 
   it("renders the icon image", () => {
     render(<Books />);
-    const icon = screen.getByAltText("Icono");
+    const icon = screen.getByAltText("Icono dun pergamino");
     expect(icon).toBeInTheDocument();
     expect(icon).toHaveAttribute("src", "/src/assets/script.svg");
   });
