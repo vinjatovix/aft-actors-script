@@ -17,6 +17,7 @@ const config: Config.InitialOptions = {
   setupFilesAfterEnv: ["./jest.setup.js"],
   moduleNameMapper: {
     "\\.css$": "identity-obj-proxy",
+    '\\.svg$': '<rootDir>/tests/__mocks__/fileMock.js',  
   },
 };
 
