@@ -1,0 +1,49 @@
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.loader {
+  border: 8px solid #09d724;
+  border-top: 8px solid #3db697;
+  border-top-style: double;
+  border-bottom-style: double;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  box-shadow:
+    0 0 10px rgba(0, 0, 0, 0.322),
+    inset 0 0 10px rgba(0, 0, 0, 0.591);
+  animation:
+    spin 1s linear infinite,
+    color-change 15s linear forwards;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  33% {
+    transform: rotate(60deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes color-change {
+  0% {
+    border-color: #09d724; /* Verde */
+  }
+  25% {
+    border-color: #ffff00; /* Amarillo */
+  }
+  50% {
+    border-color: #ffa500; /* Naranja */
+  }
+  100% {
+    border-color: #ff0000; /* Rojo */
+  }
+}
