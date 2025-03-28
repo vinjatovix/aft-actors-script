@@ -8,6 +8,7 @@ import playsIcon from "../assets/script.svg";
 import charactersIcon from "../assets/character.svg";
 import scenesIcon from "../assets/scene.svg";
 import characterBuildingsIcon from "../assets/character-building.svg";
+import settingsIcon from "../assets/settings.svg";
 import loginIcon from "../assets/login.svg";
 import logoutIcon from "../assets/logout.svg";
 
@@ -57,16 +58,24 @@ export const NavBar = () => {
 
   return (
     <nav className="nav-bar">
-      <div className="nav-links">
+      <div className="nav-links-left">
         <NavItem to="/home" icon={homeIcon} alt="Home" label="Fogar" />
         {token && navItems.map((item) => <NavItem key={item.to} {...item} />)}
       </div>
 
       {token ? (
-        <button className="nav-item" onClick={() => dispatch(logout())}>
-          <img src={logoutIcon} className="icon" alt="Cerrar sesión" />
-          <span>{user?.username} Sair</span>
-        </button>
+        <div className="nav-links-right">
+          <NavItem
+            to="/settings"
+            icon={settingsIcon}
+            alt="Configuracion"
+            label="Axustes"
+          />
+          <button className="nav-item" onClick={() => dispatch(logout())}>
+            <img src={logoutIcon} className="icon" alt="Cerrar sesión" />
+            <span>{user?.username} Sair</span>
+          </button>
+        </div>
       ) : (
         <NavItem
           to="/login"
