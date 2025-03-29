@@ -15,6 +15,6 @@ describe("Authors Page", () => {
     render(<Authors />);
     const icon = screen.getByAltText("Icono dun autor");
     expect(icon).toBeInTheDocument();
-    expect(icon).toHaveAttribute("src", "/src/assets/author.svg");
+    expect(icon).toHaveAttribute("src", "/assets/author.svg");
   });
 });

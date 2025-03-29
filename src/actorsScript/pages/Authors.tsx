@@ -4,7 +4,7 @@ export const Authors = () => {
   return (
     <div>
       <img
-        src="/src/assets/author.svg"
+        src="/assets/author.svg"
         alt="Icono dun autor"
         width="50"
         height="50"

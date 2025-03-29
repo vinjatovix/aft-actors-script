@@ -15,6 +15,6 @@ describe("Settings Page", () => {
     render(<Settings />);
     const icon = screen.getByAltText("Icono dunha roda de engranaxe");
     expect(icon).toBeInTheDocument();
-    expect(icon).toHaveAttribute("src", "/src/assets/settings.svg");
+    expect(icon).toHaveAttribute("src", "/assets/settings.svg");
   });
 });

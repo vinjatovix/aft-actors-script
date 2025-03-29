@@ -3,7 +3,7 @@ import { characterBuildings } from "../../../tests/data";
 export const CharacterBuildings = () => {
   return (
     <div>
-      <img src="/src/assets/character-building.svg" alt="Icono dun obreiro e un libro" width="50" height="50" />
+      <img src="/assets/character-building.svg" alt="Icono dun obreiro e un libro" width="50" height="50" />
       <h1>Character Buildings</h1>
       {characterBuildings.map((characterBuilding) => (
         <div key={characterBuilding.id}>

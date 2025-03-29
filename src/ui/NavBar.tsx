@@ -2,15 +2,15 @@ import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/slices/authSlice";
 import { RootState } from "../redux/store";
-import homeIcon from "../assets/home.svg";
-import authorsIcon from "../assets/author.svg";
-import playsIcon from "../assets/script.svg";
-import charactersIcon from "../assets/character.svg";
-import scenesIcon from "../assets/scene.svg";
-import characterBuildingsIcon from "../assets/character-building.svg";
-import settingsIcon from "../assets/settings.svg";
-import loginIcon from "../assets/login.svg";
-import logoutIcon from "../assets/logout.svg";
+import homeIcon from "../../public/assets/home.svg";
+import authorsIcon from "../../public/assets/author.svg";
+import playsIcon from "../../public/assets/script.svg";
+import charactersIcon from "../../public/assets/character.svg";
+import scenesIcon from "../../public/assets/scene.svg";
+import characterBuildingsIcon from "../../public/assets/character-building.svg";
+import settingsIcon from "../../public/assets/settings.svg";
+import loginIcon from "../../public/assets/login.svg";
+import logoutIcon from "../../public/assets/logout.svg";
 
 const navItems = [
   { to: "/authors", icon: authorsIcon, alt: "Autores", label: "DramaturgX" },

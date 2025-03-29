@@ -15,6 +15,6 @@ describe("Books Page", () => {
     render(<Books />);
     const icon = screen.getByAltText("Icono dun pergamino");
     expect(icon).toBeInTheDocument();
-    expect(icon).toHaveAttribute("src", "/src/assets/script.svg");
+    expect(icon).toHaveAttribute("src", "/assets/script.svg");
   });
 });

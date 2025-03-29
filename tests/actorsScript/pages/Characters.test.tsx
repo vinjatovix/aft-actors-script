@@ -15,6 +15,6 @@ describe("Characters Page", () => {
     render(<Characters />);
     const icon = screen.getByAltText("Icono dun persoaxe con máscara de hockey");
     expect(icon).toBeInTheDocument();
-    expect(icon).toHaveAttribute("src", "/src/assets/character.svg");
+    expect(icon).toHaveAttribute("src", "/assets/character.svg");
   });
 });

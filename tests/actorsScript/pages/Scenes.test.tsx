@@ -15,6 +15,6 @@ describe("Scenes Page", () => {
     render(<Scenes />);
     const icon = screen.getByAltText("Icono dun cubo simulando unha caixa escénica");
     expect(icon).toBeInTheDocument();
-    expect(icon).toHaveAttribute("src", "/src/assets/scene.svg");
+    expect(icon).toHaveAttribute("src", "/assets/scene.svg");
   });
 });

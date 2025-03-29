@@ -15,6 +15,6 @@ describe("CharacterBuildings Page", () => {
     render(<CharacterBuildings />);
     const icon = screen.getByAltText("Icono dun obreiro e un libro");
     expect(icon).toBeInTheDocument();
-    expect(icon).toHaveAttribute("src", "/src/assets/character-building.svg");
+    expect(icon).toHaveAttribute("src", "/assets/character-building.svg");
   });
 });
