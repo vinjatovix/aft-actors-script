@@ -42,26 +42,33 @@ const handleFetch = async (url: string, options: RequestInit) => {
     const errorData = await response.json();
     throw new Error(errorData.message || "Error de autenticación");
   }
-  return response.json();
-};
 
-const saveToken = (token: string) => localStorage.setItem("token", token);
-const clearToken = () => localStorage.removeItem("token");
+  const contentType = response.headers?.get("Content-Type") ?? "";
+  const contentLength = response.headers?.get("Content-Length");
+
+  if (contentType.includes("application/json") && contentLength !== "0") {
+    return await response.json();
+  }
+
+  return null;
+};
 
 export const loginUser = createAsyncThunk(
   "auth/login",
   async (
-    credentials: { email: string; password: string },
+    { email, password }: { email: string; password: string },
     { rejectWithValue },
   ) => {
     try {
       const data = await handleFetch(`${API_URL}/api/v1/Auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(credentials),
+        body: JSON.stringify({ email, password }),
       });
-      saveToken(data.token);
-      return { token: data.token, user: getUserFromToken(data.token) };
+
+      localStorage.setItem("token", data.token);
+
+      return { token: data.token, user: data.user };
     } catch (error) {
       return rejectWithValue(
         error instanceof Error ? error.message : "Ocurrió un error desconocido",
@@ -80,7 +87,7 @@ export const registerUser = createAsyncThunk(
       password: string;
       repeatPassword: string;
     },
-    { rejectWithValue },
+    { dispatch, rejectWithValue },
   ) => {
     try {
       await handleFetch(`${API_URL}/api/v1/Auth/register`, {
@@ -88,10 +95,12 @@ export const registerUser = createAsyncThunk(
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(credentials),
       });
-      return loginUser({
-        email: credentials.email,
-        password: credentials.password,
-      });
+
+      const loginResult = await dispatch(
+        loginUser({ email: credentials.email, password: credentials.password }),
+      ).unwrap();
+
+      return loginResult;
     } catch (error) {
       return rejectWithValue(
         error instanceof Error ? error.message : "Ocurrió un error desconocido",
@@ -114,10 +123,10 @@ export const refreshAuthToken = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       });
-      saveToken(data.token);
+      localStorage.setItem("token", data.token);
       return { token: data.token, user: getUserFromToken(data.token) };
     } catch {
-      clearToken();
+      localStorage.removeItem("token");
       return rejectWithValue("Error al refrescar el token");
     }
   },
@@ -132,7 +141,6 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     logout: (state) => {
-      clearToken();
       state.token = null;
       state.user = defaultUser;
     },

@@ -3,6 +3,7 @@ import authReducer, {
   refreshAuthToken,
   logout,
   clearError,
+  registerUser,
 } from "../../../src/redux/slices/authSlice";
 import { configureStore } from "@reduxjs/toolkit";
 
@@ -22,21 +23,60 @@ describe("authSlice", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     localStorage.clear();
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        ok: true,
-        json: () =>
-          Promise.resolve({
-            token: "test-token",
-            user: {
-              username: "test",
-              id: "1",
-              roles: ["user"],
-              email: "test@test.com",
-            },
+
+    global.fetch = jest.fn((url) => {
+      let responseBody = null;
+
+      if (url.includes("/api/v1/Auth/register")) {
+        responseBody = {};
+      }
+
+      if (url.includes("/api/v1/Auth/login")) {
+        responseBody = {
+          token: "test-token",
+          user: {
+            username: "test",
+            id: "1",
+            roles: ["user"],
+            email: "test@test.com",
+          },
+        };
+      }
+
+      if (url.includes("/api/v1/Auth/refresh")) {
+        responseBody = {
+          token: "test-token",
+          user: {
+            username: "test",
+            id: "1",
+            roles: ["user"],
+            email: "test@test.com",
+          },
+        };
+      }
+
+      if (responseBody !== null) {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve(responseBody),
+          headers: new Headers({
+            "Content-Type": "application/json",
+            "Content-Length": JSON.stringify(responseBody).length.toString(),
           }),
-      }),
-    ) as jest.Mock;
+        });
+      }
+
+      return Promise.resolve({
+        ok: false,
+        json: () => Promise.resolve({ message: "Error desconocido" }),
+        headers: new Headers({
+          "Content-Type": "application/json",
+          "Content-Length": JSON.stringify({
+            message: "Error desconocido",
+          }).length.toString(),
+        }),
+      });
+    }) as jest.Mock;
   });
 
   it("should return the initial state", () => {
@@ -124,5 +164,37 @@ describe("authSlice", () => {
     const state = store.getState();
     expect(state.token).toBeNull();
     expect(state.error).toBe("Login failed");
+  });
+
+  it("should handle registerUser async thunk", async () => {
+    const store = configureStore({ reducer: authReducer });
+
+    await store.dispatch(
+      registerUser({
+        id: "1",
+        username: "test",
+        email: "test@test.com",
+        password: "password",
+        repeatPassword: "password",
+      }),
+    );
+
+    const state = store.getState();
+    expect(state.token).toBe("test-token");
+    expect(state.user.email).toBe("test@test.com");
+    expect(localStorage.getItem("token")).toBe("test-token");
+
+    expect(global.fetch).toHaveBeenCalledWith(
+      expect.stringMatching(/\/api\/v1\/Auth\/register/),
+      expect.objectContaining({
+        method: "POST",
+      }),
+    );
+    expect(global.fetch).toHaveBeenCalledWith(
+      expect.stringMatching(/\/api\/v1\/Auth\/login/),
+      expect.objectContaining({
+        method: "POST",
+      }),
+    );
   });
 });

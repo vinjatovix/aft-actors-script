@@ -71,7 +71,10 @@ export const NavBar = () => {
             alt="Configuracion"
             label="Axustes"
           />
-          <button className="nav-item" onClick={() => dispatch(logout())}>
+          <button className="nav-item" onClick={() => {
+            dispatch(logout())
+            localStorage.removeItem("token");
+          }}>
             <img src={logoutIcon} className="icon" alt="Cerrar sesión" />
             <span>{user?.username} Sair</span>
           </button>
