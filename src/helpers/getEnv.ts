@@ -5,7 +5,7 @@ export const getEnv = (): Record<string, string> => {
 
   return {
     API_URL: env.VITE_API_URL,
-    ENVIRONMENT: env.MODE,
+    ENVIRONMENT: env.VITE_MODE,
     APP_VERSION: version,
   };
 };
