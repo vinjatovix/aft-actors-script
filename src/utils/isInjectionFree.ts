@@ -1,6 +1,6 @@
 const validateXss = (input: string) => {
   const patterns = [
-    /<script.*?>.*?<\/script>/i,
+    /<script\b[^>]*>[\s\S]*?<\/script>/i,
     /javascript:/i,
     /on\w+=".*?"/i,
     /on\w+=.*/i,
@@ -23,7 +23,7 @@ const validateSql = (input: string) => {
     /\b(UNION( +ALL)?|TRUNCATE|REPLACE)\b/gi,
     /--/g,
     /;/g,
-    /\b(AND|OR)\b\s*['"]?\s*=\s*['"][^'"]*['"]/gi,
+    /\b(AND|OR)\b\s*=\s*['"][^'"]*['"]/gi,
     /#/g,
   ];
   return sqlPatterns.some((pattern) => pattern.test(input));
