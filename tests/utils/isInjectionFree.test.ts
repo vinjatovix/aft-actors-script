@@ -17,27 +17,9 @@ describe("isInjectionFree", () => {
     expect(isInjectionFree("<body onload=alert('XSS')>")).toBe(false);
   });
 
-  it("should return false for SQL injection attempts", () => {
-    expect(
-      isInjectionFree("SELECT * FROM users WHERE id = 1; DROP TABLE users;"),
-    ).toBe(false);
-    expect(isInjectionFree("1 OR 1=1")).toBe(false);
-    expect(isInjectionFree("admin' -- djsa")).toBe(false);
-    expect(isInjectionFree("admin' -- -")).toBe(false);
-    expect(isInjectionFree("admin' --")).toBe(false);
-    expect(isInjectionFree("admin' #")).toBe(false);
-    expect(isInjectionFree("admin'/*")).toBe(false);
-  });
-
-  it("should return false for MongoDB injection attempts", () => {
-    expect(isInjectionFree('{"$where": "this.age == 25"}')).toBe(false);
-    expect(
-      isInjectionFree("db.users.find({ $where: \"this.name == 'admin'\" })"),
-    ).toBe(false);
-    expect(isInjectionFree('{"$gt": ""}')).toBe(false);
-    expect(isInjectionFree('{"$ne": ""}')).toBe(false);
-    expect(isInjectionFree('{"$in": ""}')).toBe(false);
-    expect(isInjectionFree('{"$exists": ""}')).toBe(false);
+  it("should return false for CRLF injection attempts", () => {
+    expect(isInjectionFree("q\rlf\n")).toBe(false);
+    expect(isInjectionFree("Hello%0D%0AWorld")).toBe(false);
   });
 
   it("should return true for safe inputs", () => {

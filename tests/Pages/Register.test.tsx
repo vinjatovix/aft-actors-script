@@ -21,6 +21,26 @@ const renderWithProvider = (store: ReturnType<typeof mockStore>) => {
   );
 };
 
+const fillRegisterForm = (
+  username: string,
+  email: string,
+  password: string,
+  repeatPassword: string
+) => {
+  fireEvent.change(screen.getByPlaceholderText("Nome"), {
+    target: { value: username },
+  });
+  fireEvent.change(screen.getByPlaceholderText("Correo"), {
+    target: { value: email },
+  });
+  fireEvent.change(screen.getByPlaceholderText("Contrasinal"), {
+    target: { value: password },
+  });
+  fireEvent.change(screen.getByPlaceholderText("Confirma contrasinal"), {
+    target: { value: repeatPassword },
+  });
+}
+
 describe("Register Page", () => {
   let store: ReturnType<typeof mockStore>;
 
@@ -57,11 +77,7 @@ describe("Register Page", () => {
   });
 
   it("should display validation errors when form is submitted with invalid data", async () => {
-    const errorMessages = [
-      "O nome é obrigatorio",
-      "O correo é obrigatorio",
-      "O contrasinal é obrigatorio",
-    ];
+    const errorMessages = ["É obrigatorio."];
 
     renderWithProvider(store);
     await act(async () => {
@@ -69,25 +85,19 @@ describe("Register Page", () => {
     });
 
     errorMessages.forEach((message) => {
-      expect(screen.getByText(message)).toBeInTheDocument();
+      expect(screen.getAllByText(message)).toHaveLength(3);
     });
   });
 
   it("should dispatch register action when form is submitted with valid data", async () => {
     const dispatchSpy = jest.spyOn(store, "dispatch");
     renderWithProvider(store);
-    fireEvent.change(screen.getByPlaceholderText("Nome"), {
-      target: { value: "Test User" },
-    });
-    fireEvent.change(screen.getByPlaceholderText("Correo"), {
-      target: { value: "test@example.com" },
-    });
-    fireEvent.change(screen.getByPlaceholderText("Contrasinal"), {
-      target: { value: "Password@123" },
-    });
-    fireEvent.change(screen.getByPlaceholderText("Confirma contrasinal"), {
-      target: { value: "Password@123" },
-    });
+    fillRegisterForm(
+      "TestUser",
+      "test@example.com",
+      "Password.123",
+      "Password.123"
+    );
 
     await act(async () => {
       fireEvent.click(screen.getByRole("button"));
@@ -106,24 +116,24 @@ describe("Register Page", () => {
       fireEvent.click(screen.getByRole("button"));
     });
 
-    expect(screen.getByText("O correo non é válido")).toBeInTheDocument();
+    expect(screen.getByText("O correo non é válido.")).toBeInTheDocument();
   });
 
   it("should display error message when passwords do not match", async () => {
     renderWithProvider(store);
-    fireEvent.change(screen.getByPlaceholderText("Contrasinal"), {
-      target: { value: "Password@123" },
-    });
-    fireEvent.change(screen.getByPlaceholderText("Confirma contrasinal"), {
-      target: { value: "Password@456" },
-    });
+    fillRegisterForm(
+      "Test User",
+      "test@da.com",
+      "Password@123",
+      "Password@456"
+    );
 
     await act(async () => {
       fireEvent.click(screen.getByRole("button"));
     });
 
     expect(
-      screen.getByText("Os contrasinais non coinciden")
+      screen.getByText("Os contrasinais non coinciden.")
     ).toBeInTheDocument();
   });
 
@@ -139,25 +149,57 @@ describe("Register Page", () => {
 
     expect(
       screen.getByText(
-        "O contrasinal debe ter polo menos 8 caracteres, unha maiúscula, unha minúscula, un número e un carácter especial (@$!%*?&)"
-      )
+        "O contrasinal é feble.")
     ).toBeInTheDocument();
   });
 
+  it("should display error message when username is invalid", async () => {
+    renderWithProvider(store);
+    fillRegisterForm(
+      "Test User",
+      "dsa@dsa.com",
+      "Password.123",
+      "Password.123"
+    );
+
+    await act(async () => {
+      fireEvent.click(screen.getByRole("button"));
+    });
+
+    expect(
+      screen.getByText("O nome de usuario non é válido.")
+    ).toBeInTheDocument();
+  });
+
+  //Injection test
+  test.each(["<script>alert('XSS')</script>", "<img src=x onerror=alert(1)>", "%0D%0A"])(
+    "should display error message when input contains injection characters: %p", async (inj) => {
+      renderWithProvider(store);
+      fillRegisterForm(
+        "testUser",
+        "das@das.com",
+        inj,
+        "Password.123"
+      );
+
+      await act(async () => {
+        fireEvent.click(screen.getByRole("button"));
+      });
+
+      expect(
+        screen.getByText("Amodo oh! -9001")
+      ).toBeInTheDocument();
+    });
+
+
   it("should render the backend error message", async () => {
     renderWithProvider(store);
-    fireEvent.change(screen.getByPlaceholderText("Nome"), {
-      target: { value: "Test User" },
-    });
-    fireEvent.change(screen.getByPlaceholderText("Correo"), {
-      target: { value: "a@a.com" },
-    });
-    fireEvent.change(screen.getByPlaceholderText("Contrasinal"), {
-      target: { value: "123456Pol!" },
-    });
-    fireEvent.change(screen.getByPlaceholderText("Confirma contrasinal"), {
-      target: { value: "123456Pol!" },
-    });
+    fillRegisterForm(
+      "TestUser",
+      "te@dsa.com",
+      "Password.123",
+      "Password.123"
+    );
 
     await act(async () => {
       fireEvent.click(screen.getByRole("button"));
