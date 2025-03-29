@@ -78,6 +78,7 @@ export const registerUser = createAsyncThunk(
       username: string;
       email: string;
       password: string;
+      repeatPassword: string;
     },
     { rejectWithValue },
   ) => {
