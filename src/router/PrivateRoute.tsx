@@ -8,8 +8,6 @@ export const PrivateRoute = ({ children }: { children: ReactNode }) => {
   const { pathname, search } = useLocation();
 
   localStorage.setItem("lastPath", pathname + search);
-  
-  
 
   return token ? children : <Navigate to="/login" />;
 };

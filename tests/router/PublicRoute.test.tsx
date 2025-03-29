@@ -22,7 +22,9 @@ describe("PublicRoute", () => {
 
     const { getByText } = render(
       <Provider store={store}>
-        <MemoryRouter>
+        <MemoryRouter
+          future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+        >
           <PublicRoute>
             <div>Public Content</div>
           </PublicRoute>
@@ -42,7 +44,9 @@ describe("PublicRoute", () => {
 
     const { container } = render(
       <Provider store={store}>
-        <MemoryRouter>
+        <MemoryRouter
+          future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+        >
           <PublicRoute>
             <div>Public Content</div>
           </PublicRoute>

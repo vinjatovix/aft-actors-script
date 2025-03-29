@@ -5,6 +5,7 @@ import { ActorsScriptRoutes } from "../actorsScript/routes/ActorsScriptRoutes";
 import { PrivateRoute } from "./PrivateRoute";
 import { Home } from "../actorsScript/pages/Home";
 import { PublicRoute } from "./PublicRoute";
+import { Register } from "../auth/pages/Register";
 
 export const AppRouter = () => {
   return (
@@ -18,6 +19,15 @@ export const AppRouter = () => {
           element={
             <PublicRoute>
               <Login />
+            </PublicRoute>
+          }
+        />
+
+        <Route
+          path="register"
+          element={
+            <PublicRoute>
+              <Register />
             </PublicRoute>
           }
         />

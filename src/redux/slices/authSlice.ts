@@ -36,13 +36,17 @@ const initialState: AuthState = {
   error: null,
 };
 
-const handleFetchError = async (response: Response) => {
+const handleFetch = async (url: string, options: RequestInit) => {
+  const response = await fetch(url, options);
   if (!response.ok) {
     const errorData = await response.json();
     throw new Error(errorData.message || "Error de autenticación");
   }
   return response.json();
 };
+
+const saveToken = (token: string) => localStorage.setItem("token", token);
+const clearToken = () => localStorage.removeItem("token");
 
 export const loginUser = createAsyncThunk(
   "auth/login",
@@ -51,16 +55,42 @@ export const loginUser = createAsyncThunk(
     { rejectWithValue },
   ) => {
     try {
-      const response = await fetch(`${API_URL}/api/v1/Auth/login`, {
+      const data = await handleFetch(`${API_URL}/api/v1/Auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(credentials),
       });
-
-      const data = await handleFetchError(response);
-      localStorage.setItem("token", data.token);
-
+      saveToken(data.token);
       return { token: data.token, user: getUserFromToken(data.token) };
+    } catch (error) {
+      return rejectWithValue(
+        error instanceof Error ? error.message : "Ocurrió un error desconocido",
+      );
+    }
+  },
+);
+
+export const registerUser = createAsyncThunk(
+  "auth/register",
+  async (
+    credentials: {
+      id: string;
+      username: string;
+      email: string;
+      password: string;
+    },
+    { rejectWithValue },
+  ) => {
+    try {
+      await handleFetch(`${API_URL}/api/v1/Auth/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(credentials),
+      });
+      return loginUser({
+        email: credentials.email,
+        password: credentials.password,
+      });
     } catch (error) {
       return rejectWithValue(
         error instanceof Error ? error.message : "Ocurrió un error desconocido",
@@ -73,33 +103,27 @@ export const refreshAuthToken = createAsyncThunk(
   "auth/refreshToken",
   async (_, { rejectWithValue }) => {
     const token = localStorage.getItem("token");
-
     if (!token) return rejectWithValue("No hay token");
 
     try {
-      const response = await fetch(`${API_URL}/api/v1/Auth/refresh`, {
+      const data = await handleFetch(`${API_URL}/api/v1/Auth/refresh`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       });
-
-      const data = await handleFetchError(response);
-      localStorage.setItem("token", data.token);
-
+      saveToken(data.token);
       return { token: data.token, user: getUserFromToken(data.token) };
     } catch {
-      localStorage.removeItem("token");
+      clearToken();
       return rejectWithValue("Error al refrescar el token");
     }
   },
 );
 
 export const autoClearError = () => (dispatch: Dispatch) => {
-  setTimeout(() => {
-    dispatch(clearError());
-  }, 4000);
+  setTimeout(() => dispatch(clearError()), 4000);
 };
 
 const authSlice = createSlice({
@@ -107,7 +131,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     logout: (state) => {
-      localStorage.removeItem("token");
+      clearToken();
       state.token = null;
       state.user = defaultUser;
     },
@@ -125,7 +149,6 @@ const authSlice = createSlice({
         state.loading = false;
         state.token = action.payload.token;
         state.user = action.payload.user || defaultUser;
-        state.error = null;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
@@ -145,6 +168,17 @@ const authSlice = createSlice({
         state.loading = false;
         state.token = null;
         state.user = defaultUser;
+        state.error = action.payload as string;
+      })
+      .addCase(registerUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(registerUser.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(registerUser.rejected, (state, action) => {
+        state.loading = false;
         state.error = action.payload as string;
       });
   },

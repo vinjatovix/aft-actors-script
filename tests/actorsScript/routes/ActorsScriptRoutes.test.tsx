@@ -30,7 +30,10 @@ jest.mock("../../../src/actorsScript/pages/CharacterBuildings", () => ({
 describe("ActorsScriptRoutes", () => {
   it("renders the Home page for the root path", () => {
     render(
-      <MemoryRouter initialEntries={["/"]}>
+      <MemoryRouter
+        initialEntries={["/"]}
+        future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+      >
         <ActorsScriptRoutes />
       </MemoryRouter>
     );
@@ -39,7 +42,10 @@ describe("ActorsScriptRoutes", () => {
 
   it("renders the Authors page for the /authors path", () => {
     render(
-      <MemoryRouter initialEntries={["/authors"]}>
+      <MemoryRouter
+        initialEntries={["/authors"]}
+        future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+      >
         <ActorsScriptRoutes />
       </MemoryRouter>
     );
@@ -48,7 +54,10 @@ describe("ActorsScriptRoutes", () => {
 
   it("renders the Books page for the /plays path", () => {
     render(
-      <MemoryRouter initialEntries={["/plays"]}>
+      <MemoryRouter
+        initialEntries={["/plays"]}
+        future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+      >
         <ActorsScriptRoutes />
       </MemoryRouter>
     );
@@ -57,7 +66,10 @@ describe("ActorsScriptRoutes", () => {
 
   it("renders the Characters page for the /characters path", () => {
     render(
-      <MemoryRouter initialEntries={["/characters"]}>
+      <MemoryRouter
+        initialEntries={["/characters"]}
+        future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+      >
         <ActorsScriptRoutes />
       </MemoryRouter>
     );
@@ -66,7 +78,10 @@ describe("ActorsScriptRoutes", () => {
 
   it("renders the Scenes page for the /scenes path", () => {
     render(
-      <MemoryRouter initialEntries={["/scenes"]}>
+      <MemoryRouter
+        initialEntries={["/scenes"]}
+        future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+      >
         <ActorsScriptRoutes />
       </MemoryRouter>
     );
@@ -75,7 +90,10 @@ describe("ActorsScriptRoutes", () => {
 
   it("renders the Character Buildings page for the /character-buildings path", () => {
     render(
-      <MemoryRouter initialEntries={["/character-buildings"]}>
+      <MemoryRouter
+        initialEntries={["/character-buildings"]}
+        future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+      >
         <ActorsScriptRoutes />
       </MemoryRouter>
     );
@@ -84,7 +102,10 @@ describe("ActorsScriptRoutes", () => {
 
   it("renders the Home page for an unknown path", () => {
     render(
-      <MemoryRouter initialEntries={["/unknown"]}>
+      <MemoryRouter
+        initialEntries={["/unknown"]}
+        future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+      >
         <ActorsScriptRoutes />
       </MemoryRouter>
     );

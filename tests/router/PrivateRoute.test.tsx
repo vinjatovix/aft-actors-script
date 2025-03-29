@@ -9,10 +9,12 @@ jest.mock("react-redux", () => ({
 }));
 
 jest.mock("react-router-dom", () => ({
-    ...jest.requireActual("react-router-dom"),
-    useLocation: jest.fn(() => ({ pathname: "/protected", search: "?query=123" })),
-  }));
-  
+  ...jest.requireActual("react-router-dom"),
+  useLocation: jest.fn(() => ({
+    pathname: "/protected",
+    search: "?query=123",
+  })),
+}));
 
 describe("PrivateRoute Component", () => {
   afterEach(() => {
@@ -26,7 +28,10 @@ describe("PrivateRoute Component", () => {
     });
 
     const { getByText } = render(
-      <MemoryRouter initialEntries={["/protected"]}>
+      <MemoryRouter
+        initialEntries={["/protected"]}
+        future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+      >
         <Routes>
           <Route
             path="/protected"
@@ -47,7 +52,10 @@ describe("PrivateRoute Component", () => {
     (useSelector as unknown as jest.Mock).mockReturnValue({ token: null });
 
     const { container } = render(
-      <MemoryRouter initialEntries={["/protected"]}>
+      <MemoryRouter
+        initialEntries={["/protected"]}
+        future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+      >
         <Routes>
           <Route
             path="/protected"
@@ -65,24 +73,29 @@ describe("PrivateRoute Component", () => {
     expect(container.textContent).toBe("Login Page");
   });
 
-it("saves the last path to localStorage", () => {
-    (useSelector as unknown as jest.Mock).mockReturnValue({ token: "valid-token" });
+  it("saves the last path to localStorage", () => {
+    (useSelector as unknown as jest.Mock).mockReturnValue({
+      token: "valid-token",
+    });
 
     render(
-        <MemoryRouter initialEntries={["/protected?query=123"]}>
-            <Routes>
-                <Route
-                    path="/protected"
-                    element={
-                        <PrivateRoute>
-                            <div>Protected Content</div>
-                        </PrivateRoute>
-                    }
-                />
-            </Routes>
-        </MemoryRouter>
+      <MemoryRouter
+        initialEntries={["/protected?query=123"]}
+        future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+      >
+        <Routes>
+          <Route
+            path="/protected"
+            element={
+              <PrivateRoute>
+                <div>Protected Content</div>
+              </PrivateRoute>
+            }
+          />
+        </Routes>
+      </MemoryRouter>
     );
 
     expect(localStorage.getItem("lastPath")).toBe("/protected?query=123");
-});
+  });
 });

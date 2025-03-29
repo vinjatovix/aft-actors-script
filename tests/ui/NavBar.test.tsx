@@ -19,7 +19,9 @@ describe("NavBar Component", () => {
 
     render(
       <Provider store={store}>
-        <BrowserRouter>
+        <BrowserRouter
+          future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+        >
           <NavBar />
         </BrowserRouter>
       </Provider>
@@ -33,7 +35,9 @@ describe("NavBar Component", () => {
 
     render(
       <Provider store={store}>
-        <BrowserRouter>
+        <BrowserRouter
+          future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+        >
           <NavBar />
         </BrowserRouter>
       </Provider>
@@ -49,7 +53,9 @@ describe("NavBar Component", () => {
 
     render(
       <Provider store={store}>
-        <BrowserRouter>
+        <BrowserRouter
+          future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+        >
           <NavBar />
         </BrowserRouter>
       </Provider>
@@ -69,7 +75,9 @@ describe("NavBar Component", () => {
 
     render(
       <Provider store={store}>
-        <BrowserRouter>
+        <BrowserRouter
+          future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+        >
           <NavBar />
         </BrowserRouter>
       </Provider>
@@ -86,7 +94,9 @@ describe("NavBar Component", () => {
 
     render(
       <Provider store={store}>
-        <BrowserRouter>
+        <BrowserRouter
+          future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+        >
           <NavBar />
         </BrowserRouter>
       </Provider>

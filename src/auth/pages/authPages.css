@@ -1,4 +1,4 @@
-.login-page {
+.auth-page {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -6,7 +6,7 @@
   align-items: start;
 }
 
-.login-page form {
+.auth-page form {
   display: flex;
   gap: 1rem;
   flex-direction: column;
@@ -15,7 +15,7 @@
   width: 100%;
 }
 
-.login-page form input {
+.auth-page form input {
   width: 100%;
   max-width: 300px;
   padding: 0.5rem;
@@ -24,7 +24,7 @@
   box-shadow: inset 0 0 10px rgba(228, 217, 217, 0.591);
 }
 
-.login-page form button {
+.auth-page form button {
   padding: 0.5rem;
   border: 1px solid #000;
   border-radius: 0.5rem;
@@ -32,7 +32,7 @@
   color: #fff;
 }
 
-.login-page form button:hover {
+.auth-page form button:hover {
   background-color: #fff;
   color: #000;
 }
