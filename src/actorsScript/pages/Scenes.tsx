@@ -4,6 +4,9 @@ import { useEffect } from "react";
 import { getAllScenes } from "../../redux/thunks/sceneThunks";
 import { Scene } from "../../redux/interfaces/sceneInterfaces";
 import { SceneCard } from "../components/scenes/SceneCard";
+import CollectionsIcon from '@mui/icons-material/Collections';
+import { PageHeader } from "../components/PageHeader";
+
 
 export const Scenes = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -18,8 +21,10 @@ export const Scenes = () => {
 
   return (
     <div className="page">
-      <img src="/assets/scene.svg" alt="Icono dun cubo simulando unha caixa escénica" width="50" height="50" />
-      <h1>Scenes</h1>
+      <PageHeader
+        icon={<CollectionsIcon />}
+        title="Esceas"
+      />
 
       {loading && <p>Cargando escenas...</p>}
 

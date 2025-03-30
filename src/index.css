@@ -79,7 +79,6 @@ body {
   position: fixed;
   bottom: 0;
   width: 100%;
-  font-weight: 600;
   color: black;
   background-color: rgb(198, 140, 25);
   animation: blink 4s infinite alternate;
@@ -164,6 +163,14 @@ body {
 
 .page {
   width: 100%;
+}
+
+.page-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
 .card-container {

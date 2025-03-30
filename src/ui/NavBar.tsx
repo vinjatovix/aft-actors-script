@@ -2,29 +2,34 @@ import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/slices/authSlice";
 import { RootState } from "../redux/store";
-import homeIcon from "../../public/assets/home.svg";
-import authorsIcon from "../../public/assets/author.svg";
-import playsIcon from "../../public/assets/script.svg";
-import charactersIcon from "../../public/assets/character.svg";
-import scenesIcon from "../../public/assets/scene.svg";
-import characterBuildingsIcon from "../../public/assets/character-building.svg";
-import settingsIcon from "../../public/assets/settings.svg";
-import loginIcon from "../../public/assets/login.svg";
-import logoutIcon from "../../public/assets/logout.svg";
+
+import HomeIcon from '@mui/icons-material/Home';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import AutoStoriesIcon from '@mui/icons-material/AutoStories';
+import Groups3OutlinedIcon from '@mui/icons-material/Groups3Outlined';
+import CollectionsIcon from '@mui/icons-material/Collections';
+import EngineeringIcon from '@mui/icons-material/Engineering';
+import SettingsIcon from '@mui/icons-material/Settings';
+import LoginIcon from '@mui/icons-material/Login';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const navItems = [
-  { to: "/authors", icon: authorsIcon, alt: "Autores", label: "DramaturgX" },
-  { to: "/plays", icon: playsIcon, alt: "Obras", label: "Obras" },
+  { to: "/authors", icon: <AssignmentIndIcon />, alt: "Autores", label: "DramaturgX" },
+  { to: "/plays", icon: <AutoStoriesIcon />, alt: "Obras", label: "Obras" },
   {
     to: "/characters",
-    icon: charactersIcon,
+    icon: <Groups3OutlinedIcon />,
     alt: "Personajes",
     label: "Persoaxes",
   },
-  { to: "/scenes", icon: scenesIcon, alt: "Escenas", label: "Esceas" },
+  {
+    to: "/scenes", icon:
+      <CollectionsIcon />
+    , alt: "Escenas", label: "Esceas"
+  },
   {
     to: "/character-buildings",
-    icon: characterBuildingsIcon,
+    icon: <EngineeringIcon />,
     alt: "Construcciones de personajes",
     label: "Construccións",
   },
@@ -33,12 +38,11 @@ const navItems = [
 const NavItem = ({
   to,
   icon,
-  alt,
   label,
 }: {
   to: string;
-  icon: string;
-  alt: string;
+  icon: React.ReactNode;
+
   label: string;
 }) => (
   <NavLink
@@ -47,7 +51,8 @@ const NavItem = ({
     }
     to={to}
   >
-    <img src={icon} className="icon" alt={alt} />
+
+    {icon}
     <span>{label}</span>
   </NavLink>
 );
@@ -59,7 +64,7 @@ export const NavBar = () => {
   return (
     <nav className="nav-bar">
       <div className="nav-links-left">
-        <NavItem to="/home" icon={homeIcon} alt="Home" label="Fogar" />
+        <NavItem to="/home" label="Fogar" icon={<HomeIcon />} />
         {token && navItems.map((item) => <NavItem key={item.to} {...item} />)}
       </div>
 
@@ -67,23 +72,21 @@ export const NavBar = () => {
         <div className="nav-links-right">
           <NavItem
             to="/settings"
-            icon={settingsIcon}
-            alt="Configuracion"
+            icon={<SettingsIcon />}
             label="Axustes"
           />
           <button className="nav-item" onClick={() => {
             dispatch(logout())
             localStorage.removeItem("token");
           }}>
-            <img src={logoutIcon} className="icon" alt="Cerrar sesión" />
+            <LogoutIcon />
             <span>{user?.username} Sair</span>
           </button>
         </div>
       ) : (
         <NavItem
           to="/login"
-          icon={loginIcon}
-          alt="Iniciar sesión"
+          icon={<LoginIcon />}
           label="Acceder"
         />
       )}

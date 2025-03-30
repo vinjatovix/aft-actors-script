@@ -4,6 +4,9 @@ import { Book } from "../../redux/interfaces/bookInterfaces";
 import { getAllBooks } from "../../redux/thunks/bookThunks";
 import { AppDispatch, RootState } from "../../redux/store";
 import { BookCard } from "../components/books/BookCard";
+import AutoStoriesIcon from '@mui/icons-material/AutoStories';
+import { PageHeader } from "../components/PageHeader";
+
 
 export const Books = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -18,8 +21,10 @@ export const Books = () => {
 
   return (
     <div className="page">
-      <img src="/assets/script.svg" alt="Icono dun pergamino" width="50" height="50" />
-      <h1>Obras</h1>
+      <PageHeader
+        icon={<AutoStoriesIcon />}
+        title="Obras"
+      />
 
       {loading && <p>Cargando obras...</p>}
 

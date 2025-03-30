@@ -4,6 +4,9 @@ import { CharacterBuilding } from "../../redux/interfaces/characterBuildingInter
 import { useEffect } from "react";
 import { getAllCharacterBuildings } from "../../redux/thunks/characterBuildingThunks";
 import { CharacterBuildingCard } from "../components/characterBuildings/CharacterBuildingCard";
+import EngineeringIcon from '@mui/icons-material/Engineering';
+import { PageHeader } from "../components/PageHeader";
+
 
 export const CharacterBuildings = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -16,8 +19,10 @@ export const CharacterBuildings = () => {
 
   return (
     <div className="page">
-      <img src="/assets/character-building.svg" alt="Icono dun obreiro e un libro" width="50" height="50" />
-      <h1>Character Buildings</h1>
+       <PageHeader
+         icon={<EngineeringIcon />}
+         title="Contrucciones de personaje"
+       />
 
       {loading && <p>Cargando construcciones...</p>}
 
