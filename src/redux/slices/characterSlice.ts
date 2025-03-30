@@ -1,12 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getAllCharacters } from "../thunks/characterThunks";
-import { Character } from "../interfaces/characterInterfaces";
-
-interface CharacterState {
-  characters: Character[];
-  loading: boolean;
-  error: string | null;
-}
+import { CharacterState } from "../interfaces/characterInterfaces";
 
 const initialState: CharacterState = {
   characters: [],
