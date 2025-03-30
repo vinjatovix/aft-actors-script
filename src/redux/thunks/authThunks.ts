@@ -1,12 +1,14 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { handleFetch } from "../../utils/handleFetch";
 import { API_MAP } from "../../constants";
+
+import { getUserFromToken } from "../../utils/getUserFromToken";
 import {
   AuthLoginResponse,
   LoginPayload,
   RegisterPayload,
-} from "../slices/authSlice";
-import { getUserFromToken } from "../../utils/getUserFromToken";
+} from "../interfaces/authInterfaces";
+import { handleError } from "../../utils/handleError";
 
 const saveToken = (token: string) => {
   localStorage.setItem("token", token);
@@ -15,9 +17,6 @@ const saveToken = (token: string) => {
 const removeToken = () => {
   localStorage.removeItem("token");
 };
-
-const handleError = (error: unknown, defaultMessage: string) =>
-  error instanceof Error ? error.message : defaultMessage;
 
 const DEFAULT_HEADERS = {
   "Content-Type": "application/json",

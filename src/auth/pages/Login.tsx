@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { autoClearError, LoginPayload, } from "../../redux/slices/authSlice";
+import { autoClearError, } from "../../redux/slices/authSlice";
 import Loader from "../../actorsScript/components/Loader";
 import { CallToAction } from '../../components/CallToAction';
 import { InputTextField } from "../../components/InputTextField";
@@ -9,6 +9,7 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { loginUser } from "../../redux/thunks/authThunks";
 import "./authPages.css";
 import { loginTranslationMap } from "./translationMap";
+import { LoginPayload } from "../../redux/interfaces/authInterfaces";
 
 const Login = () => {
   const dispatch = useDispatch<AppDispatch>();

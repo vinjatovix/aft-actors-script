@@ -27,6 +27,13 @@ const API_MAP = {
     register: { url: `${API_URL}/api/v1/Auth/register`, method: "POST" },
     refreshToken: { url: `${API_URL}/api/v1/Auth/refresh`, method: "GET" },
   },
+  books: {
+    getAll: { url: `${API_URL}/api/v1/Books`, method: "GET" },
+    getById: { url: `${API_URL}/api/v1/Books/:id`, method: "GET" },
+    create: { url: `${API_URL}/api/v1/Books`, method: "POST" },
+    update: { url: `${API_URL}/api/v1/Books/:id`, method: "PATCH" },
+    delete: { url: `${API_URL}/api/v1/Books/:id`, method: "DELETE" },
+  },
 };
 
 export { ENVIRONMENT, API_URL, API_MAP, APP_VERSION, REGEX };

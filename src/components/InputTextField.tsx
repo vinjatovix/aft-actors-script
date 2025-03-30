@@ -16,7 +16,7 @@ const getAutocompleteProps = (field: string, isNewPassword: boolean) => {
         autoComplete = "off";
     }
 
-
+    
     return autoComplete
 }
 
