@@ -27,6 +27,8 @@ body {
   place-items: start;
   min-width: 320px;
   min-height: 100vh;
+  background-color: #e5e5e5;
+  color: #000;
 }
 
 @media (prefers-color-scheme: light) {
@@ -177,6 +179,7 @@ body {
 
 .card {
   background-color: #fffefd;
+  color: #000;
   border-radius: 8px;
   box-shadow:
     0 2px 4px rgba(0, 0, 0, 0.1),
