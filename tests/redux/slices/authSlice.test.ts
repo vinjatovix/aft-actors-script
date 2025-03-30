@@ -1,6 +1,4 @@
 import authReducer, {
-  AuthLoginResponse,
-  AuthState,
   clearError,
   logout,
 } from "../../../src/redux/slices/authSlice";
@@ -12,6 +10,10 @@ import {
 } from "../../../src/redux/thunks/authThunks";
 import { API_MAP } from "../../../src/constants";
 import { handleFetch } from "../../../src/utils/handleFetch";
+import {
+  AuthLoginResponse,
+  AuthState,
+} from "../../../src/redux/interfaces/authInterfaces";
 
 jest.mock("../../../src/utils/handleFetch", () => ({
   handleFetch: jest.fn(),

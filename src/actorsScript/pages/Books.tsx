@@ -19,7 +19,7 @@ export const Books = () => {
   return (
     <div className="page">
       <img src="/assets/script.svg" alt="Icono dun pergamino" width="50" height="50" />
-      <h1>Books</h1>
+      <h1>Obras</h1>
 
       {loading && <p>Cargando obras...</p>}
 
