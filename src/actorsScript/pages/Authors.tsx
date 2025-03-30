@@ -2,7 +2,7 @@ import { authors } from "../../../tests/data";
 
 export const Authors = () => {
   return (
-    <div>
+    <div className="page">
       <img
         src="/assets/author.svg"
         alt="Icono dun autor"

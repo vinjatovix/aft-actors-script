@@ -3,6 +3,7 @@ import authReducer from "./slices/authSlice";
 import bookReducer from "./slices/bookSlice";
 import characterReducer from "./slices/characterSlice";
 import sceneReducer from "./slices/sceneSlice";
+import characterBuildingReducer from "./slices/characterBuildingSlice";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     book: bookReducer,
     character: characterReducer,
     scene: sceneReducer,
+    characterBuilding: characterBuildingReducer,
   },
 });
 

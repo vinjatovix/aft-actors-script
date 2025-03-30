@@ -1,48 +1,41 @@
-import { characterBuildings } from "../../../tests/data";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
+import { CharacterBuilding } from "../../redux/interfaces/characterBuildingInterfaces";
+import { useEffect } from "react";
+import { getAllCharacterBuildings } from "../../redux/thunks/characterBuildingThunks";
+import { CharacterBuildingCard } from "../components/characterBuildings/CharacterBuildingCard";
 
 export const CharacterBuildings = () => {
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { characterBuildings, loading, error } = useSelector((state: RootState) => state.characterBuilding);
+
+  useEffect(() => {
+    dispatch(getAllCharacterBuildings());
+  }, [dispatch]);
+
   return (
-    <div>
+    <div className="page">
       <img src="/assets/character-building.svg" alt="Icono dun obreiro e un libro" width="50" height="50" />
       <h1>Character Buildings</h1>
-      {characterBuildings.map((characterBuilding) => (
-        <div key={characterBuilding.id}>
-          <h2>Personaje: {characterBuilding.character}</h2>
-          <p>Escena: {characterBuilding.scene}</p>
-          <p>Actor: {characterBuilding.actor}</p>
-          <p>Centro: {characterBuilding.center}</p>
-          <p>
-            Circunstancias de la escena: {characterBuilding.sceneCircumstances}
-          </p>
-          <p>
-            Circunstancias previas: {characterBuilding.previousCircumstances}
-          </p>
-          <ul>
-            Circunstancias de relación:{" "}
-            {characterBuilding.relationshipCircumstances.map(
-              (relationshipCircumstance) => (
-                <li key={relationshipCircumstance.character}>
-                  {relationshipCircumstance.character}:{" "}
-                  {relationshipCircumstance.circumstance}
-                </li>
-              )
-            )}
-          </ul>
-          <ul>
-            Unidades de acción:
-            {characterBuilding.actionUnits.map((actionUnit) => (
-              <li key={actionUnit.action}>
-                <ul>
-                  {actionUnit.action}:
-                  {actionUnit.strategies.map((strategy) => (
-                    <li key={strategy}>{strategy}</li>
-                  ))}
-                </ul>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
+
+      {loading && <p>Cargando construcciones...</p>}
+
+      {error && <p>Error: {error}</p>}
+
+      {!loading && !characterBuildings.length && (
+        <p>No hay construcciones disponibles</p>
+      )}
+
+      {!loading && !!characterBuildings.length && (<div className="card-container">
+        {characterBuildings.map((characterBuilding: CharacterBuilding) => (
+          <CharacterBuildingCard
+            key={characterBuilding.id}
+            {...characterBuilding}
+          />
+        ))}
+      </div>)}
+
     </div>
   );
 };

@@ -13,31 +13,33 @@ export const Scenes = () => {
   useEffect(() => {
     dispatch(getAllScenes());
   }, [dispatch]);
-  if (loading) {
-    return <div>Cargando escenas...</div>;
-  }
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
 
 
 
   return (
-    <>
+    <div className="page">
       <img src="/assets/scene.svg" alt="Icono dun cubo simulando unha caixa escénica" width="50" height="50" />
       <h1>Scenes</h1>
-      {scenes.length === 0 ? (
-        <p>No hay escenas disponibles</p>
-      ) : (
-        scenes.map((scene: Scene) => (
-          <SceneCard
-            key={scene.id}
-            {...scene}
-          />
 
-        ))
+      {loading && <p>Cargando escenas...</p>}
+
+      {error && <p>Error: {error}</p>}
+
+      {!loading && !scenes.length && (
+        <p>No hay escenas disponibles</p>
       )}
-    </>
+
+      {!loading && !!scenes.length && (
+        <div className="card-container">
+          {scenes.map((scene: Scene) => (
+            <SceneCard
+              key={scene.id}
+              {...scene}
+            />
+
+          ))}
+        </div>
+      )}
+    </div>
   );
 };

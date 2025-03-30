@@ -15,28 +15,30 @@ export const Characters = () => {
     dispatch(getAllCharacters());
   }, [dispatch]);
 
-  if (loading) {
-    return <div>Cargando libros...</div>;
-  }
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
 
   return (
-    <>
+    <div className="page">
       <img src="/assets/character.svg" alt="Icono dun persoaxe con máscara de hockey" width="50" height="50" />
       <h1>Characters</h1>
-      {characters.length === 0 ? (
-        <p>No hay persoaxes dispoñibles</p>
-      ) : (
-        characters.map((character: Character) => (
-          <CharacterCard
-            key={character.id}
-            {...character}
-          />
-        ))
+
+      {loading && <p>Cargando personajes...</p>}
+
+      {error && <p>Error: {error}</p>}
+
+      {!loading && !characters.length && (
+        <p>No hay personajes disponibles</p>
       )}
-    </>
+      {!loading && !!characters.length && (
+        <div className="card-container">
+          {characters.map((character: Character) => (
+            <CharacterCard
+              key={character.id}
+              {...character}
+            />
+          ))}
+        </div>
+      )}
+    </div>
   );
 };

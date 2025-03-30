@@ -14,27 +14,30 @@ export const Books = () => {
     dispatch(getAllBooks());
   }, [dispatch]);
 
-  if (loading) {
-    return <div>Cargando libros...</div>;
-  }
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
 
   return (
-    <div>
+    <div className="page">
       <img src="/assets/script.svg" alt="Icono dun pergamino" width="50" height="50" />
       <h1>Books</h1>
-      {books.length === 0 ? (
-        <p>No hay libros disponibles</p>
-      ) : (
-        books.map((book: Book) => (
-          <BookCard
-            key={book.id}
-            {...book}
-          />
-        ))
+
+      {loading && <p>Cargando obras...</p>}
+
+      {error && <p>Error: {error}</p>}
+
+      {!loading && !books.length && (
+        <p>No hay obras disponibles</p>
+      )}
+
+      {!loading && !!books.length && (
+        <div className="card-container">
+          {books.map((book: Book) => (
+            <BookCard
+              key={book.id}
+              {...book}
+            />
+          ))}
+        </div>
       )}
     </div>
   );

@@ -48,6 +48,19 @@ const API_MAP = {
     update: { url: `${API_URL}/api/v1/Scenes/:id`, method: "PATCH" },
     delete: { url: `${API_URL}/api/v1/Scenes/:id`, method: "DELETE" },
   },
+  characterBuildings: {
+    getAll: { url: `${API_URL}/api/v1/CharacterBuildings`, method: "GET" },
+    getById: { url: `${API_URL}/api/v1/CharacterBuildings/:id`, method: "GET" },
+    create: { url: `${API_URL}/api/v1/CharacterBuildings`, method: "POST" },
+    update: {
+      url: `${API_URL}/api/v1/CharacterBuildings/:id`,
+      method: "PATCH",
+    },
+    delete: {
+      url: `${API_URL}/api/v1/CharacterBuildings/:id`,
+      method: "DELETE",
+    },
+  },
 };
 
 export { ENVIRONMENT, API_URL, API_MAP, APP_VERSION, REGEX };

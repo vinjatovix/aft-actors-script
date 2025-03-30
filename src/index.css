@@ -74,7 +74,7 @@ body {
 }
 
 .dev-stripe {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   width: 100%;
   font-weight: 600;
@@ -84,6 +84,8 @@ body {
 }
 
 .nav-bar {
+  position: sticky;
+  top: 0;
   display: flex;
   width: 100%;
   justify-content: space-between;
@@ -156,4 +158,35 @@ body {
   100% {
     opacity: 0;
   }
+}
+
+.page {
+  width: 100%;
+}
+
+.card-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 100%;
+  width: 100%;
+  gap: 1rem;
+}
+
+.card {
+  background-color: #fffefd;
+  border-radius: 8px;
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.1),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  max-width: 400px;
+}
+
+.card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: box-shadow 0.3s ease;
+  transform: scale(1.02);
 }
