@@ -2,15 +2,14 @@ import { render, screen, fireEvent, act } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { jest } from "@jest/globals";
 import { Provider } from "react-redux";
-import { configureStore } from "@reduxjs/toolkit";
-import authReducer from "../../src/redux/slices/authSlice";
 import Login from "../../src/auth/pages/Login";
+import { mockStore } from "../__mocks__/mockStore";
 
-const mockStore = (preloadedState = {}) =>
-  configureStore({
-    reducer: { auth: authReducer },
-    preloadedState,
-  });
+
+jest.mock("../../src/utils/handleFetch", () => ({
+  handleFetch: jest.fn().mockImplementation(() => Promise.reject(new Error("BackEndError"))),
+}));
+
 
 const renderWithProvider = (store: ReturnType<typeof mockStore>) =>
   render(
@@ -35,13 +34,12 @@ describe("Login Page", () => {
     jest.clearAllMocks();
     localStorage.clear();
     store = mockStore();
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        ok: false,
-        json: () => Promise.resolve({ message: "BackEndError" }),
-      })
-    ) as unknown as jest.MockedFunction<typeof fetch>;
+
   });
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
 
   it("should render the login form", () => {
     renderWithProvider(store);
@@ -54,7 +52,7 @@ describe("Login Page", () => {
   it("should dispatch login action when form is submitted", async () => {
     const dispatchSpy = jest.spyOn(store, "dispatch");
     renderWithProvider(store);
-    fillLoginForm("test@example.com", "password123");
+    fillLoginForm("test@example.com", "password123Adwr!");
 
     await act(async () => {
       fireEvent.click(screen.getByRole("button"));
@@ -65,12 +63,27 @@ describe("Login Page", () => {
 
   it("should render the backend error message", async () => {
     renderWithProvider(store);
-    fillLoginForm("a@a.com", "123456");
+    fillLoginForm("a@a.com", "password123Adwr!");
 
     await act(async () => {
       fireEvent.click(screen.getByRole("button"));
     });
 
     expect(screen.queryByText("BackEndError")).toBeInTheDocument();
+  });
+
+
+
+  it("should display validation errors when form is submitted with invalid data", async () => {
+    const errorMessages = ["É obrigatorio."];
+    renderWithProvider(store);
+
+    await act(async () => {
+      fireEvent.click(screen.getByRole("button"));
+    });
+
+    errorMessages.forEach((message) => {
+      expect(screen.getAllByText(message)).toHaveLength(2);
+    });
   });
 });

@@ -1,17 +1,12 @@
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { jest } from "@jest/globals";
 import { Provider } from "react-redux";
-import { configureStore } from "@reduxjs/toolkit";
-import authReducer from "../../src/redux/slices/authSlice";
 import { Register } from "../../src/auth/pages/Register";
+import { mockStore } from "../__mocks__/mockStore";
 
-const mockStore = (preloadedState = {}) => {
-  return configureStore({
-    reducer: { auth: authReducer },
-    preloadedState,
-  });
-};
+jest.mock("../../src/utils/handleFetch", () => ({
+  handleFetch: jest.fn().mockImplementation(() => Promise.reject(new Error("BackEndError"))),
+}));
 
 const renderWithProvider = (store: ReturnType<typeof mockStore>) => {
   return render(
@@ -48,12 +43,6 @@ describe("Register Page", () => {
     jest.clearAllMocks();
     localStorage.clear();
     store = mockStore();
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        ok: false,
-        json: () => Promise.resolve({ message: "BackEndError" }),
-      })
-    ) as unknown as jest.MockedFunction<typeof fetch>;
   });
 
   afterEach(() => {
@@ -171,7 +160,6 @@ describe("Register Page", () => {
     ).toBeInTheDocument();
   });
 
-  //Injection test
   test.each(["<script>alert('XSS')</script>", "<img src=x onerror=alert(1)>", "%0D%0A"])(
     "should display error message when input contains injection characters: %p", async (inj) => {
       renderWithProvider(store);

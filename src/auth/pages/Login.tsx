@@ -1,22 +1,32 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { autoClearError, loginUser } from "../../redux/slices/authSlice";
-import { AppDispatch, RootState } from "../../redux/store";
+import { autoClearError, LoginPayload, } from "../../redux/slices/authSlice";
 import Loader from "../../actorsScript/components/Loader";
+import { CallToAction } from '../../components/CallToAction';
+import { InputTextField } from "../../components/InputTextField";
+import { useFormValidation } from "../hooks/useFormValidation";
+import { AppDispatch, RootState } from "../../redux/store";
+import { loginUser } from "../../redux/thunks/authThunks";
 import "./authPages.css";
+import { loginTranslationMap } from "./translationMap";
 
 const Login = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const {
+    validateForm,
+    handleInputChange,
+    formData,
+    errors,
+  } = useFormValidation<LoginPayload>({
+    email: "",
+    password: "",
+  });
   const { loading, error } = useSelector((state: RootState) => state.auth);
 
-  const [formData, setFormData] = useState({ email: "", password: "" });
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleLogin = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!validateForm()) return;
+
     dispatch(loginUser(formData));
   };
 
@@ -26,36 +36,32 @@ const Login = () => {
     }
   }, [error, dispatch]);
 
+  const currentLanguage = localStorage.getItem("language") ?? "GL";
+  const translationMap = loginTranslationMap[currentLanguage]
+
   return (
     <div className="auth-page">
-      <form onSubmit={handleLogin}>
-        <h2>Iniciar Sesión</h2>
-        <p>
-          Non tes conta? <a href="/register">Rexístrate</a>
-        </p>
+      <form onSubmit={handleSubmit}>
+        <h2>{translationMap.header}</h2>
+        <CallToAction callToAction={translationMap.callToAction} linkText={translationMap.action} linkPath="/register" />
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Correo"
-          value={formData.email}
-          onChange={handleInputChange}
-          required
-          autoComplete="email"
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Contrasinal"
-          value={formData.password}
-          onChange={handleInputChange}
-          required
-          autoComplete="current-password"
-        />
-        {loading ? <Loader /> : <button type="submit">Entra</button>}
+        {["email", "password"].map((field) => (
+          <InputTextField
+            key={field}
+            field={field}
+            formData={formData}
+            handleInputChange={handleInputChange}
+            errors={errors}
+            translationMap={translationMap}
+          />
+        ))}
+        {loading
+          ? <Loader />
+          : <button type="submit">{translationMap.submit}</button>
+        }
         {error && <p className="error-message fade-out4s">{error}</p>}
       </form>
-    </div>
+    </div >
   );
 };
 

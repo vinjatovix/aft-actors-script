@@ -21,4 +21,12 @@ const REGEX = {
   maxInputLength: 250,
 };
 
-export { ENVIRONMENT, API_URL, APP_VERSION, REGEX };
+const API_MAP = {
+  auth: {
+    login: { url: `${API_URL}/api/v1/Auth/login`, method: "POST" },
+    register: { url: `${API_URL}/api/v1/Auth/register`, method: "POST" },
+    refreshToken: { url: `${API_URL}/api/v1/Auth/refresh`, method: "GET" },
+  },
+};
+
+export { ENVIRONMENT, API_URL, API_MAP, APP_VERSION, REGEX };

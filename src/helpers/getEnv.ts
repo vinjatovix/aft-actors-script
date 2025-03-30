@@ -1,6 +1,10 @@
 import { version } from "../../package.json";
 
-export const getEnv = (): Record<string, string> => {
+export const getEnv = (): {
+  API_URL: string;
+  ENVIRONMENT: string;
+  APP_VERSION: string;
+} => {
   const env = import.meta.env;
 
   return {

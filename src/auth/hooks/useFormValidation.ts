@@ -10,11 +10,16 @@ export interface FormErrors {
   [key: string]: string;
 }
 
-export const useFormValidation = (
-  initialFormData: FormData,
-  initialErrors: FormErrors,
+export const useFormValidation = <T extends Record<string, string>>(
+  initialFormData: T,
 ) => {
-  const [formData, setFormData] = useState<FormData>(initialFormData);
+  const initialErrors: FormErrors = Object.keys(
+    initialFormData,
+  ).reduce<FormErrors>(
+    (acc: FormErrors, key: string) => ({ ...acc, [key]: "" }),
+    {},
+  );
+  const [formData, setFormData] = useState<T>(initialFormData);
   const [errors, setErrors] = useState<FormErrors>(initialErrors);
 
   const validateEmail = (email: string): boolean =>
@@ -62,9 +67,9 @@ export const useFormValidation = (
     return valid;
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const { name, value } = e.target;
-
+  const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = ({
+    target: { name, value },
+  }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };

@@ -1,15 +1,35 @@
-import { createSlice, createAsyncThunk, Dispatch } from "@reduxjs/toolkit";
+import { createSlice, Dispatch } from "@reduxjs/toolkit";
 import { getUserFromToken } from "../../utils/getUserFromToken";
-import { API_URL } from "../../constants";
+import {
+  loginUser,
+  refreshAuthToken,
+  registerUser,
+} from "../thunks/authThunks";
 
-interface User {
+export interface User {
   username: string | null;
   id: string | null;
   roles: string[];
   email: string | null;
 }
+export interface LoginPayload extends Record<string, string> {
+  email: string;
+  password: string;
+}
 
-interface AuthState {
+export interface AuthLoginResponse {
+  token: string;
+  user: User;
+}
+export interface RegisterPayload {
+  id: string;
+  username: string;
+  email: string;
+  password: string;
+  repeatPassword: string;
+}
+
+export interface AuthState {
   token: string | null;
   user: User;
   loading: boolean;
@@ -35,102 +55,6 @@ const initialState: AuthState = {
   loading: false,
   error: null,
 };
-
-const handleFetch = async (url: string, options: RequestInit) => {
-  const response = await fetch(url, options);
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.message || "Error de autenticación");
-  }
-
-  const contentType = response.headers?.get("Content-Type") ?? "";
-  const contentLength = response.headers?.get("Content-Length");
-
-  if (contentType.includes("application/json") && contentLength !== "0") {
-    return await response.json();
-  }
-
-  return null;
-};
-
-export const loginUser = createAsyncThunk(
-  "auth/login",
-  async (
-    { email, password }: { email: string; password: string },
-    { rejectWithValue },
-  ) => {
-    try {
-      const data = await handleFetch(`${API_URL}/api/v1/Auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
-      localStorage.setItem("token", data.token);
-
-      return { token: data.token, user: data.user };
-    } catch (error) {
-      return rejectWithValue(
-        error instanceof Error ? error.message : "Ocurrió un error desconocido",
-      );
-    }
-  },
-);
-
-export const registerUser = createAsyncThunk(
-  "auth/register",
-  async (
-    credentials: {
-      id: string;
-      username: string;
-      email: string;
-      password: string;
-      repeatPassword: string;
-    },
-    { dispatch, rejectWithValue },
-  ) => {
-    try {
-      await handleFetch(`${API_URL}/api/v1/Auth/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(credentials),
-      });
-
-      const loginResult = await dispatch(
-        loginUser({ email: credentials.email, password: credentials.password }),
-      ).unwrap();
-
-      return loginResult;
-    } catch (error) {
-      return rejectWithValue(
-        error instanceof Error ? error.message : "Ocurrió un error desconocido",
-      );
-    }
-  },
-);
-
-export const refreshAuthToken = createAsyncThunk(
-  "auth/refreshToken",
-  async (_, { rejectWithValue }) => {
-    const token = localStorage.getItem("token");
-    if (!token) return rejectWithValue("No hay token");
-
-    try {
-      const data = await handleFetch(`${API_URL}/api/v1/Auth/refresh`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      localStorage.setItem("token", data.token);
-      return { token: data.token, user: getUserFromToken(data.token) };
-    } catch {
-      localStorage.removeItem("token");
-      return rejectWithValue("Error al refrescar el token");
-    }
-  },
-);
 
 export const autoClearError = () => (dispatch: Dispatch) => {
   setTimeout(() => dispatch(clearError()), 4000);
