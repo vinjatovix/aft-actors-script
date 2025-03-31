@@ -8,10 +8,14 @@ jest.mock("../../src/utils/handleFetch", () => ({
   handleFetch: jest.fn().mockImplementation(() => Promise.reject(new Error("BackEndError"))),
 }));
 
+import { BrowserRouter } from "react-router-dom";
+
 const renderWithProvider = (store: ReturnType<typeof mockStore>) => {
   return render(
     <Provider store={store}>
-      <Register />
+      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        <Register />
+      </BrowserRouter>
     </Provider>
   );
 };
@@ -22,16 +26,16 @@ const fillRegisterForm = (
   password: string,
   repeatPassword: string
 ) => {
-  fireEvent.change(screen.getByPlaceholderText("Nome"), {
+  fireEvent.change(screen.getByLabelText("Nome"), {
     target: { value: username },
   });
-  fireEvent.change(screen.getByPlaceholderText("Correo"), {
+  fireEvent.change(screen.getByLabelText("Correo"), {
     target: { value: email },
   });
-  fireEvent.change(screen.getByPlaceholderText("Contrasinal"), {
+  fireEvent.change(screen.getByLabelText("Contrasinal"), {
     target: { value: password },
   });
-  fireEvent.change(screen.getByPlaceholderText("Confirma contrasinal"), {
+  fireEvent.change(screen.getByLabelText("Confirma contrasinal"), {
     target: { value: repeatPassword },
   });
 }
@@ -50,7 +54,7 @@ describe("Register Page", () => {
   });
 
   it("should render the registration form", () => {
-    const placeholders = [
+    const labels = [
       "Nome",
       "Correo",
       "Contrasinal",
@@ -59,8 +63,8 @@ describe("Register Page", () => {
 
     renderWithProvider(store);
 
-    placeholders.forEach((placeholder) => {
-      expect(screen.getByPlaceholderText(placeholder)).toBeInTheDocument();
+    labels.forEach((label) => {
+      expect(screen.getByLabelText(label)).toBeInTheDocument();
     });
     expect(screen.getByRole("button")).toHaveTextContent("Rexístrate");
   });
@@ -97,7 +101,7 @@ describe("Register Page", () => {
 
   it("should display error message when email is invalid", async () => {
     renderWithProvider(store);
-    fireEvent.change(screen.getByPlaceholderText("Correo"), {
+    fireEvent.change(screen.getByPlaceholderText("aaron@swartz.op"), {
       target: { value: "test@test" },
     });
 
@@ -128,7 +132,7 @@ describe("Register Page", () => {
 
   it("should display error message when password is invalid", async () => {
     renderWithProvider(store);
-    fireEvent.change(screen.getByPlaceholderText("Contrasinal"), {
+    fireEvent.change(screen.getByPlaceholderText("********"), {
       target: { value: "password" },
     });
 

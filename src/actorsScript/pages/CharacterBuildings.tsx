@@ -21,7 +21,7 @@ export const CharacterBuildings = () => {
     <div className="page">
        <PageHeader
          icon={<EngineeringIcon />}
-         title="Contrucciones de personaje"
+         title="Construccións de persoaxe"
        />
 
       {loading && <p>Cargando construcciones...</p>}

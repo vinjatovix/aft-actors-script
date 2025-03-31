@@ -4,6 +4,7 @@ import { jest } from "@jest/globals";
 import { Provider } from "react-redux";
 import Login from "../../src/auth/pages/Login";
 import { mockStore } from "../__mocks__/mockStore";
+import { BrowserRouter } from "react-router-dom";
 
 
 jest.mock("../../src/utils/handleFetch", () => ({
@@ -14,15 +15,17 @@ jest.mock("../../src/utils/handleFetch", () => ({
 const renderWithProvider = (store: ReturnType<typeof mockStore>) =>
   render(
     <Provider store={store}>
-      <Login />
+      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        <Login />
+      </BrowserRouter>
     </Provider>
   );
 
 const fillLoginForm = (email: string, password: string) => {
-  fireEvent.change(screen.getByPlaceholderText("Correo"), {
+  fireEvent.change(screen.getByLabelText("Correo"), {
     target: { value: email },
   });
-  fireEvent.change(screen.getByPlaceholderText("Contrasinal"), {
+  fireEvent.change(screen.getByLabelText("Contrasinal"), {
     target: { value: password },
   });
 };
@@ -44,9 +47,10 @@ describe("Login Page", () => {
   it("should render the login form", () => {
     renderWithProvider(store);
 
-    expect(screen.getByPlaceholderText("Correo")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("Contrasinal")).toBeInTheDocument();
-    expect(screen.getByRole("button")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("aaron@swartz.com")).toBeInTheDocument();
+    expect(screen.getByLabelText("Contrasinal")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Entrar" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Google" })).toBeInTheDocument();
   });
 
   it("should dispatch login action when form is submitted", async () => {
@@ -55,7 +59,7 @@ describe("Login Page", () => {
     fillLoginForm("test@example.com", "password123Adwr!");
 
     await act(async () => {
-      fireEvent.click(screen.getByRole("button"));
+      fireEvent.click(screen.getByRole("button", { name: "Entrar" }));
     });
 
     expect(dispatchSpy).toHaveBeenCalled();
@@ -66,7 +70,7 @@ describe("Login Page", () => {
     fillLoginForm("a@a.com", "password123Adwr!");
 
     await act(async () => {
-      fireEvent.click(screen.getByRole("button"));
+      fireEvent.click(screen.getByRole("button", { name: "Entrar" }));
     });
 
     expect(screen.queryByText("BackEndError")).toBeInTheDocument();
@@ -79,7 +83,7 @@ describe("Login Page", () => {
     renderWithProvider(store);
 
     await act(async () => {
-      fireEvent.click(screen.getByRole("button"));
+      fireEvent.click(screen.getByRole("button", { name: "Entrar" }));
     });
 
     errorMessages.forEach((message) => {

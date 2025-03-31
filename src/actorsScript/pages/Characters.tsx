@@ -24,7 +24,7 @@ export const Characters = () => {
     <div className="page">
       <PageHeader
         icon={<Groups3OutlinedIcon />}
-        title="Personajes"
+        title="Persoaxes"
       />
 
       {loading && <p>Cargando personajes...</p>}

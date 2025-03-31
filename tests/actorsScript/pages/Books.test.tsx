@@ -15,15 +15,4 @@ describe("Books Page", () => {
       "Obras"
     );
   });
-
-  it("renders the icon image", () => {
-    render(
-      <Provider store={store}>
-        <Books />
-      </Provider>
-    );
-    const icon = screen.getByAltText("Icono dun pergamino");
-    expect(icon).toBeInTheDocument();
-    expect(icon).toHaveAttribute("src", "/assets/script.svg");
-  });
 });

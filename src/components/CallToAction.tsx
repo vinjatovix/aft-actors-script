@@ -7,6 +7,6 @@ export const CallToAction = ({ callToAction, linkPath, linkText }: {
     return (
         <p>
             {callToAction}
-            <a href={linkPath}>{linkText}</a>
+             <a href={linkPath}> {linkText}</a>
         </p>)
 }

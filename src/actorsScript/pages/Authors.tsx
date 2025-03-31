@@ -8,7 +8,7 @@ export const Authors = () => {
     <div className="page">
       <PageHeader
         icon={<AssignmentIndIcon />}
-        title="Authors"
+        title="DramaturgXs"
       />
 
       {authors.map((author) => (

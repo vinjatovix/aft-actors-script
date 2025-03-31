@@ -38,3 +38,22 @@ export const purpleThemeLight = createTheme({
     },
   },
 });
+
+export const blackThemeLight = createTheme({
+  palette: {
+    mode: "light",
+    primary: {
+      main: "#0a0a0a",
+    },
+    secondary: {
+      main: "#ffffff",
+    },
+    error: {
+      main: red.A400,
+    },
+    background: {
+      default: "#f5f5f5",
+      paper: "#ffffff",
+    },
+  },
+});

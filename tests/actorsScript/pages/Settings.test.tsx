@@ -10,11 +10,4 @@ describe("Settings Page", () => {
       "Axustes"
     );
   });
-
-  it("renders the icon image", () => {
-    render(<Settings />);
-    const icon = screen.getByAltText("Icono dunha roda de engranaxe");
-    expect(icon).toBeInTheDocument();
-    expect(icon).toHaveAttribute("src", "/assets/settings.svg");
-  });
 });

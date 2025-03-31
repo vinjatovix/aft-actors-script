@@ -13,19 +13,7 @@ describe("CharacterBuildings Page", () => {
     )
 
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-      "Character Buildings"
+      "Construccións de persoaxe"
     );
-  });
-
-  it("renders the icon image", () => {
-    render(
-      <Provider store={store}>
-        render(<CharacterBuildings />);
-      </Provider>
-    )
-
-    const icon = screen.getByAltText("Icono dun obreiro e un libro");
-    expect(icon).toBeInTheDocument();
-    expect(icon).toHaveAttribute("src", "/assets/character-building.svg");
   });
 });

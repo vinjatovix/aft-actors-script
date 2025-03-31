@@ -13,18 +13,7 @@ describe("Characters Page", () => {
     )
 
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-      "Characters"
+      "Persoaxes"
     );
-  });
-
-  it("renders the icon image", () => {
-    render(
-      <Provider store={store}>
-        render(<Characters />);
-      </Provider>
-    )
-    const icon = screen.getByAltText("Icono dun persoaxe con máscara de hockey");
-    expect(icon).toBeInTheDocument();
-    expect(icon).toHaveAttribute("src", "/assets/character.svg");
   });
 });
