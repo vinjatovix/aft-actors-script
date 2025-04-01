@@ -9,6 +9,7 @@ export interface CharacterBuilding {
   sceneCircumstances: string;
   previousCircumstances: string;
   actionUnits: {
+    id: string;
     action: string;
     strategies: string[];
   }[];
