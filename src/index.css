@@ -81,6 +81,7 @@ body {
   color: black;
   background-color: rgb(198, 140, 25);
   animation: blink 4s infinite alternate;
+  z-index: 9999;
 }
 
 .nav-bar {

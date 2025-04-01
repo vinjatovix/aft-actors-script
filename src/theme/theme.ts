@@ -56,4 +56,8 @@ export const blackThemeLight = createTheme({
       paper: "#ffffff",
     },
   },
+  zIndex: {
+    appBar: 1200,
+    drawer: 1100,
+  },
 });

@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { Authors } from "../pages/Authors";
 import { Books } from "../pages/Books";
-import { CharacterBuildings } from "../pages/CharacterBuildings";
+import { CharacterBuildings } from "../pages/CharacterBuildingsPage";
 import { Characters } from "../pages/Characters";
 import { Home } from "../pages/Home";
 import { Scenes } from "../pages/Scenes";

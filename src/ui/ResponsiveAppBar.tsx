@@ -27,7 +27,7 @@ const allPages = [
 const publicPages = [{ text: "Fogar", path: "/home" }];
 const settings = ["Perfil", "Settings", 'Logout'];
 
-function ResponsiveAppBar() {
+function ResponsiveAppBar({ drawerWidth = 240 }: { drawerWidth?: number }) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { user, token } = useSelector((state: RootState) => state.auth);
@@ -63,9 +63,21 @@ function ResponsiveAppBar() {
 
     return (
         <>
-            <AppBar position="fixed">
+            <AppBar position="fixed"
+                sx={{
+                    zIndex: (theme) => theme.zIndex.drawer + 1,
+                    width: {
+                        xs: '100%',
+                        md: `calc(100% - ${drawerWidth}px)`,
+                    },
+                    ml: {
+                        md: `${drawerWidth}px`,
+                    },
+                }}
+            >
                 <Container maxWidth="xl">
                     <Toolbar disableGutters>
+
                         <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
                             <IconButton
                                 size="large"
@@ -77,6 +89,7 @@ function ResponsiveAppBar() {
                             >
                                 <MenuIcon />
                             </IconButton>
+
                             <Menu
                                 id="menu-appbar"
                                 anchorEl={anchorElNav}
@@ -140,7 +153,7 @@ function ResponsiveAppBar() {
                     </Toolbar>
                 </Container>
             </AppBar>
-            <Box sx={{ mt: 7 }} />
+            <Toolbar />
         </>
     );
 }

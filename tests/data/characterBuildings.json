@@ -20,12 +20,32 @@
         "strategies": ["drogar", "amordazar"]
       }
     ],
-    "actor": "5ba0222e-5bcd-45fd-958a-1bb8dad0c19c",
-    "character": "1beca04e-f951-4f02-b525-ba896ae58d93",
-    "scene": "258b14be-5e68-4a8e-be1d-59a5a2a832c0",
+    "actor": {
+      "id": "5ba0222e-5bcd-45fd-958a-1bb8dad0c19c",
+      "username": "viña"
+    },
+    "character": {
+      "id": "1beca04e-f951-4f02-b525-ba896ae58d93",
+      "name": "patatao",
+      "book": {
+        "id": "jdoapsnoapfnpofas",
+        "title": "el ingrato",
+        "author": {
+          "id": "ndsiaondaiodasn",
+          "name": "gujrm"
+        }
+      }
+    },
+    "scene": {
+      "id": "258b14be-5e68-4a8e-be1d-59a5a2a832c0",
+      "description": "lorem"
+    },
     "relationshipCircumstances": [
       {
-        "character": "0955d2e1-6b7e-4294-b3da-9e9ddabad16b",
+        "character": {
+          "id": "0955d2e1-6b7e-4294-b3da-9e9ddabad16b",
+          "name": "Gogo"
+        },
         "circumstance": "Voluptatem inventore nam ab."
       }
     ]

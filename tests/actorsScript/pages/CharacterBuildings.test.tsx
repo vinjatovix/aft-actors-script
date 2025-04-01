@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { CharacterBuildings } from "../../../src/actorsScript/pages/CharacterBuildings";
+import { CharacterBuildings } from "../../../src/actorsScript/pages/CharacterBuildingsPage";
 import { Provider } from "react-redux";
 import { store } from "../../../src/redux/store";
 

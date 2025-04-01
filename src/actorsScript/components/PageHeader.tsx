@@ -1,9 +1,10 @@
+import { Typography } from "@mui/material"
 
 export const PageHeader = ({ icon, title }: { icon: React.ReactNode, title: string }) => {
     return (
         <div className="page-header">
             {icon}
-            <h1>{title}</h1>
+            <Typography variant="h5">{title}</Typography>
         </div>
     )
 }
