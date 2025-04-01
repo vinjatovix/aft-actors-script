@@ -25,7 +25,7 @@ const allPages = [
     { text: "Construccións", path: "/character-buildings" }
 ];
 const publicPages = [{ text: "Fogar", path: "/home" }];
-const settings = ["Perfil", 'Logout'];
+const settings = ["Perfil", "Settings", 'Logout'];
 
 function ResponsiveAppBar() {
     const dispatch = useDispatch();

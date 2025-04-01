@@ -9,6 +9,17 @@ export const Settings = () => {
         icon={<SettingsIcon />}
         title="Axustes"
       />
+
+      <div className="radio-buttons">
+        <label>
+          <input type="radio" name="language" value="es_gl" />Galego
+        </label>
+
+      </div>
+
+
+      <p>Esta páxina está en construción.</p>
+
     </div>
   );
 };

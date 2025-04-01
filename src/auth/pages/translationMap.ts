@@ -10,7 +10,7 @@ const registerTranslationMap: {
     submit: string;
   };
 } = {
-  GL: {
+  es_gl: {
     header: "Rexistro",
     username: "Nome",
     email: "Correo",
@@ -32,7 +32,7 @@ const loginTranslationMap: {
     submit: string;
   };
 } = {
-  GL: {
+  es_gl: {
     header: "Iniciar Sesión",
     email: "Correo",
     password: "Contrasinal",

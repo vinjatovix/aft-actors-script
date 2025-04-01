@@ -1,10 +1,14 @@
+import { Typography } from "@mui/material"
 import { Scene } from "../../../redux/interfaces/sceneInterfaces"
+import { getTimeAgo } from "../../../utils/getTimeAgo"
 
 export const SceneCard = (scene: Scene) => {
   return (
     <div key={scene.id} className="card">
+      <Typography variant="body2" color="textSecondary">
+        actualizado por {scene.metadata.updatedBy} {getTimeAgo(scene.metadata.updatedAt)}
+      </Typography>
       <h1>{scene.characters[0].book.title} - {scene.characters[0].book.author.name}</h1>
-      <small>{new Date(scene.metadata.updatedAt).toLocaleDateString()} - {scene.metadata.updatedBy}</small>
       <h2>{scene.description}</h2>
       <ul>
         {scene.characters.map((character) => (

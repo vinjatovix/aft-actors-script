@@ -39,7 +39,7 @@ export const Register = () => {
     }
   }, [error, dispatch]);
 
-  const currentLanguage = localStorage.getItem("language") ?? "GL";
+  const currentLanguage = localStorage.getItem("language") ?? "es_gl";
   const translationMap = registerTranslationMap[currentLanguage];
 
   const getInputType = (field: string): React.HTMLInputTypeAttribute | undefined => {

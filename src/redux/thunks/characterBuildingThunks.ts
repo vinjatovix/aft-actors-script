@@ -24,7 +24,7 @@ export const getAllCharacterBuildings = createAsyncThunk(
         include:
           "character.book.author,scene.characters,actor,relationshipCircumstances.character",
         fields:
-          "previousCircumstances,sceneCircumstances,center,relationshipCircumstances.circumstance,scene.description,actor.username,actionUnits,center,character.name",
+          "previousCircumstances,sceneCircumstances,center,relationshipCircumstances.circumstance,relationshipCircumstances.character.name,scene.description,actor.username,actionUnits,center,character.name",
       }).toString();
       const url = `${API_MAP.characterBuildings.getAll.url}?${queryParams}`;
       const data = await handleFetch<CharacterBuilding[]>(url, {

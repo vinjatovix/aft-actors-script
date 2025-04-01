@@ -1,5 +1,5 @@
 export const translationMap = {
-  GL: {
+  es_gl: {
     username: "Nome",
     email: "Correo",
     password: "Contrasinal",

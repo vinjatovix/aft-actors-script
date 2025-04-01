@@ -38,7 +38,7 @@ const Login = () => {
     }
   }, [error, dispatch]);
 
-  const currentLanguage = localStorage.getItem("language") ?? "GL";
+  const currentLanguage = localStorage.getItem("language") ?? "es_gl";
   const translationMap = loginTranslationMap[currentLanguage]
 
   return (

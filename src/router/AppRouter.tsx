@@ -5,7 +5,7 @@ import { PrivateRoute } from "./PrivateRoute";
 import { Home } from "../actorsScript/pages/Home";
 import { PublicRoute } from "./PublicRoute";
 import { Register } from "../auth/pages/Register";
-import ResponsiveAppBar from "../ui/AppBar";
+import ResponsiveAppBar from "../ui/ResponsiveAppBar";
 
 export const AppRouter = () => {
   return (
