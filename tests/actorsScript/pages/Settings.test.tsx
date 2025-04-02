@@ -6,7 +6,7 @@ describe("Settings Page", () => {
   it("renders the Settings page ", () => {
     render(<Settings />);
 
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
+    expect(screen.getByRole("heading", { level: 5 })).toHaveTextContent(
       "Axustes"
     );
   });

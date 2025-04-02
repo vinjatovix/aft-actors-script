@@ -2,17 +2,20 @@ import { Character } from "./characterInterfaces";
 import { Metadata } from "./metadata";
 import { Scene } from "./sceneInterfaces";
 
+export interface ActionUnits {
+  id: string;
+  action: string;
+  strategies: string[];
+}
+
 export interface CharacterBuilding {
   id: string;
   metadata: Metadata;
   center: string;
   sceneCircumstances: string;
   previousCircumstances: string;
-  actionUnits: {
-    id: string;
-    action: string;
-    strategies: string[];
-  }[];
+  startingPoint: string;
+  actionUnits: ActionUnits[];
   character: Character;
   scene: Scene;
   actor: {

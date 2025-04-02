@@ -12,7 +12,7 @@ describe("CharacterBuildings Page", () => {
       </Provider>
     )
 
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
+    expect(screen.getByRole("heading", { level: 5 })).toHaveTextContent(
       "Construccións de persoaxe"
     );
   });

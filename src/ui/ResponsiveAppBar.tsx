@@ -59,7 +59,9 @@ function ResponsiveAppBar({ drawerWidth = 240 }: { drawerWidth?: number }) {
         navigate("/login");
     };
 
-    const pagesToShow = token ? allPages : publicPages;
+    const pagesToShowInBar = token ? allPages : publicPages;
+    const pagsWithDrawer = ["/character-buildings"]
+    const width = pagsWithDrawer.includes(window.location.pathname) ? `calc(100% - ${drawerWidth}px)` : '100%'
 
     return (
         <>
@@ -68,7 +70,7 @@ function ResponsiveAppBar({ drawerWidth = 240 }: { drawerWidth?: number }) {
                     zIndex: (theme) => theme.zIndex.drawer + 1,
                     width: {
                         xs: '100%',
-                        md: `calc(100% - ${drawerWidth}px)`,
+                        md: width,
                     },
                     ml: {
                         md: `${drawerWidth}px`,
@@ -96,7 +98,7 @@ function ResponsiveAppBar({ drawerWidth = 240 }: { drawerWidth?: number }) {
                                 open={Boolean(anchorElNav)}
                                 onClose={() => handleCloseNavMenu()}
                             >
-                                {pagesToShow.map((page) => (
+                                {pagesToShowInBar.map((page) => (
                                     <MenuItem key={page.text} onClick={() => handleCloseNavMenu(page.path)}>
                                         <Typography>{page.text}</Typography>
                                     </MenuItem>
@@ -105,7 +107,7 @@ function ResponsiveAppBar({ drawerWidth = 240 }: { drawerWidth?: number }) {
                         </Box>
 
                         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                            {pagesToShow.map((page) => (
+                            {pagesToShowInBar.map((page) => (
                                 <Button
                                     key={page.text}
                                     onClick={() => handleCloseNavMenu(page.path)}
@@ -152,7 +154,7 @@ function ResponsiveAppBar({ drawerWidth = 240 }: { drawerWidth?: number }) {
 
                     </Toolbar>
                 </Container>
-            </AppBar>
+            </AppBar >
             <Toolbar />
         </>
     );

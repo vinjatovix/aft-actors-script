@@ -6,7 +6,7 @@ describe("Authors Page", () => {
   it("renders the Authors page with a title and author names", () => {
     render(<Authors />);
 
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
+    expect(screen.getByRole("heading", { level: 5 })).toHaveTextContent(
       "DramaturgXs"
     );
   });
