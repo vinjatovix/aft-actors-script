@@ -1,8 +1,9 @@
 import { Add } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 
-export const AddButton = ({ icon }: {
+export const AddButton = ({ icon, handleClick }: {
     icon?: React.ReactNode
+    handleClick?: () => void
 }) => {
     return (
 
@@ -19,10 +20,7 @@ export const AddButton = ({ icon }: {
                 backgroundColor: 'white',
                 boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
             },
-        }} onClick={() => {
-            // Handle the click event here
-            console.log('Icon button clicked');
-        }}>
+        }} onClick={handleClick}>
 
             <Add />
             {icon}

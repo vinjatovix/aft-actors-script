@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getAllBooks } from "../thunks/bookThunks";
+import { getAllBooks, getBookByAuthorId } from "../thunks/bookThunks";
 import { Book } from "../interfaces/bookInterfaces";
 
 interface BookState {
@@ -29,6 +29,18 @@ const bookSlice = createSlice({
         state.books = action.payload ?? [];
       })
       .addCase(getAllBooks.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(getBookByAuthorId.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getBookByAuthorId.fulfilled, (state, action) => {
+        state.loading = false;
+        state.books = action.payload ?? [];
+      })
+      .addCase(getBookByAuthorId.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

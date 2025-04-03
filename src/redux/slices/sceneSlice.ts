@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { SceneState } from "../interfaces/sceneInterfaces";
-import { getAllScenes } from "../thunks/sceneThunks";
+import { getAllScenes, getScenesByCharacterId } from "../thunks/sceneThunks";
 
 const initialState: SceneState = {
   scenes: [],
@@ -23,6 +23,18 @@ const sceneSlice = createSlice({
         state.scenes = action.payload ?? [];
       })
       .addCase(getAllScenes.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(getScenesByCharacterId.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getScenesByCharacterId.fulfilled, (state, action) => {
+        state.loading = false;
+        state.scenes = action.payload ?? [];
+      })
+      .addCase(getScenesByCharacterId.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

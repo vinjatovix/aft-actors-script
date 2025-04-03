@@ -40,3 +40,34 @@ export const getAllScenes = createAsyncThunk(
     }
   },
 );
+
+export const getScenesByCharacterId = createAsyncThunk(
+  "scenes/getByCharacterId",
+  async (characterId: string, { rejectWithValue, getState }) => {
+    try {
+      const state = getState() as { auth: AuthState };
+      const token = state.auth.token;
+
+      if (!token) {
+        throw new Error("No hay token disponible");
+      }
+
+      const queryParams = new URLSearchParams({
+        filter: `characters:${characterId}`,
+        fields: "description",
+      }).toString();
+      const url = `${API_MAP.scenes.getAll.url}?${queryParams}`;
+      const data = await handleFetch<Scene[]>(url, {
+        method: API_MAP.scenes.getAll.method,
+        headers: {
+          ...DEFAULT_HEADERS,
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(handleError(error, "Error al obter os persoaxes"));
+    }
+  },
+);

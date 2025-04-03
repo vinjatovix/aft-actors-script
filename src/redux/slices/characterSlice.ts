@@ -1,5 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getAllCharacters } from "../thunks/characterThunks";
+import {
+  getAllCharacters,
+  getCharactersByBookId,
+} from "../thunks/characterThunks";
 import { CharacterState } from "../interfaces/characterInterfaces";
 
 const initialState: CharacterState = {
@@ -23,6 +26,18 @@ const characterSlice = createSlice({
         state.characters = action.payload ?? [];
       })
       .addCase(getAllCharacters.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(getCharactersByBookId.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getCharactersByBookId.fulfilled, (state, action) => {
+        state.loading = false;
+        state.characters = action.payload ?? [];
+      })
+      .addCase(getCharactersByBookId.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

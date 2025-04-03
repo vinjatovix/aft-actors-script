@@ -39,3 +39,34 @@ export const getAllCharacters = createAsyncThunk(
     }
   },
 );
+
+export const getCharactersByBookId = createAsyncThunk(
+  "characters/getByBookId",
+  async (bookId: string, { rejectWithValue, getState }) => {
+    try {
+      const state = getState() as { auth: AuthState };
+      const token = state.auth.token;
+
+      if (!token) {
+        throw new Error("No hay token disponible");
+      }
+
+      const queryParams = new URLSearchParams({
+        filter: `book:${bookId}`,
+        fields: "name",
+      }).toString();
+      const url = `${API_MAP.characters.getAll.url}?${queryParams}`;
+      const data = await handleFetch<Character[]>(url, {
+        method: API_MAP.characters.getAll.method,
+        headers: {
+          ...DEFAULT_HEADERS,
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(handleError(error, "Error ao obter os persoaxes"));
+    }
+  },
+);
