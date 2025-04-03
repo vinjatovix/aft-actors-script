@@ -7,9 +7,10 @@ import { CharacterBuildingCard } from "../components/characterBuildings/Characte
 import EngineeringIcon from '@mui/icons-material/Engineering';
 import { PageHeader } from "../components/PageHeader";
 import { CharacterBuildingsLayout } from "../layout/CharacterBuildingsLayout";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { NothingSelectedView } from '../views/NothingSelectedView';
 import { CharacterBuildingView } from "../views/CharacterBuildingView";
+import { AddButton } from "../components/buttons/AddButton";
 
 
 export const CharacterBuildings = () => {
@@ -55,6 +56,8 @@ export const CharacterBuildings = () => {
           ))}
         </div>)}
 
+        <AddButton icon={<EngineeringIcon />} />
+
       </Box>
 
       <Box sx={{
@@ -64,40 +67,38 @@ export const CharacterBuildings = () => {
         },
         width: 'calc(95vw - 240px)',
       }}>
-        {/* <PageHeader
-            icon={<EngineeringIcon />}
-            title="Construccións de persoaxe"
-          /> */}
-
-        {characterBuildings.length ? <CharacterBuildingView characterBuilding={characterBuildings[0]} /> :
-          <NothingSelectedView />
-        }
-
-
-
-
-
-
-
-
-
         {loading && <p>Cargando construcciones...</p>}
 
         {error && <p>Error: {error}</p>}
 
         {!loading && !characterBuildings.length && (
-          <p>No hay construcciones disponibles</p>
+          <Typography
+            sx={{
+              textAlign: 'center',
+              color: '#666',
+            }}
+          >No hay construcciones disponibles
+          </Typography>
         )}
 
-        {/* {!loading && !!characterBuildings.length && (<div className="card-container">
-          {characterBuildings.map((characterBuilding: CharacterBuilding) => (
-            <CharacterBuildingCard
-              key={characterBuilding.id}
-              {...characterBuilding}
-            />
-          ))}
-        </div>)} */}
+        {characterBuildings.length
+          ? <CharacterBuildingView characterBuilding={characterBuildings[0]} />
+          : <NothingSelectedView />
+        }
+
+
+
+        <AddButton icon={<EngineeringIcon />} />
+
+
+
+
+
+
+
+
+
       </Box>
-    </CharacterBuildingsLayout>
+    </CharacterBuildingsLayout >
   );
 };

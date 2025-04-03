@@ -32,6 +32,9 @@ export const purpleThemeLight = createTheme({
     error: {
       main: red.A400,
     },
+    success: {
+      main: "#4caf50",
+    },
     background: {
       default: "#f5f5f5",
       paper: "#ffffff",
