@@ -32,4 +32,5 @@ export interface CharacterBuildingState {
   characterBuildings: CharacterBuilding[];
   loading: boolean;
   error: string | null;
+  selectedCharacterBuilding: CharacterBuilding | null;
 }

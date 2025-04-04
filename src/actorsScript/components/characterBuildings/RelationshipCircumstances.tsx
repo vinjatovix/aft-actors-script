@@ -35,7 +35,7 @@ export const RelationshipCircumstances = ({ setRelations, relations, handleRelat
                 </Button>
                 <Typography variant="h6">{title}</Typography>
             </Grid>
-            {relations.map((relation, index) => (
+            {relations?.map((relation, index) => (
                 <Grid
                     container
                     spacing={2}

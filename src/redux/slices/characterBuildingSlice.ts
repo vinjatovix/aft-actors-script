@@ -4,6 +4,7 @@ import { getAllCharacterBuildings } from "../thunks/characterBuildingThunks";
 
 const initialState: CharacterBuildingState = {
   characterBuildings: [],
+  selectedCharacterBuilding: null,
   loading: false,
   error: null,
 };
@@ -11,7 +12,14 @@ const initialState: CharacterBuildingState = {
 const characterBuildingSlice = createSlice({
   name: "characterBuilding",
   initialState,
-  reducers: {},
+  reducers: {
+    setSelectedCharacterBuilding: (state, action) => {
+      state.selectedCharacterBuilding = action.payload;
+    },
+    clearSelectedCharacterBuilding: (state) => {
+      state.selectedCharacterBuilding = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getAllCharacterBuildings.pending, (state) => {
@@ -28,5 +36,8 @@ const characterBuildingSlice = createSlice({
       });
   },
 });
+
+export const { setSelectedCharacterBuilding, clearSelectedCharacterBuilding } =
+  characterBuildingSlice.actions;
 
 export default characterBuildingSlice.reducer;

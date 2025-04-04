@@ -75,6 +75,8 @@ const characterBuildingTranslationMap: {
       strategies: string;
       strategy: string;
     };
+    delete: string;
+    add: string;
   };
 } = {
   es_gl: {
@@ -110,6 +112,8 @@ const characterBuildingTranslationMap: {
       strategies: "Estratexias",
       strategy: "Estratexia",
     },
+    delete: "Eliminar",
+    add: "Engadir",
   },
 };
 

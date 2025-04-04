@@ -1,4 +1,5 @@
 import {
+  Button,
   FormControl,
   Grid,
   InputLabel,
@@ -17,7 +18,9 @@ import { RelationshipCircumstances } from '../components/characterBuildings/Rela
 import { ActionUnits } from "../components/characterBuildings/ActionUnits";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
-import { updateCharacterBuilding } from "../../redux/thunks/characterBuildingThunks";
+import { deleteCharacterBuilding, getAllCharacterBuildings, updateCharacterBuilding } from "../../redux/thunks/characterBuildingThunks";
+import { Delete } from "@mui/icons-material";
+import { clearSelectedCharacterBuilding } from "../../redux/slices/characterBuildingSlice";
 
 
 export const CharacterBuildingView = ({
@@ -32,13 +35,13 @@ export const CharacterBuildingView = ({
     sceneCircumstances: characterBuilding.sceneCircumstances,
     previousCircumstances: characterBuilding.previousCircumstances,
     startingPoint: characterBuilding.startingPoint,
-    relationshipCircumstances: characterBuilding.relationshipCircumstances.map(
+    relationshipCircumstances: (characterBuilding.relationshipCircumstances ?? []).map(
       (relation) => ({
         character: relation.character.id,
         circumstance: relation.circumstance,
       })
     ),
-    actionUnits: characterBuilding.actionUnits.map((unit) => ({
+    actionUnits: (characterBuilding.actionUnits ?? []).map((unit) => ({
       action: unit.action,
       strategies: unit.strategies ?? [],
     })),
@@ -99,9 +102,9 @@ export const CharacterBuildingView = ({
         <Typography fontSize={39} fontWeight="light" color="primary.main">
           {characterBuilding?.character?.name} {translationMap.at}{" "}{characterBuilding?.scene?.description}
         </Typography>
-        <Typography variant="body2" color="textSecondary">
+        {characterBuilding.metadata && <Typography variant="body2" color="textSecondary">
           {translationMap.updated} {getTimeAgo(characterBuilding.metadata.updatedAt)}
-        </Typography>
+        </Typography>}
       </Grid>
 
       <SaveButton text={translationMap.save} handleSubmit={handleSubmit} />
@@ -153,6 +156,26 @@ export const CharacterBuildingView = ({
           formData={formData}
           setFormData={setFormData}
         />
+      </Grid>
+
+
+      <Grid size={{ xs: 12 }} sx={{ mt: 10 }}>
+        <Button
+          variant="contained"
+          color="error"
+          onClick={() => {
+            dispatch(deleteCharacterBuilding(characterBuilding.id));
+            dispatch(clearSelectedCharacterBuilding());
+            dispatch(getAllCharacterBuildings());
+          }}
+        >
+          <Delete sx={
+            { fontSize: 30, mr: 1 }
+          } />
+          <Typography fontSize={14} fontWeight="bold" color="secondary.main">
+            {translationMap.delete}
+          </Typography>
+        </Button>
       </Grid>
     </Grid >
   );

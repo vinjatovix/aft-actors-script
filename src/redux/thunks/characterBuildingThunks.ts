@@ -53,6 +53,48 @@ export const getAllCharacterBuildings = createAsyncThunk(
   },
 );
 
+export const createCharacterBuilding = createAsyncThunk(
+  "characterBuilding/create",
+  async (
+    characterBuilding: {
+      id: string;
+      character: string;
+      scene: string;
+    },
+    { rejectWithValue, getState },
+  ) => {
+    try {
+      const state = getState() as { auth: AuthState };
+      const token = state.auth.token;
+      const user = state.auth.user;
+      if (!token) {
+        throw new Error("No hay token disponible");
+      }
+      const url = API_MAP.characterBuildings.create.url;
+      const data = await handleFetch<CharacterBuilding>(url, {
+        method: API_MAP.characterBuildings.create.method,
+        headers: {
+          ...DEFAULT_HEADERS,
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          ...characterBuilding,
+          actor: user.id,
+          relationshipCircumstances: [],
+          actionUnits: [],
+          sceneCircumstances: "",
+          previousCircumstances: "",
+          startingPoint: "",
+          center: "instinctive",
+        }),
+      });
+      return data;
+    } catch (error) {
+      return rejectWithValue(handleError(error, "Error ao crear o persoaxe"));
+    }
+  },
+);
+
 export const updateCharacterBuilding = createAsyncThunk(
   "characterBuilding/update",
   async (
@@ -84,6 +126,35 @@ export const updateCharacterBuilding = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(
         handleError(error, "Error ao actualizar o persoaxe"),
+      );
+    }
+  },
+);
+
+export const deleteCharacterBuilding = createAsyncThunk(
+  "characterBuilding/delete",
+  async (id: string, { rejectWithValue, getState }) => {
+    try {
+      const state = getState() as { auth: AuthState };
+      const token = state.auth.token;
+
+      if (!token) {
+        throw new Error("No hay token disponible");
+      }
+
+      const url = `${API_MAP.characterBuildings.delete.url.replace(":id", id)}`;
+      await handleFetch(url, {
+        method: API_MAP.characterBuildings.delete.method,
+        headers: {
+          ...DEFAULT_HEADERS,
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return id;
+    } catch (error) {
+      return rejectWithValue(
+        handleError(error, "Error ao eliminar o persoaxe"),
       );
     }
   },

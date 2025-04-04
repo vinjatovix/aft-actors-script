@@ -1,10 +1,13 @@
-import { Box, FormControl, InputLabel, MenuItem, Modal, Select, } from '@mui/material'
+import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Modal, Select } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../redux/store';
 import { useEffect, useState } from 'react';
 import { getBookByAuthorId } from '../../../redux/thunks/bookThunks';
 import { getCharactersByBookId } from '../../../redux/thunks/characterThunks';
 import { getScenesByCharacterId } from '../../../redux/thunks/sceneThunks';
+import { clearSelectedCharacterBuilding, setSelectedCharacterBuilding } from '../../../redux/slices/characterBuildingSlice';
+import { v4 as uuidv4 } from 'uuid';
+import { createCharacterBuilding, getAllCharacterBuildings } from '../../../redux/thunks/characterBuildingThunks';
 
 const style = {
     position: 'absolute',
@@ -22,144 +25,200 @@ export const CreateCharacterBuildingModal = ({
     open,
     handleModalClose,
 }: {
-    open: boolean
-    handleModalClose: () => void
+    open: boolean;
+    handleModalClose: () => void;
 }) => {
     const dispatch = useDispatch<AppDispatch>();
-    const [author, setAuthor] = useState("");
-    const [book, setBook] = useState("");
-    const [character, setCharacter] = useState("");
-    const [scene, setScene] = useState("");
+    const [author, setAuthor] = useState<{ id: string; name: string } | null>(null);
+    const [book, setBook] = useState<{ id: string; title: string } | null>(null);
+    const [character, setCharacter] = useState<{ id: string; name: string } | null>(null);
+    const [scene, setScene] = useState<{ id: string; description: string } | null>(null);
 
+    const authors = [
+        { id: '8d91c3c9-f531-4c52-9a88-85cbbeb22546', name: 'Federico García Lorca' },
+        { id: 'author2', name: 'Author 2' },
+    ];
     const { books } = useSelector((state: RootState) => state.book);
     const { characters } = useSelector((state: RootState) => state.character);
     const { scenes } = useSelector((state: RootState) => state.scene);
-    console.log(books)
 
     useEffect(() => {
-        if (author) {
-            dispatch(getBookByAuthorId(author));
+        if (author?.id) {
+            dispatch(getBookByAuthorId(author.id));
         }
     }, [author, dispatch]);
 
     useEffect(() => {
-        if (book) {
-            dispatch(getCharactersByBookId(book));
+        if (book?.id) {
+            dispatch(getCharactersByBookId(book.id));
         }
     }, [book, dispatch]);
 
     useEffect(() => {
-        if (character) {
-            dispatch(getScenesByCharacterId(character));
+        if (character?.id) {
+            dispatch(getScenesByCharacterId(character.id));
         }
     }, [character, dispatch]);
 
-
+    const clearAndClose = () => {
+        // Limpiar todos los estados cuando el modal se cierre
+        setAuthor(null);
+        setBook(null);
+        setCharacter(null);
+        setScene(null);
+        handleModalClose(); // Cierra el modal
+    };
 
     return (
         <div>
-
             <Modal
                 open={open}
-                onClose={handleModalClose}
+                onClose={clearAndClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    <button onClick={handleModalClose}>Pechar</button>
+                    <button onClick={clearAndClose}>Cerrar</button>
 
+                    {/* Selección de Autor */}
                     <FormControl fullWidth sx={{ mt: 2 }}>
                         <InputLabel id="author-label">DramaturgX</InputLabel>
                         <Select
                             labelId="author-label"
                             variant="filled"
-                            value={author}
+                            value={author?.id ?? ''}
                             onChange={(e) => {
-                                const selectedAuthor = e.target.value;
+                                const selectedAuthor = authors.find((a) => a.id === e.target.value);
+                                if (!selectedAuthor) return;
                                 setAuthor(selectedAuthor);
-                                setBook("");
-                                setCharacter("");
-                                setScene("");
-                                dispatch(getBookByAuthorId(selectedAuthor));
-
+                                setBook(null); // Limpia el libro cuando se cambia el autor
+                                setCharacter(null); // Limpia el personaje
+                                setScene(null); // Limpia la escena
+                                dispatch(getBookByAuthorId(selectedAuthor.id));
                             }}
                             name="author"
                         >
-                            <MenuItem value="8d91c3c9-f531-4c52-9a88-85cbbeb22546">Federico García Lorca</MenuItem>
-                            <MenuItem value="author2">Author 2</MenuItem>
-                        </Select>
-                    </FormControl>
-
-
-                    {books.length > 0 && <FormControl fullWidth sx={{ mt: 2 }}>
-                        <InputLabel id="book-label">Obra</InputLabel>
-                        <Select
-                            labelId="book-label"
-                            variant="filled"
-                            value={book}
-                            onChange={(e) => {
-                                const selectedBook = e.target.value;
-                                setBook(selectedBook);
-                                setCharacter("");
-                                setScene("");
-                                dispatch(getCharactersByBookId(selectedBook));
-                            }}
-                            name="book"
-                        >
-                            {books.map((book) => (
-                                <MenuItem key={book.id} value={book.id}>
-                                    {book.title}
-                                </MenuItem>
-                            ))}
-
-                        </Select>
-                    </FormControl>}
-
-                    {characters.length > 0 && <FormControl fullWidth sx={{ mt: 2 }}>
-                        <InputLabel id="character-label">Personaxe</InputLabel>
-                        <Select
-                            labelId="character-label"
-                            variant="filled"
-                            value={character}
-                            onChange={(e) => {
-                                const selectedCharacter = e.target.value;
-                                setCharacter(selectedCharacter);
-                                setScene("");
-                            }}
-
-                            name="character"
-                        >
-                            {characters.map((character) => (
-                                <MenuItem key={character.id} value={character.id}>
-                                    {character.name}
+                            {authors.map((author) => (
+                                <MenuItem key={author.id} value={author.id}>
+                                    {author.name}
                                 </MenuItem>
                             ))}
                         </Select>
                     </FormControl>
-                    }
 
-                    {scenes.length > 0 && <FormControl fullWidth sx={{ mt: 2 }}>
-                        <InputLabel id="scene-label">Escea</InputLabel>
-                        <Select
-                            labelId="scene-label"
-                            variant="filled"
-                            value={scene}
-                            onChange={(e) => {
-                                const selectedScene = e.target.value;
-                                setScene(selectedScene);
-                            }}
-                            name="scene"
-                        >
-                            {scenes.map((scene) => (
-                                <MenuItem key={scene.id} value={scene.id}>
-                                    {scene.description}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>}
+                    {/* Selección de Obra - Solo aparece si hay un autor seleccionado */}
+                    {author && books.length > 0 && (
+                        <FormControl fullWidth sx={{ mt: 2 }}>
+                            <InputLabel id="book-label">Obra</InputLabel>
+                            <Select
+                                labelId="book-label"
+                                variant="filled"
+                                value={book?.id ?? ''}
+                                onChange={(e) => {
+                                    const selectedBook = books.find((b) => b.id === e.target.value);
+                                    if (!selectedBook) return;
+                                    setBook(selectedBook);
+                                    setCharacter(null); // Limpia el personaje
+                                    setScene(null); // Limpia la escena
+                                    dispatch(getCharactersByBookId(selectedBook.id));
+                                }}
+                                name="book"
+                            >
+                                {books.map((book) => (
+                                    <MenuItem key={book.id} value={book.id}>
+                                        {book.title}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    )}
 
+                    {/* Selección de Personaje - Solo aparece si hay un libro seleccionado */}
+                    {book && characters.length > 0 && (
+                        <FormControl fullWidth sx={{ mt: 2 }}>
+                            <InputLabel id="character-label">Personaxe</InputLabel>
+                            <Select
+                                labelId="character-label"
+                                variant="filled"
+                                value={character?.id ?? ''}
+                                onChange={(e) => {
+                                    const selectedCharacter = characters.find((c) => c.id === e.target.value);
+                                    if (!selectedCharacter) return;
+                                    setCharacter(selectedCharacter);
+                                    setScene(null); // Limpia la escena
+                                }}
+                                name="character"
+                            >
+                                {characters.map((character) => (
+                                    <MenuItem key={character.id} value={character.id}>
+                                        {character.name}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    )}
+
+                    {/* Selección de Escena - Solo aparece si hay un personaje seleccionado */}
+                    {character && scenes.length > 0 && (
+                        <FormControl fullWidth sx={{ mt: 2 }}>
+                            <InputLabel id="scene-label">Escea</InputLabel>
+                            <Select
+                                labelId="scene-label"
+                                variant="filled"
+                                value={scene?.id ?? ''}
+                                onChange={(e) => {
+                                    const selectedScene = scenes.find((s) => s.id === e.target.value);
+                                    if (!selectedScene) return;
+                                    setScene(selectedScene);
+                                }}
+                                name="scene"
+                            >
+                                {scenes.map((scene) => (
+                                    <MenuItem key={scene.id} value={scene.id}>
+                                        {scene.description}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    )}
+
+                    {scene && (
+                        <Grid>
+                            <Button
+                                color="primary"
+                                variant="outlined"
+                                size="small"
+                                sx={{ padding: 1, textTransform: 'none', mt: 2 }}
+                                onClick={() => {
+                                    dispatch(clearSelectedCharacterBuilding());
+                                    const id = uuidv4();
+                                    if (!author || !book || !character || !scene) return;
+                                    dispatch(createCharacterBuilding({ id, character: character.id, scene: scene.id }));
+                                    dispatch(getAllCharacterBuildings());
+                                    dispatch(
+                                        setSelectedCharacterBuilding({
+                                            id,
+                                            author,
+                                            book,
+                                            character,
+                                            scene,
+                                            relationshipCircumstances: [],
+                                            actionUnits: [],
+                                            center: 'instinctive',
+                                        })
+                                    );
+                                    clearAndClose();
+                                }}
+                            >
+                                <span style={{ fontSize: 30, marginRight: 8 }}>+</span>
+                                <span style={{ fontSize: 14, fontWeight: 'light', color: 'primary.main' }}>
+                                    Crear personaxe
+                                </span>
+                            </Button>
+                        </Grid>
+                    )}
                 </Box>
             </Modal>
         </div >
-    )
-}
+    );
+};
