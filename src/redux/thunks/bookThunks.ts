@@ -40,7 +40,7 @@ export const getAllBooks = createAsyncThunk(
   },
 );
 
-export const getBookByAuthorId = createAsyncThunk(
+export const getBooksByAuthorId = createAsyncThunk(
   "books/getByAuthorId",
   async (authorId: string, { rejectWithValue, getState }) => {
     try {

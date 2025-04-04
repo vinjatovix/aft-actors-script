@@ -11,7 +11,6 @@ import {
 import { useState } from "react";
 
 import { CharacterBuilding } from "../../redux/interfaces/characterBuildingInterfaces";
-import { getTimeAgo } from "../../utils/getTimeAgo";
 import { characterBuildingTranslationMap } from "../../auth/pages/translationMap";
 import { SaveButton } from "../components/buttons/SaveButton";
 import { RelationshipCircumstances } from '../components/characterBuildings/RelationshipCircumstances';
@@ -21,6 +20,7 @@ import { AppDispatch } from "../../redux/store";
 import { deleteCharacterBuilding, getAllCharacterBuildings, updateCharacterBuilding } from "../../redux/thunks/characterBuildingThunks";
 import { Delete } from "@mui/icons-material";
 import { clearSelectedCharacterBuilding } from "../../redux/slices/characterBuildingSlice";
+import { CharacterBuildingHeader } from "../components/characterBuildings/CharacterBuildingHeader";
 
 
 export const CharacterBuildingView = ({
@@ -32,9 +32,9 @@ export const CharacterBuildingView = ({
 
   const [formData, setFormData] = useState({
     center: characterBuilding.center,
-    sceneCircumstances: characterBuilding.sceneCircumstances,
-    previousCircumstances: characterBuilding.previousCircumstances,
-    startingPoint: characterBuilding.startingPoint,
+    sceneCircumstances: characterBuilding.sceneCircumstances ?? "",
+    previousCircumstances: characterBuilding.previousCircumstances ?? "",
+    startingPoint: characterBuilding.startingPoint ?? "",
     relationshipCircumstances: (characterBuilding.relationshipCircumstances ?? []).map(
       (relation) => ({
         character: relation.character.id,
@@ -87,6 +87,12 @@ export const CharacterBuildingView = ({
     );
   }
 
+  const handleDelete = () => {
+    dispatch(deleteCharacterBuilding(characterBuilding.id));
+    dispatch(clearSelectedCharacterBuilding());
+    dispatch(getAllCharacterBuildings());
+  }
+
   const currentLanguage = localStorage.getItem("language") ?? "es_gl";
   const translationMap = characterBuildingTranslationMap[currentLanguage];
 
@@ -98,15 +104,8 @@ export const CharacterBuildingView = ({
       justifyContent="space-between"
       sx={{ mb: 1, width: "100%" }}
     >
-      <Grid>
-        <Typography fontSize={39} fontWeight="light" color="primary.main">
-          {characterBuilding?.character?.name} {translationMap.at}{" "}{characterBuilding?.scene?.description}
-        </Typography>
-        {characterBuilding.metadata && <Typography variant="body2" color="textSecondary">
-          {translationMap.updated} {getTimeAgo(characterBuilding.metadata.updatedAt)}
-        </Typography>}
-      </Grid>
 
+      <CharacterBuildingHeader name={characterBuilding.character.name} description={characterBuilding.scene.description} updatedAt={characterBuilding.metadata?.updatedAt} />
       <SaveButton text={translationMap.save} handleSubmit={handleSubmit} />
 
       <Grid container spacing={2} sx={{ mt: 2 }}>
@@ -163,11 +162,7 @@ export const CharacterBuildingView = ({
         <Button
           variant="contained"
           color="error"
-          onClick={() => {
-            dispatch(deleteCharacterBuilding(characterBuilding.id));
-            dispatch(clearSelectedCharacterBuilding());
-            dispatch(getAllCharacterBuildings());
-          }}
+          onClick={handleDelete}
         >
           <Delete sx={
             { fontSize: 30, mr: 1 }

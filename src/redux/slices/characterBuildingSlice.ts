@@ -1,6 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { CharacterBuildingState } from "../interfaces/characterBuildingInterfaces";
-import { getAllCharacterBuildings } from "../thunks/characterBuildingThunks";
+import {
+  createCharacterBuilding,
+  deleteCharacterBuilding,
+  getAllCharacterBuildings,
+} from "../thunks/characterBuildingThunks";
 
 const initialState: CharacterBuildingState = {
   characterBuildings: [],
@@ -31,6 +35,34 @@ const characterBuildingSlice = createSlice({
         state.characterBuildings = action.payload ?? [];
       })
       .addCase(getAllCharacterBuildings.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(createCharacterBuilding.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createCharacterBuilding.fulfilled, (state, action) => {
+        state.loading = false;
+        state.characterBuildings.push(action.payload);
+        state.error = null;
+      })
+      .addCase(createCharacterBuilding.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(deleteCharacterBuilding.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteCharacterBuilding.fulfilled, (state, action) => {
+        state.loading = false;
+        state.characterBuildings = state.characterBuildings.filter(
+          (building) => building.id !== action.payload,
+        );
+        state.error = null;
+      })
+      .addCase(deleteCharacterBuilding.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

@@ -5,7 +5,7 @@ export interface Character {
   id: string;
   name: string;
   book: Book;
-  metadata: Metadata;
+  metadata?: Metadata;
 }
 
 export interface CharacterState {

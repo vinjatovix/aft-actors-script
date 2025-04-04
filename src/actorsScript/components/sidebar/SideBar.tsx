@@ -2,13 +2,17 @@ import { Accordion, AccordionDetails, AccordionSummary, Box, Divider, Drawer, Li
 import { CharacterBuilding } from "../../../redux/interfaces/characterBuildingInterfaces"
 import { ExpandMore } from "@mui/icons-material"
 import { useDispatch } from "react-redux"
-import { setSelectedCharacterBuilding } from "../../../redux/slices/characterBuildingSlice"
+import { clearSelectedCharacterBuilding, setSelectedCharacterBuilding } from "../../../redux/slices/characterBuildingSlice"
+import { useEffect } from "react"
 
 export const SideBar = ({ drawerWith = 240, header = "Actors Script", icon, data }: {
     drawerWith?: number, header?: string, icon?: React.ReactNode, data?: CharacterBuilding[]
 
 }) => {
     const dispatch = useDispatch();
+
+    useEffect(() => {
+    }, [data]);
     const constructionsByPlay = data?.reduce((acc, characterBuilding) => {
         const title = characterBuilding?.character?.book?.title;
         const characterName = characterBuilding?.character?.name;
@@ -100,6 +104,7 @@ export const SideBar = ({ drawerWith = 240, header = "Actors Script", icon, data
                                                     {character.characterBuildings.map((building) => (
                                                         <ListItem key={building.id} disablePadding sx={{ mt: 1 }}>
                                                             <ListItemButton onClick={() => {
+                                                                dispatch(clearSelectedCharacterBuilding());
                                                                 dispatch(setSelectedCharacterBuilding(building));
                                                             }}>
                                                                 <ListItemText primary={building.scene.description} />

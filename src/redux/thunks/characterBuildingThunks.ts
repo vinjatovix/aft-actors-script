@@ -58,8 +58,10 @@ export const createCharacterBuilding = createAsyncThunk(
   async (
     characterBuilding: {
       id: string;
-      character: string;
-      scene: string;
+      character: { id: string; name: string };
+      book: { id: string; title: string };
+      scene: { id: string; description: string; characters: string[] };
+      author: { id: string; name: string };
     },
     { rejectWithValue, getState },
   ) => {
@@ -70,27 +72,66 @@ export const createCharacterBuilding = createAsyncThunk(
       if (!token) {
         throw new Error("No hay token disponible");
       }
+      if (!user?.id) {
+        throw new Error(
+          "El usuario no está disponible o no tiene un ID válido.",
+        );
+      }
+      const payload = {
+        id: characterBuilding.id,
+        scene: characterBuilding.scene.id,
+        character: characterBuilding.character.id,
+        actor: user.id,
+        relationshipCircumstances: [],
+        actionUnits: [],
+        sceneCircumstances: "",
+        previousCircumstances: "",
+        startingPoint: "",
+        center: "instinctive",
+      };
       const url = API_MAP.characterBuildings.create.url;
-      const data = await handleFetch<CharacterBuilding>(url, {
+      await handleFetch<CharacterBuilding>(url, {
         method: API_MAP.characterBuildings.create.method,
         headers: {
           ...DEFAULT_HEADERS,
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          ...characterBuilding,
-          actor: user.id,
-          relationshipCircumstances: [],
-          actionUnits: [],
-          sceneCircumstances: "",
-          previousCircumstances: "",
-          startingPoint: "",
-          center: "instinctive",
-        }),
+        body: JSON.stringify(payload),
       });
-      return data;
+
+      const metadata = {
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        createdBy: user.id,
+        updatedBy: user.id,
+      };
+      return {
+        ...payload,
+        scene: {
+          id: characterBuilding.scene.id,
+          description: characterBuilding.scene.description,
+          characters: characterBuilding.scene.characters,
+        },
+        character: {
+          id: characterBuilding.character.id,
+          name: characterBuilding.character.name,
+          book: {
+            id: characterBuilding.book.id,
+            title: characterBuilding.book.title,
+            author: {
+              id: characterBuilding.author.id,
+              name: characterBuilding.author.name,
+            },
+          },
+        },
+        metadata,
+        actor: {
+          id: user.id,
+          username: user.username,
+        },
+      };
     } catch (error) {
-      return rejectWithValue(handleError(error, "Error ao crear o persoaxe"));
+      return rejectWithValue(handleError(error, "Erro ó crea-la persoaxe"));
     }
   },
 );

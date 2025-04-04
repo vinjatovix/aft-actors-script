@@ -2,7 +2,7 @@ import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Modal, Select } f
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../redux/store';
 import { useEffect, useState } from 'react';
-import { getBookByAuthorId } from '../../../redux/thunks/bookThunks';
+import { getBooksByAuthorId } from '../../../redux/thunks/bookThunks';
 import { getCharactersByBookId } from '../../../redux/thunks/characterThunks';
 import { getScenesByCharacterId } from '../../../redux/thunks/sceneThunks';
 import { clearSelectedCharacterBuilding, setSelectedCharacterBuilding } from '../../../redux/slices/characterBuildingSlice';
@@ -32,7 +32,7 @@ export const CreateCharacterBuildingModal = ({
     const [author, setAuthor] = useState<{ id: string; name: string } | null>(null);
     const [book, setBook] = useState<{ id: string; title: string } | null>(null);
     const [character, setCharacter] = useState<{ id: string; name: string } | null>(null);
-    const [scene, setScene] = useState<{ id: string; description: string } | null>(null);
+    const [scene, setScene] = useState<{ id: string; description: string, characters: { id: string, name: string }[] } | null>(null);
 
     const authors = [
         { id: '8d91c3c9-f531-4c52-9a88-85cbbeb22546', name: 'Federico García Lorca' },
@@ -44,7 +44,7 @@ export const CreateCharacterBuildingModal = ({
 
     useEffect(() => {
         if (author?.id) {
-            dispatch(getBookByAuthorId(author.id));
+            dispatch(getBooksByAuthorId(author.id));
         }
     }, [author, dispatch]);
 
@@ -61,12 +61,11 @@ export const CreateCharacterBuildingModal = ({
     }, [character, dispatch]);
 
     const clearAndClose = () => {
-        // Limpiar todos los estados cuando el modal se cierre
         setAuthor(null);
         setBook(null);
         setCharacter(null);
         setScene(null);
-        handleModalClose(); // Cierra el modal
+        handleModalClose();
     };
 
     return (
@@ -80,7 +79,6 @@ export const CreateCharacterBuildingModal = ({
                 <Box sx={style}>
                     <button onClick={clearAndClose}>Cerrar</button>
 
-                    {/* Selección de Autor */}
                     <FormControl fullWidth sx={{ mt: 2 }}>
                         <InputLabel id="author-label">DramaturgX</InputLabel>
                         <Select
@@ -91,10 +89,10 @@ export const CreateCharacterBuildingModal = ({
                                 const selectedAuthor = authors.find((a) => a.id === e.target.value);
                                 if (!selectedAuthor) return;
                                 setAuthor(selectedAuthor);
-                                setBook(null); // Limpia el libro cuando se cambia el autor
-                                setCharacter(null); // Limpia el personaje
-                                setScene(null); // Limpia la escena
-                                dispatch(getBookByAuthorId(selectedAuthor.id));
+                                setBook(null);
+                                setCharacter(null);
+                                setScene(null);
+                                dispatch(getBooksByAuthorId(selectedAuthor.id));
                             }}
                             name="author"
                         >
@@ -106,7 +104,6 @@ export const CreateCharacterBuildingModal = ({
                         </Select>
                     </FormControl>
 
-                    {/* Selección de Obra - Solo aparece si hay un autor seleccionado */}
                     {author && books.length > 0 && (
                         <FormControl fullWidth sx={{ mt: 2 }}>
                             <InputLabel id="book-label">Obra</InputLabel>
@@ -118,8 +115,8 @@ export const CreateCharacterBuildingModal = ({
                                     const selectedBook = books.find((b) => b.id === e.target.value);
                                     if (!selectedBook) return;
                                     setBook(selectedBook);
-                                    setCharacter(null); // Limpia el personaje
-                                    setScene(null); // Limpia la escena
+                                    setCharacter(null);
+                                    setScene(null);
                                     dispatch(getCharactersByBookId(selectedBook.id));
                                 }}
                                 name="book"
@@ -133,7 +130,6 @@ export const CreateCharacterBuildingModal = ({
                         </FormControl>
                     )}
 
-                    {/* Selección de Personaje - Solo aparece si hay un libro seleccionado */}
                     {book && characters.length > 0 && (
                         <FormControl fullWidth sx={{ mt: 2 }}>
                             <InputLabel id="character-label">Personaxe</InputLabel>
@@ -145,7 +141,7 @@ export const CreateCharacterBuildingModal = ({
                                     const selectedCharacter = characters.find((c) => c.id === e.target.value);
                                     if (!selectedCharacter) return;
                                     setCharacter(selectedCharacter);
-                                    setScene(null); // Limpia la escena
+                                    setScene(null);
                                 }}
                                 name="character"
                             >
@@ -158,7 +154,6 @@ export const CreateCharacterBuildingModal = ({
                         </FormControl>
                     )}
 
-                    {/* Selección de Escena - Solo aparece si hay un personaje seleccionado */}
                     {character && scenes.length > 0 && (
                         <FormControl fullWidth sx={{ mt: 2 }}>
                             <InputLabel id="scene-label">Escea</InputLabel>
@@ -193,7 +188,7 @@ export const CreateCharacterBuildingModal = ({
                                     dispatch(clearSelectedCharacterBuilding());
                                     const id = uuidv4();
                                     if (!author || !book || !character || !scene) return;
-                                    dispatch(createCharacterBuilding({ id, character: character.id, scene: scene.id }));
+                                    dispatch(createCharacterBuilding({ id, character, book, scene, author }));
                                     dispatch(getAllCharacterBuildings());
                                     dispatch(
                                         setSelectedCharacterBuilding({

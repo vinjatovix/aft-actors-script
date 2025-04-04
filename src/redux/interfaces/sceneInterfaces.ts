@@ -5,7 +5,7 @@ export interface Scene {
   id: string;
   description: string;
   characters: Character[];
-  metadata: Metadata;
+  metadata?: Metadata;
 }
 
 export interface SceneState {

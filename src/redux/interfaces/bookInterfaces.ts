@@ -6,8 +6,8 @@ export interface Book {
   author: {
     id: string;
     name: string;
-    metadata: Metadata;
+    metadata?: Metadata;
   };
-  metadata: Metadata;
-  pages: number;
+  metadata?: Metadata;
+  pages?: number;
 }
