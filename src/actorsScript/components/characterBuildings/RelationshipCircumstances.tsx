@@ -1,7 +1,7 @@
 import { Add, Delete } from "@mui/icons-material";
 import { Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
 
-export const RelationshipCircumstances = ({ setRelations, relations, handleRelationChange, title, relationshipCircumstances }: {
+export const RelationshipCircumstances = ({ setRelations, relations, handleRelationChange, title, relationshipCircumstances, characters }: {
     setRelations: React.Dispatch<React.SetStateAction<{ character: { id: string; name: string }; circumstance: string }[]>>;
     relations: { character: { id: string; name: string }; circumstance: string }[];
     handleRelationChange: (index: number, field: string, value: string) => void;
@@ -9,6 +9,10 @@ export const RelationshipCircumstances = ({ setRelations, relations, handleRelat
     relationshipCircumstances: {
         character: { id: string; name: string },
         circumstance: string;
+    }[]
+    characters: {
+        id: string;
+        name: string;
     }[]
 
 }) => {
@@ -53,27 +57,33 @@ export const RelationshipCircumstances = ({ setRelations, relations, handleRelat
                         </Button>
                     </Grid>
                     <Grid size={{ xs: 4 }}>
-                        <FormControl fullWidth>
-                            <InputLabel>Personaje</InputLabel>
-                            <Select
-                                value={relation.character.id}
-                                onChange={(e) => {
-                                    const selectedRelation = relationshipCircumstances.find(({ character }) => character.id === e.target.value);
-                                    if (selectedRelation) {
-                                        const updatedRelations = relations.map((rel, i) =>
-                                            i === index ? { ...rel, character: { id: selectedRelation.character.id, name: selectedRelation.character.name } } : rel
-                                        );
-                                        setRelations(updatedRelations);
-                                    }
-                                }}
-                            >
-                                {relationshipCircumstances.map(({ character }) => (
-                                    <MenuItem key={character.id} value={character.id}>
-                                        {character.name}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
+                        {relation.character.id ? (
+                            <Typography variant="body1">
+                                {relation.character.name}
+                            </Typography>
+                        ) : (
+                            <FormControl fullWidth>
+                                <InputLabel>Personaje</InputLabel>
+                                <Select
+                                    value={relation.character.id}
+                                    onChange={(e) => {
+                                        const selectedRelation = relationshipCircumstances.find(({ character }) => character.id === e.target.value);
+                                        if (selectedRelation) {
+                                            const updatedRelations = relations.map((rel, i) =>
+                                                i === index ? { ...rel, character: { id: selectedRelation.character.id, name: selectedRelation.character.name } } : rel
+                                            );
+                                            setRelations(updatedRelations);
+                                        }
+                                    }}
+                                >
+                                    {characters.map((character) => (
+                                        <MenuItem key={character.id} value={character.id}>
+                                            {character.name}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        )}
                     </Grid>
                     <Grid size={{ xs: 7 }}>
                         <TextField
@@ -89,5 +99,5 @@ export const RelationshipCircumstances = ({ setRelations, relations, handleRelat
                 </Grid>
             ))}
         </Grid>
-    )
-}
+    );
+};

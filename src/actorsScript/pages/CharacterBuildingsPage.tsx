@@ -13,8 +13,20 @@ import { CharacterBuildingMobileView } from "../views/CharacterBuildingMobileVie
 
 export const CharacterBuildings = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const { token } = useSelector((state: RootState) => state.auth); // Obtén el token del estado global
+
+
   const { characterBuildings, loading, error, selectedCharacterBuilding } = useSelector((state: RootState) => state.characterBuilding);
+
   const [modalOpen, setModalOpen] = useState(false);
+
+  useEffect(() => {
+    // Solo dispara la acción si el token está disponible
+    if (token) {
+      dispatch(getAllCharacterBuildings());
+    }
+  }, [dispatch, token]); // Agrega el token como dependencia
+
   const handleModalOpen = () => {
     setModalOpen(true);
   };
@@ -22,9 +34,8 @@ export const CharacterBuildings = () => {
     setModalOpen(false);
   };
 
-  useEffect(() => {
-    dispatch(getAllCharacterBuildings());
-  }, [dispatch]);
+
+
 
 
 

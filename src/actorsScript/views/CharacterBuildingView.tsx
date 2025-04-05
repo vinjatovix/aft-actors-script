@@ -149,6 +149,9 @@ export const CharacterBuildingView = ({
           setRelations={setRelations}
           relationshipCircumstances={characterBuilding.relationshipCircumstances}
           handleRelationChange={handleRelationChange}
+          characters={characterBuilding.scene.characters.filter(
+            (character) => character.id !== characterBuilding.character.id
+          )}
         />
 
         <ActionUnits

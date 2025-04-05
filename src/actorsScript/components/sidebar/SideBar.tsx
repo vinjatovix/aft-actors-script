@@ -1,19 +1,28 @@
 import { Accordion, AccordionDetails, AccordionSummary, Box, Divider, Drawer, List, ListItem, ListItemButton, /* ListItemIcon */ ListItemText, Toolbar, Typography } from "@mui/material"
 import { CharacterBuilding } from "../../../redux/interfaces/characterBuildingInterfaces"
 import { ExpandMore } from "@mui/icons-material"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { clearSelectedCharacterBuilding, setSelectedCharacterBuilding } from "../../../redux/slices/characterBuildingSlice"
 import { useEffect } from "react"
+import { AppDispatch, RootState } from "../../../redux/store"
+import { getAllCharacterBuildings } from "../../../redux/thunks/characterBuildingThunks"
 
-export const SideBar = ({ drawerWith = 240, header = "Actors Script", icon, data }: {
-    drawerWith?: number, header?: string, icon?: React.ReactNode, data?: CharacterBuilding[]
+export const SideBar = ({ drawerWith = 240, header = "Actors Script", icon, }: {
+    drawerWith?: number, header?: string, icon?: React.ReactNode,
 
 }) => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
+    const { characterBuildings } = useSelector((state: RootState) => state.characterBuilding);
 
     useEffect(() => {
-    }, [data]);
-    const constructionsByPlay = data?.reduce((acc, characterBuilding) => {
+        dispatch(getAllCharacterBuildings());
+    }, [dispatch]);
+
+    useEffect(() => {
+    }, [characterBuildings]);
+
+
+    const constructionsByPlay = characterBuildings?.reduce((acc, characterBuilding) => {
         const title = characterBuilding?.character?.book?.title;
         const characterName = characterBuilding?.character?.name;
         if (!acc[title]) {

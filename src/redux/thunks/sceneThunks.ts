@@ -54,7 +54,7 @@ export const getScenesByCharacterId = createAsyncThunk(
 
       const queryParams = new URLSearchParams({
         filter: `characters:${characterId}`,
-        fields: "description,characters",
+        fields: "description,characters.name",
         include: "characters",
       }).toString();
       const url = `${API_MAP.scenes.getAll.url}?${queryParams}`;

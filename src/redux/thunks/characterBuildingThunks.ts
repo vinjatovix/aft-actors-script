@@ -34,7 +34,7 @@ export const getAllCharacterBuildings = createAsyncThunk(
         include:
           "character.book.author,scene.characters,actor,relationshipCircumstances.character",
         fields:
-          "startingPoint,previousCircumstances,sceneCircumstances,center,relationshipCircumstances.circumstance,relationshipCircumstances.character.name,scene.description,scene.characters,actor.username,actionUnits,center,character.name,character.book.title,character.book.author.name",
+          "startingPoint,previousCircumstances,sceneCircumstances,center,relationshipCircumstances.circumstance,relationshipCircumstances.character.name,scene.description,scene.characters.name,actor.username,actionUnits,center,character.name,character.book.title,character.book.author.name",
         filter: `actor:${user.id}`,
       }).toString();
       const url = `${API_MAP.characterBuildings.getAll.url}?${queryParams}`;
@@ -60,7 +60,14 @@ export const createCharacterBuilding = createAsyncThunk(
       id: string;
       character: { id: string; name: string };
       book: { id: string; title: string };
-      scene: { id: string; description: string; characters: string[] };
+      scene: {
+        id: string;
+        description: string;
+        characters: {
+          id: string;
+          name: string;
+        }[];
+      };
       author: { id: string; name: string };
     },
     { rejectWithValue, getState },
