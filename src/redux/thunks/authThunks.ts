@@ -40,7 +40,8 @@ export const loginUser = createAsyncThunk(
       }
 
       saveToken(data.token);
-      return data;
+
+      return { token: data.token, user: getUserFromToken(data.token) };
     } catch (error) {
       return rejectWithValue(
         handleError(error, "Ocurrió un error desconocido"),
