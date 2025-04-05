@@ -5,3 +5,5 @@ npm run check-dependencies
 npm run lint
 
 npm run test
+
+npm run build

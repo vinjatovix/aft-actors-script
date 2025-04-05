@@ -12,8 +12,8 @@ export const SceneCard = (scene: Scene) => {
         </Typography>
       )}
       <h1>
-        {scene.characters[0].book.title} -{" "}
-        {scene.characters[0].book.author.name}
+        {scene.characters?.[0]?.book?.title ?? "Unknown Title"} -{" "}
+        {scene.characters?.[0]?.book?.author?.name ?? "Unknown Author"}
       </h1>
       <h2>{scene.description}</h2>
       <ul>
