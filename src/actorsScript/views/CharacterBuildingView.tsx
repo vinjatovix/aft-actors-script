@@ -1,19 +1,10 @@
-import {
-  Button,
-  FormControl,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Button, Grid, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 
 import { CharacterBuilding } from "../../redux/interfaces/characterBuildingInterfaces";
-import { characterBuildingTranslationMap } from "../../auth/pages/translationMap";
+import { characterBuildingTranslationMap } from "../../i18n/translationMap";
 import { SaveButton } from "../components/buttons/SaveButton";
-import { RelationshipCircumstances } from "../components/characterBuildings/RelationshipCircumstances";
+import { RelationshipCircumstances } from "../components/characterBuildings/relationshipCircumstances/RelationshipCircumstances";
 import { ActionUnits } from "../components/characterBuildings/ActionUnits";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
@@ -25,6 +16,7 @@ import {
 import { Delete } from "@mui/icons-material";
 import { clearSelectedCharacterBuilding } from "../../redux/slices/characterBuildingSlice";
 import { CharacterBuildingHeader } from "../components/characterBuildings/CharacterBuildingHeader";
+import { CharacterBuildingCenterSelector } from "../components/characterBuildings/CharacterBuildingCenterSelector";
 
 export const CharacterBuildingView = ({
   characterBuilding,
@@ -113,29 +105,15 @@ export const CharacterBuildingView = ({
       <SaveButton text={translationMap.save} handleSubmit={handleSubmit} />
 
       <Grid container spacing={2} sx={{ mt: 2 }}>
-        <FormControl fullWidth>
-          <InputLabel id="center-label">
-            {translationMap.center.label}
-          </InputLabel>
-          <Select
-            labelId="center-label"
-            variant="filled"
-            value={formData.center}
-            onChange={(e) => {
-              const selectedCenter = e.target.value;
-              setFormData({ ...formData, center: selectedCenter });
-            }}
-            name="center"
-          >
-            <MenuItem value="instinctive">
-              {translationMap.center.instinctive}
-            </MenuItem>
-            <MenuItem value="mental">{translationMap.center.mental}</MenuItem>
-            <MenuItem value="emotional">
-              {translationMap.center.emotional}
-            </MenuItem>
-          </Select>
-        </FormControl>
+        <CharacterBuildingCenterSelector
+          formData={formData}
+          setFormData={
+            setFormData as React.Dispatch<
+              React.SetStateAction<{ center: string }>
+            >
+          }
+          translationMap={translationMap.center}
+        />
 
         {(
           [
@@ -160,7 +138,7 @@ export const CharacterBuildingView = ({
         ))}
 
         <RelationshipCircumstances
-          title={translationMap.relationshipCircumstances}
+          translationMap={translationMap}
           relations={relations}
           setRelations={setRelations}
           handleRelationChange={handleRelationChange}

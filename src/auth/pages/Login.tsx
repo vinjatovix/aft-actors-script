@@ -5,7 +5,7 @@ import Loader from "../../actorsScript/components/Loader";
 import { useFormValidation } from "../hooks/useFormValidation";
 import { AppDispatch, RootState } from "../../redux/store";
 import { loginUser } from "../../redux/thunks/authThunks";
-import { loginTranslationMap } from "./translationMap";
+import { loginTranslationMap } from "../../i18n/translationMap";
 import { LoginPayload } from "../../redux/interfaces/authInterfaces";
 import { Button, Grid, Link, TextField, Typography } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";

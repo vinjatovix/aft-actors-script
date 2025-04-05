@@ -6,7 +6,7 @@ import { useFormValidation } from "../hooks/useFormValidation";
 import { autoClearError } from "../../redux/slices/authSlice";
 import { AppDispatch, RootState } from "../../redux/store";
 import { registerUser } from "../../redux/thunks/authThunks";
-import { registerTranslationMap } from "./translationMap";
+import { registerTranslationMap } from "../../i18n/translationMap";
 import { AuthLayout } from "../layout/AuthLayout";
 import { Button, Grid, Link, TextField, Typography } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";

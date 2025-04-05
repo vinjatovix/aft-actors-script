@@ -1,7 +1,7 @@
 import { Add, Delete } from "@mui/icons-material";
 import { Button, Grid, TextField, Typography } from "@mui/material";
 import { v4 as uuidv4 } from "uuid";
-import { characterBuildingTranslationMap } from "../../../auth/pages/translationMap";
+import { characterBuildingTranslationMap } from "../../../i18n/translationMap";
 import { useState } from "react";
 
 interface ActionUnit {
