@@ -19,6 +19,29 @@ jest.mock("../../../src/utils/handleFetch", () => ({
   handleFetch: jest.fn(),
 }));
 
+jest.mock("../../../src/utils/getUserFromToken", () => ({
+  getUserFromToken: jest.fn(() => ({
+    id: "1",
+    username: "test",
+    email: EMAIL,
+    roles: ["user"],
+  })),
+}));
+
+const EMAIL = "test@email.com";
+const PASSWORD = "password";
+const TOKEN = "test-token";
+
+const DEFAULT_RESPONSE: AuthLoginResponse = {
+  token: TOKEN,
+  user: {
+    username: "test",
+    id: "1",
+    roles: ["user"],
+    email: EMAIL,
+  },
+};
+
 describe("authSlice", () => {
   const INITIAL_STATE: AuthState = {
     token: null,
@@ -30,20 +53,6 @@ describe("authSlice", () => {
     },
     loading: false,
     error: null,
-  };
-
-  const EMAIL = "test@email.com";
-  const PASSWORD = "password";
-  const TOKEN = "test-token";
-
-  const DEFAULT_RESPONSE: AuthLoginResponse = {
-    token: TOKEN,
-    user: {
-      username: "test",
-      id: "1",
-      roles: ["user"],
-      email: EMAIL,
-    },
   };
 
   beforeEach(() => {
