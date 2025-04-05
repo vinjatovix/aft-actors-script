@@ -145,6 +145,7 @@ export const CharacterBuildingView = ({
           characters={characterBuilding.scene.characters.filter(
             (character) => character.id !== characterBuilding.character.id
           )}
+          setFormData={setFormData}
         />
 
         <ActionUnits formData={formData} setFormData={setFormData} />

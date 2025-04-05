@@ -8,6 +8,7 @@ export const RelationshipCircumstances = ({
   relations,
   handleRelationChange,
   characters,
+  setFormData,
 }: {
   translationMap: {
     relationshipCircumstances: string;
@@ -28,6 +29,16 @@ export const RelationshipCircumstances = ({
     id: string;
     name: string;
   }[];
+  setFormData: React.Dispatch<
+    React.SetStateAction<{
+      center: string;
+      sceneCircumstances: string;
+      previousCircumstances: string;
+      startingPoint: string;
+      relationshipCircumstances: { character: string; circumstance: string }[];
+      actionUnits: { action: string; strategies: string[] }[];
+    }>
+  >;
 }) => {
   const handleAddRelation = () => {
     setRelations([
@@ -37,7 +48,16 @@ export const RelationshipCircumstances = ({
   };
 
   const handleRemoveRelation = (index: number) => {
-    setRelations(relations.filter((_, i) => i !== index));
+    const updatedRelations = relations.filter((_, i) => i !== index);
+    setRelations(updatedRelations);
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      relationshipCircumstances: updatedRelations.map((relation) => ({
+        character: relation.character.id,
+        circumstance: relation.circumstance,
+      })),
+    }));
   };
 
   return (

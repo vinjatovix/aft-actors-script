@@ -11,6 +11,7 @@ describe("RelationshipCircumstances Component", () => {
 
   const mockSetRelations = jest.fn();
   const mockHandleRelationChange = jest.fn();
+  const mockSetFormData = jest.fn();
 
   const mockCharacters = [
     { id: "1", name: "Character 1" },
@@ -21,16 +22,24 @@ describe("RelationshipCircumstances Component", () => {
     { character: { id: "1", name: "Character 1" }, circumstance: "Friend" },
   ];
 
-  it("renders the RelationshipCircumstancesHeader component", () => {
+  const renderComponent = (relations = mockRelations) =>
     render(
       <RelationshipCircumstances
         translationMap={mockTranslationMap}
         setRelations={mockSetRelations}
-        relations={mockRelations}
-        handleRelationChange={mockHandleRelationChange}
+        relations={relations}
         characters={mockCharacters}
+        setFormData={mockSetFormData}
+        handleRelationChange={mockHandleRelationChange}
       />
     );
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("renders the RelationshipCircumstancesHeader component", () => {
+    renderComponent();
 
     expect(
       screen.getByText(mockTranslationMap.relationshipCircumstances)
@@ -38,30 +47,14 @@ describe("RelationshipCircumstances Component", () => {
   });
 
   it("renders the Relation components for each relation", () => {
-    render(
-      <RelationshipCircumstances
-        translationMap={mockTranslationMap}
-        setRelations={mockSetRelations}
-        relations={mockRelations}
-        handleRelationChange={mockHandleRelationChange}
-        characters={mockCharacters}
-      />
-    );
+    renderComponent();
 
     expect(screen.getByText("Character 1")).toBeInTheDocument();
     expect(screen.getByDisplayValue("Friend")).toBeInTheDocument();
   });
 
   it("calls setRelations when handleAddRelation is triggered", () => {
-    render(
-      <RelationshipCircumstances
-        translationMap={mockTranslationMap}
-        setRelations={mockSetRelations}
-        relations={mockRelations}
-        handleRelationChange={mockHandleRelationChange}
-        characters={mockCharacters}
-      />
-    );
+    renderComponent();
 
     const addButton = screen.getByTestId("add-relation");
     fireEvent.click(addButton);
@@ -73,15 +66,7 @@ describe("RelationshipCircumstances Component", () => {
   });
 
   it("calls setRelations when handleRemoveRelation is triggered", () => {
-    render(
-      <RelationshipCircumstances
-        translationMap={mockTranslationMap}
-        setRelations={mockSetRelations}
-        relations={mockRelations}
-        handleRelationChange={mockHandleRelationChange}
-        characters={mockCharacters}
-      />
-    );
+    renderComponent();
 
     const removeButton = screen.getByTestId("remove-relation-0");
     fireEvent.click(removeButton);
