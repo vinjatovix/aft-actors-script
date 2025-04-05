@@ -34,7 +34,7 @@ const characterBuildingSlice = createSlice({
         state.loading = false;
         console.log("action.payload", action.payload);
         console.log("state.characterBuildings", state.characterBuildings);
-        state.characterBuildings = action.payload ?? []; // Verifica que action.payload tenga los datos correctos
+        state.characterBuildings = action.payload ?? [];
       })
       .addCase(getAllCharacterBuildings.rejected, (state, action) => {
         state.loading = false;

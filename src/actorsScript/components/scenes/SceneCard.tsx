@@ -1,14 +1,20 @@
-import { Typography } from "@mui/material"
-import { Scene } from "../../../redux/interfaces/sceneInterfaces"
-import { getTimeAgo } from "../../../utils/getTimeAgo"
+import { Typography } from "@mui/material";
+import { Scene } from "../../../redux/interfaces/sceneInterfaces";
+import { getTimeAgo } from "../../../utils/getTimeAgo";
 
 export const SceneCard = (scene: Scene) => {
   return (
     <div key={scene.id} className="card">
-      <Typography variant="body2" color="textSecondary">
-        actualizado por {scene.metadata.updatedBy} {getTimeAgo(scene.metadata.updatedAt)}
-      </Typography>
-      <h1>{scene.characters[0].book.title} - {scene.characters[0].book.author.name}</h1>
+      {scene.metadata && (
+        <Typography variant="body2" color="textSecondary">
+          actualizado por {scene.metadata.updatedBy}{" "}
+          {getTimeAgo(scene.metadata.updatedAt)}
+        </Typography>
+      )}
+      <h1>
+        {scene.characters[0].book.title} -{" "}
+        {scene.characters[0].book.author.name}
+      </h1>
       <h2>{scene.description}</h2>
       <ul>
         {scene.characters.map((character) => (
@@ -18,5 +24,5 @@ export const SceneCard = (scene: Scene) => {
         ))}
       </ul>
     </div>
-  )
-}
+  );
+};

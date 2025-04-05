@@ -4,7 +4,7 @@ import { Metadata } from "./metadata";
 export interface Character {
   id: string;
   name: string;
-  book: Book;
+  book?: Book;
   metadata?: Metadata;
 }
 

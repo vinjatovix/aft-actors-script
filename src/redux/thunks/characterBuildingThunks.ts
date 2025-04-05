@@ -134,7 +134,7 @@ export const createCharacterBuilding = createAsyncThunk(
         metadata,
         actor: {
           id: user.id,
-          username: user.username,
+          username: user.username as string,
         },
       };
     } catch (error) {
