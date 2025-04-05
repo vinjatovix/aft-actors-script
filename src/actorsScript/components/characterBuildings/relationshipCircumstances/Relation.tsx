@@ -1,7 +1,5 @@
-import { Delete } from "@mui/icons-material";
 import {
   Grid,
-  Button,
   Typography,
   FormControl,
   InputLabel,
@@ -10,6 +8,7 @@ import {
   TextField,
 } from "@mui/material";
 import React from "react";
+import { DeleteButton } from "../../buttons/DeleteButton";
 
 export const Relation = ({
   translationMap,
@@ -55,16 +54,11 @@ export const Relation = ({
       key={relation.character.id}
       sx={{ mt: 1 }}
     >
-      <Grid size={{ xs: 1 }}>
-        <Button
-          data-testid={`remove-relation-${index}`}
-          variant="outlined"
-          color="secondary"
-          onClick={() => handleRemoveRelation(index)}
-        >
-          <Delete color="error" />
-        </Button>
-      </Grid>
+      <DeleteButton
+        handleOnClick={() => handleRemoveRelation(index)}
+        testid={`remove-relation-${index}`}
+      />
+
       <Grid size={{ xs: 4 }}>
         {relation.character.id ? (
           <Typography variant="body1">{relation.character.name}</Typography>

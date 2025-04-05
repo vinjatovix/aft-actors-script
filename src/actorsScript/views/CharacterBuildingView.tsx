@@ -5,7 +5,7 @@ import { CharacterBuilding } from "../../redux/interfaces/characterBuildingInter
 import { characterBuildingTranslationMap } from "../../i18n/translationMap";
 import { SaveButton } from "../components/buttons/SaveButton";
 import { RelationshipCircumstances } from "../components/characterBuildings/relationshipCircumstances/RelationshipCircumstances";
-import { ActionUnits } from "../components/characterBuildings/ActionUnits";
+import { ActionUnits } from "../components/characterBuildings/actionUnits/ActionUnits";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
 import {
