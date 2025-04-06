@@ -75,9 +75,9 @@ export const ActionUnits = ({ formData, setFormData }: ActionUnitsProps) => {
     const updatedUnits = actionUnits.map((unit) =>
       unit.id === unitId
         ? {
-            ...unit,
-            strategies: [...unit.strategies, { id: uuidv4(), text: "" }],
-          }
+          ...unit,
+          strategies: [...unit.strategies, { id: uuidv4(), text: "" }],
+        }
         : unit
     );
     setActionUnits(updatedUnits);
@@ -124,6 +124,7 @@ export const ActionUnits = ({ formData, setFormData }: ActionUnitsProps) => {
           color="primary"
           onClick={handleAddActionUnit}
           sx={{ mt: 2 }}
+          aria-label="add-action-unit"
         >
           <Add />
         </Button>
@@ -181,7 +182,7 @@ const ActionUnitRow = ({
   };
   return (
     <Grid container spacing={2} alignItems="center" sx={{ mt: 1 }}>
-      <DeleteButton handleOnClick={handleRemoveUnit} />
+      <DeleteButton handleOnClick={handleRemoveUnit} testid="delete-action-unit" />
       <Grid size={{ xs: 3 }}>
         <TextField
           fullWidth
@@ -202,6 +203,7 @@ const ActionUnitRow = ({
             color="primary"
             onClick={() => onAddStrategy(unit.id)}
             sx={{ mt: 1 }}
+            aria-label="add-strategy"
           >
             <Add />
           </Button>
@@ -222,6 +224,7 @@ const ActionUnitRow = ({
             </Grid>
             <DeleteButton
               handleOnClick={() => handleRemoveStrategy(strategy.id)}
+              testid="delete-strategy"
             />
           </Grid>
         ))}
