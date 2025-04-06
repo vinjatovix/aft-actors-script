@@ -50,75 +50,68 @@ export const ActionUnits = ({ formData, setFormData }: ActionUnitsProps) => {
     }));
   };
 
-  const handleAddActionUnit = () => {
-    const newUnit: ActionUnit = { id: uuidv4(), action: "", strategies: [] };
-    const updatedUnits = [...actionUnits, newUnit];
+  const updateActionUnits = (updatedUnits: ActionUnit[]) => {
     setActionUnits(updatedUnits);
     updateFormData(updatedUnits);
+  };
+
+  const handleAddActionUnit = () => {
+    updateActionUnits([...actionUnits, { id: uuidv4(), action: "", strategies: [] }]);
   };
 
   const handleRemoveActionUnit = (id: string) => {
-    const updatedUnits = actionUnits.filter((unit) => unit.id !== id);
-    setActionUnits(updatedUnits);
-    updateFormData(updatedUnits);
+    updateActionUnits(actionUnits.filter((unit) => unit.id !== id));
   };
 
   const handleActionUnitChange = (unitId: string, value: string) => {
-    const updatedUnits = actionUnits.map((unit) =>
-      unit.id === unitId ? { ...unit, action: value } : unit
+    updateActionUnits(
+      actionUnits.map((unit) =>
+        unit.id === unitId ? { ...unit, action: value } : unit
+      )
     );
-    setActionUnits(updatedUnits);
-    updateFormData(updatedUnits);
   };
 
   const handleAddStrategy = (unitId: string) => {
-    const updatedUnits = actionUnits.map((unit) =>
-      unit.id === unitId
-        ? {
-          ...unit,
-          strategies: [...unit.strategies, { id: uuidv4(), text: "" }],
-        }
-        : unit
+    updateActionUnits(
+      actionUnits.map((unit) =>
+        unit.id === unitId
+          ? { ...unit, strategies: [...unit.strategies, { id: uuidv4(), text: "" }] }
+          : unit
+      )
     );
-    setActionUnits(updatedUnits);
-    updateFormData(updatedUnits);
   };
 
-  const handleStrategyChange = (
-    unitId: string,
-    strategyId: string,
-    value: string
-  ) => {
-    const updatedUnits = actionUnits.map((unit) => {
-      if (unit.id === unitId) {
-        const updatedStrategies = unit.strategies.map((strategy) =>
-          strategy.id === strategyId ? { ...strategy, text: value } : strategy
-        );
-        return { ...unit, strategies: updatedStrategies };
-      }
-      return unit;
-    });
-    setActionUnits(updatedUnits);
-    updateFormData(updatedUnits);
+  const handleStrategyChange = (unitId: string, strategyId: string, value: string) => {
+    updateActionUnits(
+      actionUnits.map((unit) =>
+        unit.id === unitId
+          ? {
+            ...unit,
+            strategies: unit.strategies.map((strategy) =>
+              strategy.id === strategyId ? { ...strategy, text: value } : strategy
+            ),
+          }
+          : unit
+      )
+    );
   };
 
   const handleRemoveStrategy = (unitId: string, strategyId: string) => {
-    const updatedUnits = actionUnits.map((unit) => {
-      if (unit.id === unitId) {
-        const updatedStrategies = unit.strategies.filter(
-          (strategy) => strategy.id !== strategyId
-        );
-        return { ...unit, strategies: updatedStrategies };
-      }
-      return unit;
-    });
-    setActionUnits(updatedUnits);
-    updateFormData(updatedUnits);
+    updateActionUnits(
+      actionUnits.map((unit) =>
+        unit.id === unitId
+          ? {
+            ...unit,
+            strategies: unit.strategies.filter((strategy) => strategy.id !== strategyId),
+          }
+          : unit
+      )
+    );
   };
 
   return (
     <Grid container spacing={2}>
-      <Grid container spacing={2} alignItems="baseline" size={{ xs: 12 }}>
+      <Grid container spacing={2} alignItems="baseline">
         <Button
           variant="contained"
           color="primary"
@@ -174,16 +167,13 @@ const ActionUnitRow = ({
   onRemoveStrategy,
   onRemoveUnit,
 }: ActionUnitRowProps) => {
-  const handleRemoveUnit = () => {
-    onRemoveUnit(unit.id);
-  };
-  const handleRemoveStrategy = (strategyId: string) => {
-    onRemoveStrategy(unit.id, strategyId);
-  };
   return (
     <Grid container spacing={2} alignItems="center" sx={{ mt: 1 }}>
-      <DeleteButton handleOnClick={handleRemoveUnit} testid="delete-action-unit" />
-      <Grid size={{ xs: 3 }}>
+      <DeleteButton
+        handleOnClick={() => onRemoveUnit(unit.id)}
+        testid="delete-action-unit"
+      />
+      <Grid size={{xs:3}}>
         <TextField
           fullWidth
           label={translationMap.actionUnits.action}
@@ -192,8 +182,7 @@ const ActionUnitRow = ({
           onChange={(e) => onActionChange(unit.id, e.target.value)}
         />
       </Grid>
-
-      <Grid size={{ xs: 6 }}>
+      <Grid size={{ xs: 6 }} >
         <Grid container spacing={2} alignItems="baseline">
           <Typography variant="body2" sx={{ mb: 1 }}>
             {translationMap.actionUnits.strategies}
@@ -208,7 +197,6 @@ const ActionUnitRow = ({
             <Add />
           </Button>
         </Grid>
-
         {unit.strategies.map((strategy, index) => (
           <Grid container spacing={2} alignItems="center" key={strategy.id}>
             <Grid size={{ xs: 8 }}>
@@ -223,7 +211,7 @@ const ActionUnitRow = ({
               />
             </Grid>
             <DeleteButton
-              handleOnClick={() => handleRemoveStrategy(strategy.id)}
+              handleOnClick={() => onRemoveStrategy(unit.id, strategy.id)}
               testid="delete-strategy"
             />
           </Grid>
