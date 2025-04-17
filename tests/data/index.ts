@@ -1,6 +1,6 @@
-import authors from "./authors.json";
-import books from "./books.json";
-import characters from "./characters.json";
+import { authors } from "./authors";
+import { books } from "./books";
+import { characters } from "./characters";
 import { characterBuildings } from "./characterBuildings";
 import { scenes } from "./scenes";
 import { users } from "./users";
