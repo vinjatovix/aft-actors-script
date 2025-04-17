@@ -24,11 +24,11 @@ import { AppDispatch, RootState } from "../../../redux/store";
 import { getAllCharacterBuildings } from "../../../redux/thunks/characterBuildingThunks";
 
 export const SideBar = ({
-  drawerWith = 240,
+  drawerWidth = 240,
   header = "Actors Script",
   icon,
 }: {
-  drawerWith?: number;
+  drawerWidth?: number;
   header?: string;
   icon?: React.ReactNode;
 }) => {
@@ -82,7 +82,7 @@ export const SideBar = ({
     <Box
       component="nav"
       sx={{
-        width: { sm: drawerWith },
+        width: { sm: drawerWidth },
         flexShrink: { sm: 0 },
       }}
     >
@@ -96,7 +96,7 @@ export const SideBar = ({
         sx={{
           display: { xs: "block" },
           "& .MuiDrawer-paper": {
-            width: drawerWith,
+            width: drawerWidth,
             boxSizing: "border-box",
           },
         }}

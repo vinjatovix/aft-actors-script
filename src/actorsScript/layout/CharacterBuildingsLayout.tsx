@@ -13,7 +13,7 @@ export const CharacterBuildingsLayout = ({
   return (
     <Box sx={{ display: "flex" }}>
       <SideBar
-        drawerWith={drawerWidth}
+        drawerWidth={drawerWidth}
         header="Construccións"
         icon={<EngineeringIcon />}
       />
