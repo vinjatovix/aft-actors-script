@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../redux/store";
+import { AppDispatch, RootState } from "../../redux/types";
 import { getAllCharacters } from "../../redux/thunks/characterThunks";
 import { Character } from "../../redux/interfaces/characterInterfaces";
 import { CharacterCard } from "../components/characters/CharacterCard";

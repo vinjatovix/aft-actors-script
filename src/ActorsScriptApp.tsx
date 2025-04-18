@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "./redux/store";
+import { AppDispatch } from "./redux/types";
 import { Typography } from "@mui/material";
 import { refreshAuthToken } from "./redux/thunks/authThunks";
 import { AppRouter } from "./router/AppRouter";
@@ -14,16 +14,17 @@ export const ActorsScriptApp = () => {
     dispatch(refreshAuthToken());
   }, [dispatch]);
 
-  const { ENVIRONMENT } = getEnv()
+  const { ENVIRONMENT } = getEnv();
   const isDev = ENVIRONMENT !== "production";
 
   return (
     <AppTheme>
-
       <AppRouter />
       {isDev && (
         <div className="dev-stripe">
-          <Typography variant="h6">ENVIRONMENT: {ENVIRONMENT.toUpperCase()}</Typography>
+          <Typography variant="h6">
+            ENVIRONMENT: {ENVIRONMENT.toUpperCase()}
+          </Typography>
         </div>
       )}
     </AppTheme>

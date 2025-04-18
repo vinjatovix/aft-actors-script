@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../redux/store";
+import { AppDispatch, RootState } from "../../redux/types";
 import { useEffect, useState } from "react";
 import { getAllCharacterBuildings } from "../../redux/thunks/characterBuildingThunks";
 import EngineeringIcon from "@mui/icons-material/Engineering";

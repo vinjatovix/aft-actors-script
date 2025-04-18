@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { autoClearError, } from "../../redux/slices/authSlice";
 import Loader from "../../actorsScript/components/Loader";
 import { useFormValidation } from "../hooks/useFormValidation";
-import { AppDispatch, RootState } from "../../redux/store";
+import { AppDispatch, RootState } from "../../redux/types";
 import { loginUser } from "../../redux/thunks/authThunks";
 import { loginTranslationMap } from "../../i18n/translationMap";
 import { LoginPayload } from "../../redux/interfaces/authInterfaces";

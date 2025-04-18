@@ -20,7 +20,7 @@ import {
   setSelectedCharacterBuilding,
 } from "../../../redux/slices/characterBuildingSlice";
 import { useEffect } from "react";
-import { AppDispatch, RootState } from "../../../redux/store";
+import { AppDispatch, RootState } from "../../../redux/types";
 import { getAllCharacterBuildings } from "../../../redux/thunks/characterBuildingThunks";
 
 export const SideBar = ({

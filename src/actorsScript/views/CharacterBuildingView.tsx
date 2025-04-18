@@ -7,7 +7,7 @@ import { SaveButton } from "../components/buttons/SaveButton";
 import { RelationshipCircumstances } from "../components/characterBuildings/relationshipCircumstances/RelationshipCircumstances";
 import { ActionUnits } from "../components/characterBuildings/actionUnits/ActionUnits";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../redux/store";
+import { AppDispatch } from "../../redux/types";
 import {
   deleteCharacterBuilding,
   getAllCharacterBuildings,

@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { Book } from "../../redux/interfaces/bookInterfaces";
 import { getAllBooks } from "../../redux/thunks/bookThunks";
-import { AppDispatch, RootState } from "../../redux/store";
+import { AppDispatch, RootState } from "../../redux/types";
 import { BookCard } from "../components/books/BookCard";
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import { PageHeader } from "../components/PageHeader";

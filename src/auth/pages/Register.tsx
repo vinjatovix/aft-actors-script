@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import Loader from "../../actorsScript/components/Loader";
 import { useFormValidation } from "../hooks/useFormValidation";
 import { autoClearError } from "../../redux/slices/authSlice";
-import { AppDispatch, RootState } from "../../redux/store";
+import { AppDispatch, RootState } from "../../redux/types";
 import { registerUser } from "../../redux/thunks/authThunks";
 import { registerTranslationMap } from "../../i18n/translationMap";
 import { AuthLayout } from "../layout/AuthLayout";

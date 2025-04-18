@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../redux/store";
+import { AppDispatch, RootState } from "../../redux/types";
 import { useEffect } from "react";
 import { getAllScenes } from "../../redux/thunks/sceneThunks";
 import { Scene } from "../../redux/interfaces/sceneInterfaces";

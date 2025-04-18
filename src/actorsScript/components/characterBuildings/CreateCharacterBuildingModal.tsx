@@ -9,7 +9,7 @@ import {
   Select,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../redux/store";
+import { AppDispatch, RootState } from "../../../redux/types";
 import { useEffect, useState } from "react";
 import { getBooksByAuthorId } from "../../../redux/thunks/bookThunks";
 import { getCharactersByBookId } from "../../../redux/thunks/characterThunks";

@@ -11,3 +11,9 @@ export interface Book {
   metadata?: Metadata;
   pages?: number;
 }
+
+export interface BookState {
+  books: Book[];
+  loading: boolean;
+  error: string | null;
+}

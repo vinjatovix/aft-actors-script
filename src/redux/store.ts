@@ -14,6 +14,3 @@ export const store = configureStore({
     characterBuilding: characterBuildingReducer,
   },
 });
-
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;

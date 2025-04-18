@@ -4,7 +4,7 @@ import { handleFetch } from "../../utils/handleFetch";
 import { CharacterBuilding } from "../interfaces/characterBuildingInterfaces";
 import { API_MAP } from "../../constants";
 import { handleError } from "../../utils/handleError";
-import { RootState } from "../store";
+import { RootState } from "../types";
 
 const DEFAULT_HEADERS = {
   "Content-Type": "application/json",
