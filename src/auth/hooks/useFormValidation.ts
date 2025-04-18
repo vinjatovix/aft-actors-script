@@ -31,48 +31,58 @@ export const useFormValidation = <
   const validatePassword = (password: string): boolean =>
     REGEX.password.test(password);
 
+  const validateField = (
+    field: string,
+    value: string | number | boolean | null | undefined,
+    newErrors: FormErrors,
+  ): boolean => {
+    let valid = true;
+
+    if (typeof value === "string" && value.length > REGEX.maxInputLength) {
+      newErrors[field] = `O valor excede ${REGEX.maxInputLength} caracteres.`;
+      valid = false;
+    } else if (typeof value === "string" && !value.trim()) {
+      newErrors[field] = "É obrigatorio.";
+      valid = false;
+    } else if (typeof value === "string" && !isInjectionFree(value)) {
+      newErrors[field] = "Amodo oh! -9001";
+      valid = false;
+    } else if (
+      field === "email" &&
+      typeof value === "string" &&
+      !validateEmail(value)
+    ) {
+      newErrors.email = "O correo non é válido.";
+      valid = false;
+    } else if (
+      field === "password" &&
+      typeof value === "string" &&
+      !validatePassword(value)
+    ) {
+      newErrors.password = "O contrasinal é feble.";
+      valid = false;
+    } else if (field === "repeatPassword" && value !== formData.password) {
+      newErrors.repeatPassword = "Os contrasinais non coinciden.";
+      valid = false;
+    } else if (
+      field === "username" &&
+      typeof value === "string" &&
+      !REGEX.username.test(value)
+    ) {
+      newErrors.username = "O nome de usuario non é válido.";
+      valid = false;
+    }
+
+    return valid;
+  };
+
   const validateForm = (): boolean => {
     const newErrors: FormErrors = { ...initialErrors };
     let valid = true;
 
     for (const field in formData) {
       const value = formData[field];
-
-      if (typeof value === "string" && value.length > REGEX.maxInputLength) {
-        newErrors[field] = `O valor excede ${REGEX.maxInputLength} caracteres.`;
-        valid = false;
-      }
-
-      if (typeof value === "string" && !value.trim()) {
-        newErrors[field] = "É obrigatorio.";
-        valid = false;
-      } else if (typeof value === "string" && !isInjectionFree(value)) {
-        newErrors[field] = "Amodo oh! -9001";
-        valid = false;
-      } else if (
-        field === "email" &&
-        typeof value === "string" &&
-        !validateEmail(value)
-      ) {
-        newErrors.email = "O correo non é válido.";
-        valid = false;
-      } else if (
-        field === "password" &&
-        typeof value === "string" &&
-        !validatePassword(value)
-      ) {
-        newErrors.password = "O contrasinal é feble.";
-        valid = false;
-      } else if (field === "repeatPassword" && value !== formData.password) {
-        newErrors.repeatPassword = "Os contrasinais non coinciden.";
-        valid = false;
-      }
-      if (
-        field === "username" &&
-        typeof value === "string" &&
-        !REGEX.username.test(value)
-      ) {
-        newErrors.username = "O nome de usuario non é válido.";
+      if (!validateField(field, value, newErrors)) {
         valid = false;
       }
     }

@@ -5,7 +5,7 @@ export const handleFetch = async <T>(
   const response = await fetch(url, options);
   if (!response.ok) {
     const errorData = await response.json();
-    throw new Error(errorData.message || "Unknown error");
+    throw new Error(errorData.message ?? "Unknown error");
   }
 
   const contentType = response.headers?.get("Content-Type") ?? "";

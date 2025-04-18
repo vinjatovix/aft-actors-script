@@ -8,7 +8,7 @@ import {
   List,
   ListItem,
   ListItemButton,
-  /* ListItemIcon */ ListItemText,
+  ListItemText,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -78,6 +78,13 @@ export const SideBar = ({
     }
   );
 
+  const handleCharacterBuildingSelect = (building: CharacterBuilding) => {
+    return () => {
+      dispatch(clearSelectedCharacterBuilding());
+      dispatch(setSelectedCharacterBuilding(building));
+    };
+  };
+
   return (
     <Box
       component="nav"
@@ -115,7 +122,6 @@ export const SideBar = ({
 
           <List sx={{ width: "100%", bgcolor: "background.paper" }}>
             {[...plays].map((play, index) => (
-              // <ListItem key={play.title} disablePadding sx={{ mt: 1 }}>
               <Accordion
                 key={play.title}
                 sx={{
@@ -140,7 +146,6 @@ export const SideBar = ({
                     }}
                   >
                     {play.characters.map((character, index) => (
-                      // <ListItem key={character.characterName} disablePadding sx={{ mt: 1 }}>
                       <Accordion
                         key={character.characterName}
                         sx={{ width: "100%", mb: 1 }}
@@ -160,12 +165,9 @@ export const SideBar = ({
                               sx={{ mt: 1 }}
                             >
                               <ListItemButton
-                                onClick={() => {
-                                  dispatch(clearSelectedCharacterBuilding());
-                                  dispatch(
-                                    setSelectedCharacterBuilding(building)
-                                  );
-                                }}
+                                onClick={handleCharacterBuildingSelect(
+                                  building
+                                )}
                               >
                                 <ListItemText
                                   primary={building.scene.description}
@@ -179,8 +181,6 @@ export const SideBar = ({
                   </List>
                 </AccordionDetails>
               </Accordion>
-
-              // </ListItem>
             ))}
           </List>
         </Toolbar>

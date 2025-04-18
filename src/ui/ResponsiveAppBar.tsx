@@ -27,7 +27,7 @@ const allPages = [
 const publicPages = [{ text: "Fogar", path: "/home" }];
 const settings = ["Perfil", "Settings", 'Logout'];
 
-function ResponsiveAppBar({ drawerWidth = 240 }: { drawerWidth?: number }) {
+function ResponsiveAppBar({ drawerWidth = 240 }: { readonly drawerWidth?: number }) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { user, token } = useSelector((state: RootState) => state.auth);

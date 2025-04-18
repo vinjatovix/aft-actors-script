@@ -25,6 +25,10 @@ interface ActionUnitsProps {
   setFormData: React.Dispatch<React.SetStateAction<FormData>>;
 }
 
+const extractStrategyTexts = (unit: ActionUnit): string[] => {
+  return unit.strategies.map((strategy) => strategy.text);
+};
+
 export const ActionUnits = ({ formData, setFormData }: ActionUnitsProps) => {
   const [actionUnits, setActionUnits] = useState<ActionUnit[]>(
     formData?.actionUnits.map((unit) => ({
@@ -45,7 +49,7 @@ export const ActionUnits = ({ formData, setFormData }: ActionUnitsProps) => {
       ...prevFormData,
       actionUnits: updatedUnits.map((unit) => ({
         action: unit.action,
-        strategies: unit.strategies.map((strategy) => strategy.text),
+        strategies: extractStrategyTexts(unit),
       })),
     }));
   };
@@ -56,7 +60,10 @@ export const ActionUnits = ({ formData, setFormData }: ActionUnitsProps) => {
   };
 
   const handleAddActionUnit = () => {
-    updateActionUnits([...actionUnits, { id: uuidv4(), action: "", strategies: [] }]);
+    updateActionUnits([
+      ...actionUnits,
+      { id: uuidv4(), action: "", strategies: [] },
+    ]);
   };
 
   const handleRemoveActionUnit = (id: string) => {
@@ -75,22 +82,31 @@ export const ActionUnits = ({ formData, setFormData }: ActionUnitsProps) => {
     updateActionUnits(
       actionUnits.map((unit) =>
         unit.id === unitId
-          ? { ...unit, strategies: [...unit.strategies, { id: uuidv4(), text: "" }] }
+          ? {
+              ...unit,
+              strategies: [...unit.strategies, { id: uuidv4(), text: "" }],
+            }
           : unit
       )
     );
   };
 
-  const handleStrategyChange = (unitId: string, strategyId: string, value: string) => {
+  const handleStrategyChange = (
+    unitId: string,
+    strategyId: string,
+    value: string
+  ) => {
     updateActionUnits(
       actionUnits.map((unit) =>
         unit.id === unitId
           ? {
-            ...unit,
-            strategies: unit.strategies.map((strategy) =>
-              strategy.id === strategyId ? { ...strategy, text: value } : strategy
-            ),
-          }
+              ...unit,
+              strategies: unit.strategies.map((strategy) =>
+                strategy.id === strategyId
+                  ? { ...strategy, text: value }
+                  : strategy
+              ),
+            }
           : unit
       )
     );
@@ -101,9 +117,11 @@ export const ActionUnits = ({ formData, setFormData }: ActionUnitsProps) => {
       actionUnits.map((unit) =>
         unit.id === unitId
           ? {
-            ...unit,
-            strategies: unit.strategies.filter((strategy) => strategy.id !== strategyId),
-          }
+              ...unit,
+              strategies: unit.strategies.filter(
+                (strategy) => strategy.id !== strategyId
+              ),
+            }
           : unit
       )
     );
@@ -173,7 +191,7 @@ const ActionUnitRow = ({
         handleOnClick={() => onRemoveUnit(unit.id)}
         testid="delete-action-unit"
       />
-      <Grid size={{xs:3}}>
+      <Grid size={{ xs: 3 }}>
         <TextField
           fullWidth
           label={translationMap.actionUnits.action}
@@ -182,7 +200,7 @@ const ActionUnitRow = ({
           onChange={(e) => onActionChange(unit.id, e.target.value)}
         />
       </Grid>
-      <Grid size={{ xs: 6 }} >
+      <Grid size={{ xs: 6 }}>
         <Grid container spacing={2} alignItems="baseline">
           <Typography variant="body2" sx={{ mb: 1 }}>
             {translationMap.actionUnits.strategies}
