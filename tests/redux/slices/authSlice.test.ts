@@ -136,6 +136,20 @@ describe("authSlice", () => {
     );
   });
 
+  it("should handle refreshAuthToken.rejected", async () => {
+    const errorMessage = "Token refresh failed";
+    (handleFetch as jest.Mock).mockRejectedValue(new Error(errorMessage));
+    const store = configureStore({ reducer: authReducer });
+    localStorage.setItem("token", "old-token");
+    await store.dispatch(refreshAuthToken());
+
+    const state = store.getState();
+
+    expect(state.token).toBe(null);
+    expect(state.error).toBe(errorMessage);
+    expect(localStorage.getItem("token")).toBe(null);
+  });
+
   it("should handle loginUser.rejected", async () => {
     const errorMessage = "Login failed";
     (handleFetch as jest.Mock).mockRejectedValue(new Error(errorMessage));
