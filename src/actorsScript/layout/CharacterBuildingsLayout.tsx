@@ -2,7 +2,7 @@ import { Box, IconButton } from "@mui/material";
 import { ReactNode, useState } from "react";
 import { SideBar } from "../components/sidebar/SideBar";
 import EngineeringIcon from "@mui/icons-material/Engineering";
-import { Assignment } from "@mui/icons-material";
+import { AssignmentOutlined } from "@mui/icons-material";
 
 const drawerWidth = 240;
 
@@ -32,7 +32,7 @@ export const CharacterBuildingsLayout = ({
           zIndex: 1201,
         }}
       >
-        <Assignment />
+        <AssignmentOutlined />
       </IconButton>
 
       <SideBar
@@ -49,6 +49,8 @@ export const CharacterBuildingsLayout = ({
           flexGrow: 1,
           bgcolor: "background.default",
           p: 3,
+          pl: 4,
+          pr: 4,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
         }}
       >
