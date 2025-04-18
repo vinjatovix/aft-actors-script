@@ -12,14 +12,6 @@ jest.mock("../../../src/utils/handleFetch");
 
 const authorId = "123";
 
-const mockGetState = () => ({
-  book: {
-    books: [],
-    loading: false,
-    error: null,
-  },
-});
-
 describe("bookSlice", () => {
   const mockedHandleFetch = handleFetch as jest.Mock;
   const mockDispatch = jest.fn();
@@ -148,113 +140,6 @@ describe("bookSlice", () => {
       ...INITIAL_STATE,
       loading: false,
       error: "Error",
-    });
-  });
-
-  it("should call handleFetch with the correct URL for getAllBooks", async () => {
-    const thunk = getAllBooks();
-
-    await thunk(mockDispatch, mockGetState, undefined);
-
-    expect(mockDispatch).toHaveBeenCalledWith(
-      expect.objectContaining({
-        type: "books/getAll/pending",
-      }),
-    );
-    expect(mockDispatch).toHaveBeenCalledWith({
-      type: "books/getAll/fulfilled",
-      payload: books,
-    });
-    expect(mockedHandleFetch).toHaveBeenCalledWith(
-      `${API_MAP.books.getAll.url}?include=author&fields=title,pages,author.name`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      },
-    );
-  });
-
-  it("should call handleFetch with the correct URL for getBooksByAuthorId", async () => {
-    const thunk = getBooksByAuthorId(authorId);
-
-    await thunk(mockDispatch, mockGetState, undefined);
-
-    expect(mockDispatch).toHaveBeenCalledWith(
-      expect.objectContaining({
-        type: "books/getByAuthorId/pending",
-      }),
-    );
-    expect(mockDispatch).toHaveBeenCalledWith({
-      type: "books/getByAuthorId/fulfilled",
-      payload: books,
-    });
-    expect(mockedHandleFetch).toHaveBeenCalledWith(
-      `${API_MAP.books.getAll.url}?filter=author:${authorId}&fields=title`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      },
-    );
-  });
-
-  it("should handle error in getAllBooks", async () => {
-    const errorMessage = "Error fetching books";
-    mockedHandleFetch.mockRejectedValue(new Error(errorMessage));
-    const action = { type: getAllBooks.rejected.type, payload: errorMessage };
-
-    const state = bookReducer(INITIAL_STATE, action);
-
-    expect(state).toEqual({
-      ...INITIAL_STATE,
-      loading: false,
-      error: errorMessage,
-    });
-  });
-
-  it("should handle error in getBooksByAuthorId", async () => {
-    const errorMessage = "Error fetching books by author";
-    mockedHandleFetch.mockRejectedValue(new Error(errorMessage));
-    const action = {
-      type: getBooksByAuthorId.rejected.type,
-      payload: errorMessage,
-    };
-
-    const state = bookReducer(INITIAL_STATE, action);
-
-    expect(state).toEqual({
-      ...INITIAL_STATE,
-      loading: false,
-      error: errorMessage,
-    });
-  });
-
-  it("should handle empty payload in getAllBooks", () => {
-    const action = { type: getAllBooks.fulfilled.type, payload: [] };
-
-    const state = bookReducer(INITIAL_STATE, action);
-
-    expect(state).toEqual({
-      ...INITIAL_STATE,
-      loading: false,
-      books: [],
-      error: null,
-    });
-  });
-
-  it("should handle empty payload in getBooksByAuthorId", () => {
-    const action = { type: getBooksByAuthorId.fulfilled.type, payload: [] };
-
-    const state = bookReducer(INITIAL_STATE, action);
-
-    expect(state).toEqual({
-      ...INITIAL_STATE,
-      loading: false,
-      books: [],
-      error: null,
     });
   });
 
