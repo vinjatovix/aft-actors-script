@@ -13,8 +13,9 @@ export const getAllBooks = createAsyncThunk(
   "books/getAll",
   async (_, { rejectWithValue, getState }) => {
     try {
-      const state = getState() as { auth: AuthState };
-      const token = state.auth.token;
+      const {
+        auth: { token },
+      } = getState() as { auth: AuthState };
 
       if (!token) {
         throw new Error("No hay token disponible");
@@ -44,8 +45,9 @@ export const getBooksByAuthorId = createAsyncThunk(
   "books/getByAuthorId",
   async (authorId: string, { rejectWithValue, getState }) => {
     try {
-      const state = getState() as { auth: AuthState };
-      const token = state.auth.token;
+      const {
+        auth: { token },
+      } = getState() as { auth: AuthState };
 
       if (!token) {
         throw new Error("No hay token disponible");
