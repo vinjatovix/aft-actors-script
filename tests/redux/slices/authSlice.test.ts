@@ -1,14 +1,49 @@
 import authReducer, {
-  loginUser,
-  refreshAuthToken,
-  logout,
   clearError,
-  registerUser,
+  logout,
 } from "../../../src/redux/slices/authSlice";
 import { configureStore } from "@reduxjs/toolkit";
+import {
+  loginUser,
+  refreshAuthToken,
+  registerUser,
+} from "../../../src/redux/thunks/authThunks";
+import { API_MAP } from "../../../src/constants";
+import { handleFetch } from "../../../src/utils/handleFetch";
+import {
+  AuthLoginResponse,
+  AuthState,
+} from "../../../src/redux/interfaces/authInterfaces";
+
+jest.mock("../../../src/utils/handleFetch", () => ({
+  handleFetch: jest.fn(),
+}));
+
+jest.mock("../../../src/utils/getUserFromToken", () => ({
+  getUserFromToken: jest.fn(() => ({
+    id: "1",
+    username: "test",
+    email: EMAIL,
+    roles: ["user"],
+  })),
+}));
+
+const EMAIL = "test@email.com";
+const PASSWORD = "password";
+const TOKEN = "test-token";
+
+const DEFAULT_RESPONSE: AuthLoginResponse = {
+  token: TOKEN,
+  user: {
+    username: "test",
+    id: "1",
+    roles: ["user"],
+    email: EMAIL,
+  },
+};
 
 describe("authSlice", () => {
-  const initialState = {
+  const INITIAL_STATE: AuthState = {
     token: null,
     user: {
       username: null,
@@ -23,147 +58,108 @@ describe("authSlice", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     localStorage.clear();
-
-    global.fetch = jest.fn((url) => {
-      let responseBody = null;
-
-      if (url.includes("/api/v1/Auth/register")) {
-        responseBody = {};
-      }
-
-      if (url.includes("/api/v1/Auth/login")) {
-        responseBody = {
-          token: "test-token",
-          user: {
-            username: "test",
-            id: "1",
-            roles: ["user"],
-            email: "test@test.com",
-          },
-        };
-      }
-
-      if (url.includes("/api/v1/Auth/refresh")) {
-        responseBody = {
-          token: "test-token",
-          user: {
-            username: "test",
-            id: "1",
-            roles: ["user"],
-            email: "test@test.com",
-          },
-        };
-      }
-
-      if (responseBody !== null) {
-        return Promise.resolve({
-          ok: true,
-          json: () => Promise.resolve(responseBody),
-          headers: new Headers({
-            "Content-Type": "application/json",
-            "Content-Length": JSON.stringify(responseBody).length.toString(),
-          }),
-        });
-      }
-
-      return Promise.resolve({
-        ok: false,
-        json: () => Promise.resolve({ message: "Error desconocido" }),
-        headers: new Headers({
-          "Content-Type": "application/json",
-          "Content-Length": JSON.stringify({
-            message: "Error desconocido",
-          }).length.toString(),
-        }),
-      });
-    }) as jest.Mock;
+    (handleFetch as jest.Mock).mockImplementation(
+      async (url: string): Promise<AuthLoginResponse | null> => {
+        if (url.includes(API_MAP.auth.register.url)) return null;
+        if (
+          url.includes(API_MAP.auth.login.url) ||
+          url.includes(API_MAP.auth.refreshToken.url)
+        ) {
+          return DEFAULT_RESPONSE;
+        }
+        throw new Error("Error desconocido");
+      },
+    );
   });
 
   it("should return the initial state", () => {
-    expect(authReducer(undefined, { type: "" })).toEqual(initialState);
+    expect(authReducer(undefined, { type: "" })).toEqual(INITIAL_STATE);
   });
 
   it("should handle logout", () => {
     const state = {
-      token: "test-token",
+      token: TOKEN,
       user: {
         username: "test",
         id: "1",
         roles: ["user"],
-        email: "test@test.com",
+        email: EMAIL,
       },
       loading: false,
       error: null,
     };
 
     const newState = authReducer(state, logout());
-    expect(newState).toEqual(initialState);
-    expect(localStorage.getItem("token")).toBeNull();
+
+    expect(newState).toEqual(INITIAL_STATE);
   });
 
   it("should handle clearError", () => {
-    const state = { ...initialState, error: "Some error" };
+    const state = { ...INITIAL_STATE, error: "Some error" };
+
     const newState = authReducer(state, clearError());
+
     expect(newState.error).toBeNull();
   });
 
   it("should handle loginUser async thunk", async () => {
     const store = configureStore({ reducer: authReducer });
 
-    await store.dispatch(
-      loginUser({ email: "test@test.com", password: "password" }),
-    );
+    await store.dispatch(loginUser({ email: EMAIL, password: PASSWORD }));
 
     const state = store.getState();
-    expect(state.token).toBe("test-token");
-    expect(localStorage.getItem("token")).toBe("test-token");
-    expect(global.fetch).toHaveBeenCalledWith(
-      expect.stringMatching(/\/api\/v1\/Auth\/login/),
+    expect(state.token).toBe(TOKEN);
+    expect(localStorage.getItem("token")).toBe(TOKEN);
+    expect(handleFetch).toHaveBeenCalledWith(
+      expect.stringMatching(API_MAP.auth.login.url),
       expect.objectContaining({
-        method: "POST",
-        body: JSON.stringify({ email: "test@test.com", password: "password" }),
+        method: API_MAP.auth.login.method,
+        body: JSON.stringify({ email: EMAIL, password: PASSWORD }),
       }),
     );
   });
 
   it("should handle refreshAuthToken async thunk", async () => {
     localStorage.setItem("token", "old-token");
-
     const store = configureStore({ reducer: authReducer });
 
     await store.dispatch(refreshAuthToken());
 
     const state = store.getState();
-    expect(state.token).toBe("test-token");
-    expect(localStorage.getItem("token")).toBe("test-token");
-    expect(global.fetch).toHaveBeenCalledWith(
-      expect.stringMatching(/\/api\/v1\/Auth\/refresh/),
+    expect(state.token).toBe(TOKEN);
+    expect(localStorage.getItem("token")).toBe(TOKEN);
+    expect(handleFetch).toHaveBeenCalledWith(
+      expect.stringMatching(API_MAP.auth.refreshToken.url),
       expect.objectContaining({
-        method: "GET",
+        method: API_MAP.auth.refreshToken.method,
       }),
     );
   });
 
-  it("should handle loginUser.rejected", async () => {
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        ok: false,
-        json: () => Promise.resolve({ message: "Login failed" }),
-      }),
-    ) as jest.Mock;
+  it("should handle refreshAuthToken.rejected", async () => {
+    const errorMessage = "Token refresh failed";
+    (handleFetch as jest.Mock).mockRejectedValue(new Error(errorMessage));
+    const store = configureStore({ reducer: authReducer });
+    localStorage.setItem("token", "old-token");
+    await store.dispatch(refreshAuthToken());
 
+    const state = store.getState();
+
+    expect(state.token).toBe(null);
+    expect(state.error).toBe(errorMessage);
+    expect(localStorage.getItem("token")).toBe(null);
+  });
+
+  it("should handle loginUser.rejected", async () => {
+    const errorMessage = "Login failed";
+    (handleFetch as jest.Mock).mockRejectedValue(new Error(errorMessage));
     const store = configureStore({ reducer: authReducer });
 
-    await store.dispatch(
-      loginUser({
-        email: "wrong@test.com",
-        password: "wrongpass",
-      }),
-    );
+    await store.dispatch(loginUser({ email: EMAIL, password: PASSWORD }));
 
     const state = store.getState();
     expect(state.token).toBeNull();
-    expect(state.error).toBe("Login failed");
+    expect(state.error).toBe(errorMessage);
   });
 
   it("should handle registerUser async thunk", async () => {
@@ -173,28 +169,24 @@ describe("authSlice", () => {
       registerUser({
         id: "1",
         username: "test",
-        email: "test@test.com",
-        password: "password",
-        repeatPassword: "password",
+        email: EMAIL,
+        password: PASSWORD,
+        repeatPassword: PASSWORD,
       }),
     );
 
     const state = store.getState();
-    expect(state.token).toBe("test-token");
-    expect(state.user.email).toBe("test@test.com");
-    expect(localStorage.getItem("token")).toBe("test-token");
-
-    expect(global.fetch).toHaveBeenCalledWith(
-      expect.stringMatching(/\/api\/v1\/Auth\/register/),
-      expect.objectContaining({
-        method: "POST",
-      }),
+    expect(state.token).toBe(TOKEN);
+    expect(state.user.email).toBe(EMAIL);
+    expect(localStorage.getItem("token")).toBe(TOKEN);
+    expect(handleFetch).toHaveBeenNthCalledWith(
+      1,
+      expect.stringMatching(API_MAP.auth.register.url),
+      expect.objectContaining({ method: API_MAP.auth.register.method }),
     );
-    expect(global.fetch).toHaveBeenCalledWith(
-      expect.stringMatching(/\/api\/v1\/Auth\/login/),
-      expect.objectContaining({
-        method: "POST",
-      }),
+    expect(handleFetch).toHaveBeenLastCalledWith(
+      expect.stringMatching(API_MAP.auth.login.url),
+      expect.objectContaining({ method: API_MAP.auth.login.method }),
     );
   });
 });

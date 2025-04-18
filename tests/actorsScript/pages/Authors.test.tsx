@@ -6,15 +6,8 @@ describe("Authors Page", () => {
   it("renders the Authors page with a title and author names", () => {
     render(<Authors />);
 
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-      "Authors"
+    expect(screen.getByRole("heading", { level: 5 })).toHaveTextContent(
+      "DramaturgXs"
     );
-  });
-
-  it("renders the icon image", () => {
-    render(<Authors />);
-    const icon = screen.getByAltText("Icono dun autor");
-    expect(icon).toBeInTheDocument();
-    expect(icon).toHaveAttribute("src", "/assets/author.svg");
   });
 });

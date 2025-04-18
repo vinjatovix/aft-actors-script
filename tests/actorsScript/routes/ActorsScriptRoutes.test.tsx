@@ -23,8 +23,8 @@ jest.mock("../../../src/actorsScript/pages/Scenes", () => ({
   Scenes: jest.fn(() => <div>Scenes Page</div>),
 }));
 
-jest.mock("../../../src/actorsScript/pages/CharacterBuildings", () => ({
-  CharacterBuildings: jest.fn(() => <div>Character Buildings Page</div>),
+jest.mock("../../../src/actorsScript/pages/CharacterBuildingsPage", () => ({
+  CharacterBuildingsPage: jest.fn(() => <div>Character Buildings Page</div>),
 }));
 
 describe("ActorsScriptRoutes", () => {

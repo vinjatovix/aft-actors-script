@@ -1,25 +1,16 @@
-import { useDispatch, useSelector } from "react-redux";
-import Loader from "../../actorsScript/components/Loader";
-import { AppDispatch, RootState } from "../../redux/store";
 import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import { autoClearError, registerUser } from "../../redux/slices/authSlice";
-import "./authPages.css";
-import { FormData, FormErrors, useFormValidation } from "../hooks/useFormValidation";
+import Loader from "../../actorsScript/components/Loader";
+import { useFormValidation } from "../hooks/useFormValidation";
+import { autoClearError } from "../../redux/slices/authSlice";
+import { AppDispatch, RootState } from "../../redux/types";
+import { registerUser } from "../../redux/thunks/authThunks";
+import { registerTranslationMap } from "../../i18n/translationMap";
+import { AuthLayout } from "../layout/AuthLayout";
+import { Button, Grid, Link, TextField, Typography } from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
 
-const initialFormData: FormData = {
-  username: "",
-  email: "",
-  password: "",
-  repeatPassword: "",
-};
-
-const initialErrors: FormErrors = {
-  username: "",
-  email: "",
-  password: "",
-  repeatPassword: "",
-};
 
 export const Register = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -28,21 +19,18 @@ export const Register = () => {
     handleInputChange,
     formData,
     errors,
-  } = useFormValidation(initialFormData, initialErrors);
+  } = useFormValidation({
+    username: "",
+    email: "",
+    password: "",
+    repeatPassword: "",
+  });
   const { loading, error } = useSelector((state: RootState) => state.auth);
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validateForm()) return;
 
-    const id = uuidv4();
-    dispatch(registerUser({
-      id,
-      username: formData.username,
-      email: formData.email,
-      password: formData.password,
-      repeatPassword: formData.repeatPassword,
-    }));
+    dispatch(registerUser({ id: uuidv4(), ...formData, }));
   };
 
   useEffect(() => {
@@ -51,41 +39,66 @@ export const Register = () => {
     }
   }, [error, dispatch]);
 
-  const translationMap = {
-    username: "Nome",
-    email: "Correo",
-    password: "Contrasinal",
-    repeatPassword: "Confirma contrasinal",
+  const currentLanguage = localStorage.getItem("language") ?? "es_gl";
+  const translationMap = registerTranslationMap[currentLanguage];
+
+  const getInputType = (field: string): React.HTMLInputTypeAttribute | undefined => {
+    if (/password/i.test(field)) return "password";
+    return field === "email" ? "email" : "text";
   };
 
+  const getAutocompleteProps = (field: string, isNewPassword: boolean) => {
+    let autoComplete: string;
+    if (field === "email") {
+      autoComplete = "username";
+    } else if (/password/i.test(field)) {
+      autoComplete = isNewPassword ? "new-password" : "current-password";
+    } else {
+      autoComplete = "off";
+    }
+
+
+    return autoComplete
+  }
+
+
   return (
-    <div className="auth-page">
-      <form onSubmit={handleSubmit}>
-        <h2>Rexistro</h2>
-        <p>
-          Xa tes conta? <a href="/login">Entra</a>
-        </p>
+    <AuthLayout title={translationMap.header}>
+      <form onSubmit={handleSubmit} autoComplete="on">
+        <Grid container alignItems={"center"} sx={{ border: "1px solid #e0e0e0", borderRadius: 2, padding: 2, mt: 2 }}>
+          {[["username", "aaron9000"], ["email", "aaron@swartz.op"], ["password", "********"], ["repeatPassword", "****"]].map(([field, placeholder]) => (
+            <Grid key={field} size={{ xs: 12, }} sx={{ mt: 2 }}>
+              <TextField name={field} label={translationMap[field as keyof typeof translationMap]} type={getInputType(field)} placeholder={placeholder} fullWidth value={formData[field as keyof typeof formData]} onChange={handleInputChange} autoComplete={
+                getAutocompleteProps(field, field === "password")
+              } />
+              {errors?.[field] && <p className="error-message">{errors[field]}</p>}
+            </Grid>
+          ))}
 
-        {["username", "email", "password", "repeatPassword"].map((field) => (
-          <div key={field}>
-            <input
-              type={/password/i.test(field) ? "password" : "text"}
-              placeholder={translationMap[field as keyof typeof translationMap]}
-              name={field}
-              value={formData[field as keyof typeof formData]}
-              onChange={handleInputChange}
-            />
-            {errors[field as keyof typeof errors] && (
-              <p className="error-message">
-                {errors[field as keyof typeof errors]}
-              </p>
-            )}
-          </div>
-        ))}
+          <Grid container spacing={2} size={{ xs: 12 }} sx={{ mb: 2, padding: 2, mt: 2 }}>
+            <Grid size={{ xs: 12, sm: 6 }} sx={{ mt: 2 }}>
+              {loading
+                ? <Loader />
+                : <Button variant="contained" fullWidth type="submit" >{translationMap.submit}</Button>}
+            </Grid>
 
-        {loading ? <Loader /> : <button type="submit">Rexístrate</button>}
+          </Grid>
+
+          <Grid container size={{ xs: 12 }} direction="row" justifyContent="end" sx={{ mt: 2 }}>
+            <Typography variant="body2" sx={{ color: 'primary.main', fontWeight: 'bold' }}>
+              {translationMap.callToAction}
+              <Link component={RouterLink} to="/login" sx={{ ml: 1, color: 'red', fontWeight: 'bold' }}>
+
+                {translationMap.action}
+              </Link>
+            </Typography>
+          </Grid>
+
+
+        </Grid>
         {error && <p className="error-message fade-out4s">{error}</p>}
       </form>
-    </div>
+    </AuthLayout>
   );
 };
+

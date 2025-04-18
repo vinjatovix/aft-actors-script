@@ -1,22 +1,25 @@
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { jest } from "@jest/globals";
 import { Provider } from "react-redux";
-import { configureStore } from "@reduxjs/toolkit";
-import authReducer from "../../src/redux/slices/authSlice";
 import { Register } from "../../src/auth/pages/Register";
+import { mockStore } from "../__mocks__/mockStore";
 
-const mockStore = (preloadedState = {}) => {
-  return configureStore({
-    reducer: { auth: authReducer },
-    preloadedState,
-  });
-};
+jest.mock("../../src/utils/handleFetch", () => ({
+  handleFetch: jest
+    .fn()
+    .mockImplementation(() => Promise.reject(new Error("BackEndError"))),
+}));
+
+import { BrowserRouter } from "react-router-dom";
 
 const renderWithProvider = (store: ReturnType<typeof mockStore>) => {
   return render(
     <Provider store={store}>
-      <Register />
+      <BrowserRouter
+        future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+      >
+        <Register />
+      </BrowserRouter>
     </Provider>
   );
 };
@@ -27,19 +30,19 @@ const fillRegisterForm = (
   password: string,
   repeatPassword: string
 ) => {
-  fireEvent.change(screen.getByPlaceholderText("Nome"), {
+  fireEvent.change(screen.getByLabelText("Nome"), {
     target: { value: username },
   });
-  fireEvent.change(screen.getByPlaceholderText("Correo"), {
+  fireEvent.change(screen.getByLabelText("Correo"), {
     target: { value: email },
   });
-  fireEvent.change(screen.getByPlaceholderText("Contrasinal"), {
+  fireEvent.change(screen.getByLabelText("Contrasinal"), {
     target: { value: password },
   });
-  fireEvent.change(screen.getByPlaceholderText("Confirma contrasinal"), {
+  fireEvent.change(screen.getByLabelText("Confirma contrasinal"), {
     target: { value: repeatPassword },
   });
-}
+};
 
 describe("Register Page", () => {
   let store: ReturnType<typeof mockStore>;
@@ -48,12 +51,6 @@ describe("Register Page", () => {
     jest.clearAllMocks();
     localStorage.clear();
     store = mockStore();
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        ok: false,
-        json: () => Promise.resolve({ message: "BackEndError" }),
-      })
-    ) as unknown as jest.MockedFunction<typeof fetch>;
   });
 
   afterEach(() => {
@@ -61,17 +58,12 @@ describe("Register Page", () => {
   });
 
   it("should render the registration form", () => {
-    const placeholders = [
-      "Nome",
-      "Correo",
-      "Contrasinal",
-      "Confirma contrasinal",
-    ];
+    const labels = ["Nome", "Correo", "Contrasinal", "Confirma contrasinal"];
 
     renderWithProvider(store);
 
-    placeholders.forEach((placeholder) => {
-      expect(screen.getByPlaceholderText(placeholder)).toBeInTheDocument();
+    labels.forEach((label) => {
+      expect(screen.getByLabelText(label)).toBeInTheDocument();
     });
     expect(screen.getByRole("button")).toHaveTextContent("Rexístrate");
   });
@@ -85,7 +77,7 @@ describe("Register Page", () => {
     });
 
     errorMessages.forEach((message) => {
-      expect(screen.getAllByText(message)).toHaveLength(3);
+      expect(screen.getAllByText(message)).toHaveLength(4);
     });
   });
 
@@ -108,7 +100,7 @@ describe("Register Page", () => {
 
   it("should display error message when email is invalid", async () => {
     renderWithProvider(store);
-    fireEvent.change(screen.getByPlaceholderText("Correo"), {
+    fireEvent.change(screen.getByPlaceholderText("aaron@swartz.op"), {
       target: { value: "test@test" },
     });
 
@@ -139,7 +131,7 @@ describe("Register Page", () => {
 
   it("should display error message when password is invalid", async () => {
     renderWithProvider(store);
-    fireEvent.change(screen.getByPlaceholderText("Contrasinal"), {
+    fireEvent.change(screen.getByPlaceholderText("********"), {
       target: { value: "password" },
     });
 
@@ -147,10 +139,7 @@ describe("Register Page", () => {
       fireEvent.click(screen.getByRole("button"));
     });
 
-    expect(
-      screen.getByText(
-        "O contrasinal é feble.")
-    ).toBeInTheDocument();
+    expect(screen.getByText("O contrasinal é feble.")).toBeInTheDocument();
   });
 
   it("should display error message when username is invalid", async () => {
@@ -171,35 +160,27 @@ describe("Register Page", () => {
     ).toBeInTheDocument();
   });
 
-  //Injection test
-  test.each(["<script>alert('XSS')</script>", "<img src=x onerror=alert(1)>", "%0D%0A"])(
-    "should display error message when input contains injection characters: %p", async (inj) => {
+  test.each([
+    "<script>alert('XSS')</script>",
+    "<img src=x onerror=alert(1)>",
+    "%0D%0A",
+  ])(
+    "should display error message when input contains injection characters: %p",
+    async (inj) => {
       renderWithProvider(store);
-      fillRegisterForm(
-        "testUser",
-        "das@das.com",
-        inj,
-        "Password.123"
-      );
+      fillRegisterForm("testUser", "das@das.com", inj, "Password.123");
 
       await act(async () => {
         fireEvent.click(screen.getByRole("button"));
       });
 
-      expect(
-        screen.getByText("Amodo oh! -9001")
-      ).toBeInTheDocument();
-    });
-
+      expect(screen.getByText("Amodo oh! -9001")).toBeInTheDocument();
+    }
+  );
 
   it("should render the backend error message", async () => {
     renderWithProvider(store);
-    fillRegisterForm(
-      "TestUser",
-      "te@dsa.com",
-      "Password.123",
-      "Password.123"
-    );
+    fillRegisterForm("TestUser", "te@dsa.com", "Password.123", "Password.123");
 
     await act(async () => {
       fireEvent.click(screen.getByRole("button"));

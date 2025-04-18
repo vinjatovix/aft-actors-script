@@ -1,20 +1,19 @@
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { Scenes } from "../../../src/actorsScript/pages/Scenes";
+import { Provider } from "react-redux";
+import { store } from "../../../src/redux/store";
 
 describe("Scenes Page", () => {
   it("renders the Scenes page with a title and author names", () => {
-    render(<Scenes />);
+    render(
+      <Provider store={store}>
+        render(<Scenes />);
+      </Provider>
+    )
 
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-      "Scenes"
+    expect(screen.getByRole("heading", { level: 5 })).toHaveTextContent(
+      "Esceas"
     );
-  });
-
-  it("renders the icon image", () => {
-    render(<Scenes />);
-    const icon = screen.getByAltText("Icono dun cubo simulando unha caixa escénica");
-    expect(icon).toBeInTheDocument();
-    expect(icon).toHaveAttribute("src", "/assets/scene.svg");
   });
 });

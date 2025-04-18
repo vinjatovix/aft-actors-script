@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "../redux/store";
+import { RootState } from "../redux/types";
 import { Navigate } from "react-router-dom";
 
 export const PublicRoute = ({ children }: { children: ReactNode }) => {

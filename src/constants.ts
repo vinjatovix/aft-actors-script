@@ -21,4 +21,46 @@ const REGEX = {
   maxInputLength: 250,
 };
 
-export { ENVIRONMENT, API_URL, APP_VERSION, REGEX };
+const API_MAP = {
+  auth: {
+    login: { url: `${API_URL}/api/v1/Auth/login`, method: "POST" },
+    register: { url: `${API_URL}/api/v1/Auth/register`, method: "POST" },
+    refreshToken: { url: `${API_URL}/api/v1/Auth/refresh`, method: "GET" },
+  },
+  books: {
+    getAll: { url: `${API_URL}/api/v1/Books`, method: "GET" },
+    getById: { url: `${API_URL}/api/v1/Books/:id`, method: "GET" },
+    create: { url: `${API_URL}/api/v1/Books`, method: "POST" },
+    update: { url: `${API_URL}/api/v1/Books/:id`, method: "PATCH" },
+    delete: { url: `${API_URL}/api/v1/Books/:id`, method: "DELETE" },
+  },
+  characters: {
+    getAll: { url: `${API_URL}/api/v1/Characters`, method: "GET" },
+    getById: { url: `${API_URL}/api/v1/Characters/:id`, method: "GET" },
+    create: { url: `${API_URL}/api/v1/Characters`, method: "POST" },
+    update: { url: `${API_URL}/api/v1/Characters/:id`, method: "PATCH" },
+    delete: { url: `${API_URL}/api/v1/Characters/:id`, method: "DELETE" },
+  },
+  scenes: {
+    getAll: { url: `${API_URL}/api/v1/Scenes`, method: "GET" },
+    getById: { url: `${API_URL}/api/v1/Scenes/:id`, method: "GET" },
+    create: { url: `${API_URL}/api/v1/Scenes`, method: "POST" },
+    update: { url: `${API_URL}/api/v1/Scenes/:id`, method: "PATCH" },
+    delete: { url: `${API_URL}/api/v1/Scenes/:id`, method: "DELETE" },
+  },
+  characterBuildings: {
+    getAll: { url: `${API_URL}/api/v1/CharacterBuildings`, method: "GET" },
+    getById: { url: `${API_URL}/api/v1/CharacterBuildings/:id`, method: "GET" },
+    create: { url: `${API_URL}/api/v1/CharacterBuildings`, method: "POST" },
+    update: {
+      url: `${API_URL}/api/v1/CharacterBuildings/:id`,
+      method: "PATCH",
+    },
+    delete: {
+      url: `${API_URL}/api/v1/CharacterBuildings/:id`,
+      method: "DELETE",
+    },
+  },
+};
+
+export { ENVIRONMENT, API_URL, API_MAP, APP_VERSION, REGEX };

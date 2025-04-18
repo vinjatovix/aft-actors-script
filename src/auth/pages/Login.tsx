@@ -1,22 +1,34 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { autoClearError, loginUser } from "../../redux/slices/authSlice";
-import { AppDispatch, RootState } from "../../redux/store";
+import { autoClearError, } from "../../redux/slices/authSlice";
 import Loader from "../../actorsScript/components/Loader";
-import "./authPages.css";
+import { useFormValidation } from "../hooks/useFormValidation";
+import { AppDispatch, RootState } from "../../redux/types";
+import { loginUser } from "../../redux/thunks/authThunks";
+import { loginTranslationMap } from "../../i18n/translationMap";
+import { LoginPayload } from "../../redux/interfaces/authInterfaces";
+import { Button, Grid, Link, TextField, Typography } from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
+import { Google } from "@mui/icons-material";
+import { AuthLayout } from "../layout/AuthLayout";
 
 const Login = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const {
+    validateForm,
+    handleInputChange,
+    formData,
+    errors,
+  } = useFormValidation<LoginPayload>({
+    email: "",
+    password: "",
+  });
   const { loading, error } = useSelector((state: RootState) => state.auth);
 
-  const [formData, setFormData] = useState({ email: "", password: "" });
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleLogin = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!validateForm()) return;
+
     dispatch(loginUser(formData));
   };
 
@@ -26,36 +38,63 @@ const Login = () => {
     }
   }, [error, dispatch]);
 
-  return (
-    <div className="auth-page">
-      <form onSubmit={handleLogin}>
-        <h2>Iniciar Sesión</h2>
-        <p>
-          Non tes conta? <a href="/register">Rexístrate</a>
-        </p>
+  const currentLanguage = localStorage.getItem("language") ?? "es_gl";
+  const translationMap = loginTranslationMap[currentLanguage]
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Correo"
-          value={formData.email}
-          onChange={handleInputChange}
-          required
-          autoComplete="email"
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Contrasinal"
-          value={formData.password}
-          onChange={handleInputChange}
-          required
-          autoComplete="current-password"
-        />
-        {loading ? <Loader /> : <button type="submit">Entra</button>}
+  return (
+
+    <AuthLayout title={translationMap.header}>
+      
+      <form onSubmit={handleSubmit}>
+
+        <Grid container alignItems={"center"} sx={{ border: "1px solid #e0e0e0", borderRadius: 2, padding: 2, mt: 2 }}>
+          <Grid size={{ xs: 12, }} sx={{ mt: 2 }}>
+            <TextField name="email" label={translationMap.email} type="email" placeholder="aaron@swartz.com" fullWidth autoComplete="username" value={formData.email} onChange={handleInputChange} />
+            {errors?.email && <p className="error-message">{errors.email}</p>}
+          </Grid>
+
+          <Grid size={{ xs: 12, }} sx={{ mt: 2 }}>
+            <TextField name="password" label={translationMap.password} type="password" placeholder="***********" fullWidth autoComplete="current-password" value={formData.password} onChange={handleInputChange} />
+            {errors?.password && <p className="error-message">{errors.password}</p>}
+          </Grid>
+
+          <Grid container spacing={2} size={{ xs: 12 }} sx={{ mb: 2, padding: 2, mt: 2 }}>
+            <Grid size={{ xs: 12, sm: 6 }} sx={{ mt: 2 }}>
+              <Button variant="contained" fullWidth disabled ><Google />
+                <Typography sx={{ ml: 1 }}>Google</Typography>
+              </Button>
+            </Grid>
+
+            <Grid size={{ xs: 12, sm: 6 }} sx={{ mt: 2 }}>
+              {loading
+                ? <Loader />
+                : <Button variant="contained" fullWidth type="submit" >{translationMap.submit}</Button>}
+            </Grid>
+
+          </Grid>
+
+          <Grid container size={{ xs: 12 }} direction="row" justifyContent="end" sx={{ mt: 2 }}>
+            <Typography variant="body2" sx={{ color: 'primary.main', fontWeight: 'bold' }}>
+              {translationMap.callToAction}
+              <Link component={RouterLink} to="/register" sx={{ ml: 1, color: 'red', fontWeight: 'bold' }}>
+
+                {translationMap.action}
+              </Link>
+            </Typography>
+          </Grid>
+        </Grid>
+
+
+
+
+
+
         {error && <p className="error-message fade-out4s">{error}</p>}
       </form>
-    </div>
+
+    </AuthLayout>
+
+
   );
 };
 

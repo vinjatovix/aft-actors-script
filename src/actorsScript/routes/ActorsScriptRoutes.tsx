@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { Authors } from "../pages/Authors";
 import { Books } from "../pages/Books";
-import { CharacterBuildings } from "../pages/CharacterBuildings";
+import { CharacterBuildingsPage } from "../pages/CharacterBuildingsPage";
 import { Characters } from "../pages/Characters";
 import { Home } from "../pages/Home";
 import { Scenes } from "../pages/Scenes";
@@ -15,7 +15,7 @@ export const ActorsScriptRoutes = () => {
       <Route path="plays" element={<Books />} />
       <Route path="characters" element={<Characters />} />
       <Route path="scenes" element={<Scenes />} />
-      <Route path="character-buildings" element={<CharacterBuildings />} />
+      <Route path="character-buildings" element={<CharacterBuildingsPage />} />
       <Route path="settings" element={<Settings />} />
 
       <Route path="*" element={<Home />} />
