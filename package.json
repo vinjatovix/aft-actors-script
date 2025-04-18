@@ -1,7 +1,14 @@
 {
   "name": "aft-actors-script",
-  "private": true,
   "version": "0.0.0",
+  "license": "MIT",
+  "author": "Vinjatovix",
+  "description": "Frontend for AFT Actors Script",
+  "homepage": "https://github.com/vinjatovix/aft-actors-script#readme",
+  "engines": {
+    "node": ">=22.14.0",
+    "npm": ">=10.9.2"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -26,6 +33,13 @@
       "pattern": "^\\[GH-[\\d]+\\]\\s.*$",
       "errorMessage": "Invalid commit message. Valid example: [GH-123] feat(api): add new feature"
     }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vinjatovix/aft-actors-script.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vinjatovix/aft-actors-script/issues"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
