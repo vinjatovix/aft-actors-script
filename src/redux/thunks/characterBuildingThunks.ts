@@ -4,6 +4,7 @@ import { handleFetch } from "../../utils/handleFetch";
 import { CharacterBuilding } from "../interfaces/characterBuildingInterfaces";
 import { API_MAP } from "../../constants";
 import { handleError } from "../../utils/handleError";
+import { RootState } from "../store";
 
 const DEFAULT_HEADERS = {
   "Content-Type": "application/json",
@@ -19,39 +20,52 @@ interface CharacterBuildingPatch {
   relationshipCircumstances: { character: string; circumstance: string }[];
 }
 
-export const getAllCharacterBuildings = createAsyncThunk(
-  "characterBuilding/getAll",
-  async (_, { rejectWithValue, getState }) => {
-    try {
-      const { auth } = getState() as { auth: AuthState };
-      const { token, user } = auth;
+const validateAuthState = (auth: AuthState) => {
+  const { token, user } = auth;
 
-      if (!token) {
-        throw new Error("No hay token disponible");
-      }
+  if (!token) {
+    throw new Error("No hay token disponible");
+  }
+  if (!user?.id) {
+    throw new Error("El usuario no está disponible o no tiene un ID válido.");
+  }
+  return { token, user };
+};
 
-      const queryParams = new URLSearchParams({
-        include:
-          "character.book.author,scene.characters,actor,relationshipCircumstances.character",
-        fields:
-          "startingPoint,previousCircumstances,sceneCircumstances,center,relationshipCircumstances.circumstance,relationshipCircumstances.character.name,scene.description,scene.characters.name,actor.username,actionUnits,center,character.name,character.book.title,character.book.author.name",
-        filter: `actor:${user.id}`,
-      }).toString();
-      const url = `${API_MAP.characterBuildings.getAll.url}?${queryParams}`;
-      const data = await handleFetch<CharacterBuilding[]>(url, {
-        method: API_MAP.characterBuildings.getAll.method,
-        headers: {
-          ...DEFAULT_HEADERS,
-          Authorization: `Bearer ${token}`,
-        },
-      });
+export const getAllCharacterBuildings = createAsyncThunk<
+  CharacterBuilding[],
+  void,
+  { state: RootState; rejectValue: string }
+>("characterBuilding/getAll", async (_, { rejectWithValue, getState }) => {
+  try {
+    const { auth } = getState() as { auth: AuthState };
+    const { token, user } = validateAuthState(auth);
 
-      return data;
-    } catch (error) {
-      return rejectWithValue(handleError(error, "Error al obter os persoaxes"));
+    const queryParams = new URLSearchParams({
+      include:
+        "character.book.author,scene.characters,actor,relationshipCircumstances.character",
+      fields:
+        "startingPoint,previousCircumstances,sceneCircumstances,center,relationshipCircumstances.circumstance,relationshipCircumstances.character.name,scene.description,scene.characters.name,actor.username,actionUnits,center,character.name,character.book.title,character.book.author.name",
+      filter: `actor:${user.id}`,
+    }).toString();
+    const url = `${API_MAP.characterBuildings.getAll.url}?${queryParams}`;
+    const data = await handleFetch<CharacterBuilding[]>(url, {
+      method: API_MAP.characterBuildings.getAll.method,
+      headers: {
+        ...DEFAULT_HEADERS,
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!data) {
+      throw new Error("No se pudieron obtener los datos de los personajes");
     }
-  },
-);
+
+    return data;
+  } catch (error) {
+    return rejectWithValue(handleError(error, "Erro ao obte-las persoaxes"));
+  }
+});
 
 export const createCharacterBuilding = createAsyncThunk(
   "characterBuilding/create",
@@ -73,17 +87,9 @@ export const createCharacterBuilding = createAsyncThunk(
     { rejectWithValue, getState },
   ) => {
     try {
-      const state = getState() as { auth: AuthState };
-      const token = state.auth.token;
-      const user = state.auth.user;
-      if (!token) {
-        throw new Error("No hay token disponible");
-      }
-      if (!user?.id) {
-        throw new Error(
-          "El usuario no está disponible o no tiene un ID válido.",
-        );
-      }
+      const { auth } = getState() as { auth: AuthState };
+      const { token, user } = validateAuthState(auth);
+
       const payload = {
         id: characterBuilding.id,
         scene: characterBuilding.scene.id,
@@ -150,12 +156,8 @@ export const updateCharacterBuilding = createAsyncThunk(
     { rejectWithValue, getState },
   ) => {
     try {
-      const state = getState() as { auth: AuthState };
-      const token = state.auth.token;
-
-      if (!token) {
-        throw new Error("No hay token disponible");
-      }
+      const { auth } = getState() as { auth: AuthState };
+      const { token } = validateAuthState(auth);
 
       const url = `${API_MAP.characterBuildings.update.url.replace(
         ":id",
@@ -183,12 +185,8 @@ export const deleteCharacterBuilding = createAsyncThunk(
   "characterBuilding/delete",
   async (id: string, { rejectWithValue, getState }) => {
     try {
-      const state = getState() as { auth: AuthState };
-      const token = state.auth.token;
-
-      if (!token) {
-        throw new Error("No hay token disponible");
-      }
+      const { auth } = getState() as { auth: AuthState };
+      const { token } = validateAuthState(auth);
 
       const url = `${API_MAP.characterBuildings.delete.url.replace(":id", id)}`;
       await handleFetch(url, {

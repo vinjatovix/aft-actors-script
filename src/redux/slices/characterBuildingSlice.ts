@@ -32,8 +32,6 @@ const characterBuildingSlice = createSlice({
       })
       .addCase(getAllCharacterBuildings.fulfilled, (state, action) => {
         state.loading = false;
-        console.log("action.payload", action.payload);
-        console.log("state.characterBuildings", state.characterBuildings);
         state.characterBuildings = action.payload ?? [];
       })
       .addCase(getAllCharacterBuildings.rejected, (state, action) => {
@@ -46,7 +44,9 @@ const characterBuildingSlice = createSlice({
       })
       .addCase(createCharacterBuilding.fulfilled, (state, action) => {
         state.loading = false;
-        state.characterBuildings.push(action.payload);
+        state.characterBuildings.push(
+          action.payload as CharacterBuildingState["characterBuildings"][number],
+        );
         state.error = null;
       })
       .addCase(createCharacterBuilding.rejected, (state, action) => {
