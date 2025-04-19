@@ -21,6 +21,12 @@ export interface RegisterPayload {
   repeatPassword: string;
 }
 
+export interface UpdatePasswordPayload {
+  password: string;
+  oldPassword: string;
+  repeatPassword: string;
+}
+
 export interface AuthState {
   token: string | null;
   user: User;
