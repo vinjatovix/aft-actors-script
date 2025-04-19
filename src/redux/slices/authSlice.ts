@@ -1,21 +1,22 @@
-import { createSlice, Dispatch } from "@reduxjs/toolkit";
-import { getUserFromToken } from "../../utils/getUserFromToken";
+import { createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit';
+import { getUserFromToken } from '../../utils/getUserFromToken';
 import {
   loginUser,
   refreshAuthToken,
   registerUser,
-} from "../thunks/authThunks";
-import { AuthState, User } from "../interfaces/authInterfaces";
+  updatePassword
+} from '../thunks/authThunks';
+import { AuthState, User } from '../interfaces/authInterfaces';
 
 const defaultUser: User = {
   username: null,
   id: null,
   roles: [],
-  email: null,
+  email: null
 };
 
 const loadInitialAuthState = (): { token: string | null; user: User } => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem('token');
   return token
     ? { token, user: getUserFromToken(token) || defaultUser }
     : { token: null, user: defaultUser };
@@ -24,15 +25,25 @@ const loadInitialAuthState = (): { token: string | null; user: User } => {
 const initialState: AuthState = {
   ...loadInitialAuthState(),
   loading: false,
-  error: null,
+  error: null
 };
 
 export const autoClearError = () => (dispatch: Dispatch) => {
   setTimeout(() => dispatch(clearError()), 4000);
 };
 
+const handlePending = (state: AuthState) => {
+  state.loading = true;
+  state.error = null;
+};
+
+const handleRejected = (state: AuthState, action: PayloadAction<unknown>) => {
+  state.loading = false;
+  state.error = action.payload as string;
+};
+
 const authSlice = createSlice({
-  name: "auth",
+  name: 'auth',
   initialState,
   reducers: {
     logout: (state) => {
@@ -41,51 +52,43 @@ const authSlice = createSlice({
     },
     clearError: (state) => {
       state.error = null;
-    },
+    }
   },
   extraReducers: (builder) => {
     builder
-      .addCase(loginUser.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
+      .addCase(loginUser.pending, handlePending)
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.token = action.payload.token;
         state.user = action.payload.user || defaultUser;
       })
       .addCase(loginUser.rejected, (state, action) => {
-        state.loading = false;
+        handleRejected(state, action);
         state.token = null;
         state.user = defaultUser;
-        state.error = action.payload as string;
       })
-      .addCase(refreshAuthToken.pending, (state) => {
-        state.loading = true;
-      })
+      .addCase(refreshAuthToken.pending, handlePending)
       .addCase(refreshAuthToken.fulfilled, (state, action) => {
         state.loading = false;
         state.token = action.payload.token;
         state.user = action.payload.user || defaultUser;
       })
       .addCase(refreshAuthToken.rejected, (state, action) => {
-        state.loading = false;
+        handleRejected(state, action);
         state.token = null;
         state.user = defaultUser;
-        state.error = action.payload as string;
       })
-      .addCase(registerUser.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
+      .addCase(registerUser.pending, handlePending)
       .addCase(registerUser.fulfilled, (state) => {
         state.loading = false;
       })
-      .addCase(registerUser.rejected, (state, action) => {
+      .addCase(registerUser.rejected, handleRejected)
+      .addCase(updatePassword.pending, handlePending)
+      .addCase(updatePassword.fulfilled, (state) => {
         state.loading = false;
-        state.error = action.payload as string;
-      });
-  },
+      })
+      .addCase(updatePassword.rejected, handleRejected);
+  }
 });
 
 export const { logout, clearError } = authSlice.actions;
