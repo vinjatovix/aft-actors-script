@@ -42,11 +42,23 @@ describe('Profile', () => {
     });
   });
 
-  it('renders the Profile page with a title', () => {
+  it('renders the Profile page with an user title', () => {
     renderWithProvider(store);
 
     expect(screen.getByRole('heading', { level: 4 })).toHaveTextContent(
       'Perfil de usuario'
+    );
+  });
+
+  it('renders the Profile page with an admin title', () => {
+    store = mockStore({
+      auth: { token: 'mockToken', user: users[1] }
+    });
+
+    renderWithProvider(store);
+
+    expect(screen.getByRole('heading', { level: 4 })).toHaveTextContent(
+      'Perfil de administrador'
     );
   });
 
