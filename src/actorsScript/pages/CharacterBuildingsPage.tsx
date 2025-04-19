@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { getAllCharacterBuildings } from "../../redux/thunks/characterBuildingThunks";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 import { CharacterBuildingsLayout } from "../layout/CharacterBuildingsLayout";
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { NothingSelectedView } from "../views/NothingSelectedView";
 import { CharacterBuildingView } from "../views/CharacterBuildingView";
 import { AddButton } from "../components/buttons/AddButton";
@@ -32,29 +32,36 @@ export const CharacterBuildingsPage = () => {
 
   return (
     <CharacterBuildingsLayout>
-      {loading && <p>Cargando construcciones...</p>}
+      <Box
+        sx={{
+          width: { xs: "100%", sm: "calc(95vw - 240px)" },
+        }}
+      >
+        {loading && <p>Cargando construcciones...</p>}
 
-      {error && <p>Error: {error}</p>}
+        {error && <p>Error: {error}</p>}
 
-      {!loading && !characterBuildings.length && (
-        <Typography
-          sx={{
-            textAlign: "center",
-            color: "#666",
-          }}
-        >
-          No hay construcciones disponibles
-        </Typography>
-      )}
+        {!loading && !characterBuildings.length && (
+          <Typography
+            sx={{
+              textAlign: "center",
+              color: "#666",
+            }}
+          >
+            No hay construcciones disponibles
+          </Typography>
+        )}
 
-      {selectedCharacterBuilding ? (
-        <CharacterBuildingView characterBuilding={selectedCharacterBuilding} />
-      ) : (
-        <NothingSelectedView />
-      )}
+        {selectedCharacterBuilding ? (
+          <CharacterBuildingView
+            characterBuilding={selectedCharacterBuilding}
+          />
+        ) : (
+          <NothingSelectedView />
+        )}
 
-      <AddButton icon={<EngineeringIcon />} handleClick={handleModalOpen} />
-
+        <AddButton icon={<EngineeringIcon />} handleClick={handleModalOpen} />
+      </Box>
       {modalOpen && (
         <CreateCharacterBuildingModal
           open={modalOpen}
