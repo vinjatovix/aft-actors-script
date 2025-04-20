@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { Provider } from "react-redux";
 import { mockStore } from "../../__mocks__/mockStore";
@@ -33,11 +33,13 @@ describe("CharacterBuildingsPage", () => {
       "getAllCharacterBuildings"
     );
 
-    render(
-      <Provider store={store}>
-        <CharacterBuildingsPage />
-      </Provider>
-    );
+    await act(async () => {
+      render(
+        <Provider store={store}>
+          <CharacterBuildingsPage />
+        </Provider>
+      );
+    });
 
     expect(mockGetAllCharacterBuildings).toHaveBeenCalled();
   });
@@ -57,11 +59,13 @@ describe("CharacterBuildingsPage", () => {
       throw new Error("Error al cargar construcciones");
     });
 
-    render(
-      <Provider store={store}>
-        <CharacterBuildingsPage />
-      </Provider>
-    );
+    await act(async () => {
+      render(
+        <Provider store={store}>
+          <CharacterBuildingsPage />
+        </Provider>
+      );
+    });
 
     expect(
       await screen.findByText(/Error al cargar construcciones/i)
@@ -69,11 +73,13 @@ describe("CharacterBuildingsPage", () => {
   });
 
   it("renders 'No hay construcciones disponibles' when there are no character buildings", async () => {
-    render(
-      <Provider store={store}>
-        <CharacterBuildingsPage />
-      </Provider>
-    );
+    await act(async () => {
+      render(
+        <Provider store={store}>
+          <CharacterBuildingsPage />
+        </Provider>
+      );
+    });
 
     expect(
       await screen.findByText("No hay construcciones disponibles")
