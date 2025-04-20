@@ -1,16 +1,16 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link as RouterLink } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
+import { Button, Grid, Link, TextField, Typography } from "@mui/material";
 import Loader from "../../actorsScript/components/Loader";
-import { useFormValidation } from "../hooks/useFormValidation";
+import { PasswordField } from "../../components/PasswordField";
 import { autoClearError } from "../../redux/slices/authSlice";
 import { AppDispatch, RootState } from "../../redux/types";
 import { registerUser } from "../../redux/thunks/authThunks";
 import { registerTranslationMap } from "../../i18n/translationMap";
+import { useFormValidation } from "../hooks/useFormValidation";
 import { AuthLayout } from "../layout/AuthLayout";
-import { Button, Grid, Link, TextField, Typography } from "@mui/material";
-import { Link as RouterLink } from "react-router-dom";
-
 
 export const Register = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -25,12 +25,13 @@ export const Register = () => {
     password: "",
     repeatPassword: "",
   });
+
   const { loading, error } = useSelector((state: RootState) => state.auth);
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validateForm()) return;
-
-    dispatch(registerUser({ id: uuidv4(), ...formData, }));
+    dispatch(registerUser({ id: uuidv4(), ...formData }));
   };
 
   useEffect(() => {
@@ -42,63 +43,83 @@ export const Register = () => {
   const currentLanguage = localStorage.getItem("language") ?? "es_gl";
   const translationMap = registerTranslationMap[currentLanguage];
 
-  const getInputType = (field: string): React.HTMLInputTypeAttribute | undefined => {
-    if (/password/i.test(field)) return "password";
-    return field === "email" ? "email" : "text";
-  };
-
-  const getAutocompleteProps = (field: string, isNewPassword: boolean) => {
-    let autoComplete: string;
-    if (field === "email") {
-      autoComplete = "username";
-    } else if (/password/i.test(field)) {
-      autoComplete = isNewPassword ? "new-password" : "current-password";
-    } else {
-      autoComplete = "off";
-    }
-
-
-    return autoComplete
-  }
-
-
   return (
     <AuthLayout title={translationMap.header}>
       <form onSubmit={handleSubmit} autoComplete="on">
         <Grid container alignItems={"center"} sx={{ border: "1px solid #e0e0e0", borderRadius: 2, padding: 2, mt: 2 }}>
-          {[["username", "aaron9000"], ["email", "aaron@swartz.op"], ["password", "********"], ["repeatPassword", "****"]].map(([field, placeholder]) => (
-            <Grid key={field} size={{ xs: 12, }} sx={{ mt: 2 }}>
-              <TextField name={field} label={translationMap[field as keyof typeof translationMap]} type={getInputType(field)} placeholder={placeholder} fullWidth value={formData[field as keyof typeof formData]} onChange={handleInputChange} autoComplete={
-                getAutocompleteProps(field, field === "password")
-              } />
-              {errors?.[field] && <p className="error-message">{errors[field]}</p>}
-            </Grid>
-          ))}
+          <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
+            <TextField
+              name="username"
+              label={translationMap.username}
+              placeholder="aaron9000"
+              fullWidth
+              value={formData.username}
+              onChange={handleInputChange}
+              autoComplete="off"
+            />
+            {errors?.username && <p className="error-message">{errors.username}</p>}
+          </Grid>
+
+          <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
+            <TextField
+              name="email"
+              label={translationMap.email}
+              placeholder="aaron@swartz.op"
+              fullWidth
+              value={formData.email}
+              onChange={handleInputChange}
+              autoComplete="username"
+            />
+            {errors?.email && <p className="error-message">{errors.email}</p>}
+          </Grid>
+
+          <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
+            <PasswordField
+              name="password"
+              label={translationMap.password}
+              placeholder="********"
+              value={formData.password}
+              onChange={handleInputChange}
+              error={errors?.password}
+              autoComplete="new-password"
+            />
+          </Grid>
+
+          <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
+            <PasswordField
+              name="repeatPassword"
+              label={translationMap.repeatPassword}
+              placeholder="********"
+              value={formData.repeatPassword}
+              onChange={handleInputChange}
+              error={errors?.repeatPassword}
+              autoComplete="new-password"
+            />
+          </Grid>
 
           <Grid container spacing={2} size={{ xs: 12 }} sx={{ mb: 2, padding: 2, mt: 2 }}>
             <Grid size={{ xs: 12, sm: 6 }} sx={{ mt: 2 }}>
-              {loading
-                ? <Loader />
-                : <Button variant="contained" fullWidth type="submit" >{translationMap.submit}</Button>}
+              {loading ? (
+                <Loader />
+              ) : (
+                <Button variant="contained" fullWidth type="submit">
+                  {translationMap.submit}
+                </Button>
+              )}
             </Grid>
-
           </Grid>
 
           <Grid container size={{ xs: 12 }} direction="row" justifyContent="end" sx={{ mt: 2 }}>
-            <Typography variant="body2" sx={{ color: 'primary.main', fontWeight: 'bold' }}>
+            <Typography variant="body2" sx={{ color: "primary.main", fontWeight: "bold" }}>
               {translationMap.callToAction}
-              <Link component={RouterLink} to="/login" sx={{ ml: 1, color: 'red', fontWeight: 'bold' }}>
-
+              <Link component={RouterLink} to="/login" sx={{ ml: 1, color: "red", fontWeight: "bold" }}>
                 {translationMap.action}
               </Link>
             </Typography>
           </Grid>
-
-
         </Grid>
         {error && <p className="error-message fade-out4s">{error}</p>}
       </form>
     </AuthLayout>
   );
 };
-

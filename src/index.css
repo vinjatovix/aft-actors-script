@@ -143,6 +143,9 @@ body {
 .error-message {
   color: red;
 }
+.success-message {
+  color: green;
+}
 
 .small {
   font-size: 0.8rem;

@@ -22,13 +22,13 @@ const fillForm = (
   repeatPassword: string,
   oldPassword: string
 ) => {
-  fireEvent.change(screen.getByLabelText('novo contrasinal'), {
+  fireEvent.change(screen.getByLabelText('Novo contrasinal'), {
     target: { value: newPassword }
   });
-  fireEvent.change(screen.getByLabelText('repita o novo contrasinal'), {
+  fireEvent.change(screen.getByLabelText('Repita o novo contrasinal'), {
     target: { value: repeatPassword }
   });
-  fireEvent.change(screen.getByLabelText('contrasinal actual'), {
+  fireEvent.change(screen.getByLabelText('Contrasinal actual'), {
     target: { value: oldPassword }
   });
 };
@@ -65,11 +65,11 @@ describe('Profile', () => {
   it('should render the update password form', () => {
     renderWithProvider(store);
 
-    expect(screen.getByLabelText('novo contrasinal')).toBeInTheDocument();
+    expect(screen.getByLabelText('Novo contrasinal')).toBeInTheDocument();
     expect(
-      screen.getByLabelText('repita o novo contrasinal')
+      screen.getByLabelText('Repita o novo contrasinal')
     ).toBeInTheDocument();
-    expect(screen.getByLabelText('contrasinal actual')).toBeInTheDocument();
+    expect(screen.getByLabelText('Contrasinal actual')).toBeInTheDocument();
     expect(
       screen.getByRole('button', { name: 'Actualizar' })
     ).toBeInTheDocument();

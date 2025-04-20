@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { isInjectionFree } from "../../utils/isInjectionFree";
-import { REGEX } from "../../constants";
+import { useState } from 'react';
+import { isInjectionFree } from '../../utils/isInjectionFree';
+import { REGEX } from '../../constants';
 
 export interface FormData {
   [key: string]: string;
@@ -11,15 +11,15 @@ export interface FormErrors {
 }
 
 export const useFormValidation = <
-  T extends Record<string, string | number | boolean | null | undefined>,
+  T extends Record<string, string | number | boolean | null | undefined>
 >(
-  initialFormData: T,
+  initialFormData: T
 ) => {
   const initialErrors: FormErrors = Object.keys(
-    initialFormData,
+    initialFormData
   ).reduce<FormErrors>(
-    (acc: FormErrors, key: string) => ({ ...acc, [key]: "" }),
-    {},
+    (acc: FormErrors, key: string) => ({ ...acc, [key]: '' }),
+    {}
   );
   const [formData, setFormData] = useState<T>(initialFormData);
   const [errors, setErrors] = useState<FormErrors>(initialErrors);
@@ -34,42 +34,42 @@ export const useFormValidation = <
   const validateField = (
     field: string,
     value: string | number | boolean | null | undefined,
-    newErrors: FormErrors,
+    newErrors: FormErrors
   ): boolean => {
     let valid = true;
 
-    if (typeof value === "string" && value.length > REGEX.maxInputLength) {
+    if (typeof value === 'string' && value.length > REGEX.maxInputLength) {
       newErrors[field] = `O valor excede ${REGEX.maxInputLength} caracteres.`;
       valid = false;
-    } else if (typeof value === "string" && !value.trim()) {
-      newErrors[field] = "É obrigatorio.";
+    } else if (typeof value === 'string' && !value.trim()) {
+      newErrors[field] = 'É obrigatorio.';
       valid = false;
-    } else if (typeof value === "string" && !isInjectionFree(value)) {
-      newErrors[field] = "Amodo oh! -9001";
+    } else if (typeof value === 'string' && !isInjectionFree(value)) {
+      newErrors[field] = 'Amodo oh! -9001';
       valid = false;
     } else if (
-      field === "email" &&
-      typeof value === "string" &&
+      field === 'email' &&
+      typeof value === 'string' &&
       !validateEmail(value)
     ) {
-      newErrors.email = "O correo non é válido.";
+      newErrors.email = 'O correo non é válido.';
       valid = false;
     } else if (
-      field === "password" &&
-      typeof value === "string" &&
+      field === 'password' &&
+      typeof value === 'string' &&
       !validatePassword(value)
     ) {
-      newErrors.password = "O contrasinal é feble.";
+      newErrors.password = 'O contrasinal é feble.';
       valid = false;
-    } else if (field === "repeatPassword" && value !== formData.password) {
-      newErrors.repeatPassword = "Os contrasinais non coinciden.";
+    } else if (field === 'repeatPassword' && value !== formData.password) {
+      newErrors.repeatPassword = 'Os contrasinais non coinciden.';
       valid = false;
     } else if (
-      field === "username" &&
-      typeof value === "string" &&
+      field === 'username' &&
+      typeof value === 'string' &&
       !REGEX.username.test(value)
     ) {
-      newErrors.username = "O nome de usuario non é válido.";
+      newErrors.username = 'O nome de usuario non é válido.';
       valid = false;
     }
 
@@ -92,10 +92,15 @@ export const useFormValidation = <
   };
 
   const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = ({
-    target: { name, value },
+    target: { name, value }
   }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
-    setErrors((prev) => ({ ...prev, [name]: "" }));
+    setErrors((prev) => ({ ...prev, [name]: '' }));
+  };
+
+  const resetForm = () => {
+    setFormData(initialFormData);
+    setErrors(initialErrors);
   };
 
   return {
@@ -105,5 +110,6 @@ export const useFormValidation = <
     setErrors,
     validateForm,
     handleInputChange,
+    resetForm
   };
 };

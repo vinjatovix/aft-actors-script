@@ -65,7 +65,8 @@ describe("Register Page", () => {
     labels.forEach((label) => {
       expect(screen.getByLabelText(label)).toBeInTheDocument();
     });
-    expect(screen.getByRole("button")).toHaveTextContent("Rexístrate");
+    expect(screen.getByRole("button", { name: "Rexístrate" })).toBeInTheDocument();
+
   });
 
   it("should display validation errors when form is submitted with invalid data", async () => {
@@ -73,7 +74,7 @@ describe("Register Page", () => {
 
     renderWithProvider(store);
     await act(async () => {
-      fireEvent.click(screen.getByRole("button"));
+      fireEvent.click(screen.getByRole("button", { name: "Rexístrate" }));
     });
 
     errorMessages.forEach((message) => {
@@ -92,7 +93,7 @@ describe("Register Page", () => {
     );
 
     await act(async () => {
-      fireEvent.click(screen.getByRole("button"));
+      fireEvent.click(screen.getByRole("button", { name: "Rexístrate" }));
     });
 
     expect(dispatchSpy).toHaveBeenCalled();
@@ -105,7 +106,7 @@ describe("Register Page", () => {
     });
 
     await act(async () => {
-      fireEvent.click(screen.getByRole("button"));
+      fireEvent.click(screen.getByRole("button", { name: "Rexístrate" }));
     });
 
     expect(screen.getByText("O correo non é válido.")).toBeInTheDocument();
@@ -121,7 +122,7 @@ describe("Register Page", () => {
     );
 
     await act(async () => {
-      fireEvent.click(screen.getByRole("button"));
+      fireEvent.click(screen.getByRole("button", { name: "Rexístrate" }));
     });
 
     expect(
@@ -131,12 +132,12 @@ describe("Register Page", () => {
 
   it("should display error message when password is invalid", async () => {
     renderWithProvider(store);
-    fireEvent.change(screen.getByPlaceholderText("********"), {
+    fireEvent.change(screen.getByLabelText("Contrasinal"), {
       target: { value: "password" },
     });
 
     await act(async () => {
-      fireEvent.click(screen.getByRole("button"));
+      fireEvent.click(screen.getByRole("button", { name: "Rexístrate" }));
     });
 
     expect(screen.getByText("O contrasinal é feble.")).toBeInTheDocument();
@@ -152,7 +153,7 @@ describe("Register Page", () => {
     );
 
     await act(async () => {
-      fireEvent.click(screen.getByRole("button"));
+      fireEvent.click(screen.getByRole("button", { name: "Rexístrate" }));
     });
 
     expect(
@@ -171,7 +172,7 @@ describe("Register Page", () => {
       fillRegisterForm("testUser", "das@das.com", inj, "Password.123");
 
       await act(async () => {
-        fireEvent.click(screen.getByRole("button"));
+        fireEvent.click(screen.getByRole("button", { name: "Rexístrate" }));
       });
 
       expect(screen.getByText("Amodo oh! -9001")).toBeInTheDocument();
@@ -183,7 +184,7 @@ describe("Register Page", () => {
     fillRegisterForm("TestUser", "te@dsa.com", "Password.123", "Password.123");
 
     await act(async () => {
-      fireEvent.click(screen.getByRole("button"));
+      fireEvent.click(screen.getByRole("button", { name: "Rexístrate" }));
     });
 
     expect(screen.queryByText("BackEndError")).toBeInTheDocument();
