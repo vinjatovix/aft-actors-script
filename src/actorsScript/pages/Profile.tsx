@@ -1,30 +1,40 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/types';
-import { Button, Grid, TextField, Typography } from '@mui/material';
+import { Button, Grid, Typography } from '@mui/material';
 import { AuthLayout } from '../../auth/layout/AuthLayout';
 import { useFormValidation } from '../../auth/hooks/useFormValidation';
 import Loader from '../components/Loader';
 import { updatePassword } from '../../redux/thunks/authThunks';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { autoClearError } from '../../redux/slices/authSlice';
+import { PasswordField } from '../../components/PasswordField';
 
 export const Profile = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const { user } = useSelector((state: RootState) => state.auth);
-  const { validateForm, handleInputChange, formData, errors } =
+  const { validateForm, handleInputChange, formData, errors, resetForm } =
     useFormValidation({
       password: '',
       oldPassword: '',
       repeatPassword: ''
     });
   const { loading, error } = useSelector((state: RootState) => state.auth);
+  const [successMessage, setSuccessMessage] = useState('');
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validateForm()) return;
 
-    dispatch(updatePassword(formData));
+    const action = await dispatch(updatePassword(formData));
+    if (updatePassword.fulfilled.match(action)) {
+      resetForm();
+      setSuccessMessage('Contrasinal actualizado con éxito.');
+
+      setTimeout(() => {
+        setSuccessMessage('');
+      }, 4000);
+    }
   };
 
   useEffect(() => {
@@ -52,51 +62,39 @@ export const Profile = () => {
             }}
           >
             <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
-              <TextField
-                key="password"
+              <PasswordField
                 name="password"
-                label="novo contrasinal"
-                type="password"
-                placeholder="***********"
-                fullWidth
-                onChange={handleInputChange}
+                label="Novo contrasinal"
                 value={formData.password}
+                onChange={handleInputChange}
+                error={errors?.password}
+                placeholder="***********"
+                autoComplete="new-password"
               />
-              {errors?.password && (
-                <p className="error-message">{errors.password}</p>
-              )}
             </Grid>
 
             <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
-              <TextField
-                key="repeatPassword"
+              <PasswordField
                 name="repeatPassword"
-                label="repita o novo contrasinal"
-                type="password"
-                placeholder="***********"
-                fullWidth
-                onChange={handleInputChange}
+                label="Repita o novo contrasinal"
                 value={formData.repeatPassword}
+                onChange={handleInputChange}
+                error={errors?.repeatPassword}
+                placeholder="***********"
+                autoComplete="new-password"
               />
-              {errors?.repeatPassword && (
-                <p className="error-message">{errors.repeatPassword}</p>
-              )}
             </Grid>
 
             <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
-              <TextField
-                key="oldPassword"
+              <PasswordField
                 name="oldPassword"
-                label="contrasinal actual"
-                type="password"
-                placeholder="***********"
-                fullWidth
-                onChange={handleInputChange}
+                label="Contrasinal actual"
                 value={formData.oldPassword}
+                onChange={handleInputChange}
+                error={errors?.oldPassword}
+                placeholder="***********"
+                autoComplete="current-password"
               />
-              {errors?.oldPassword && (
-                <p className="error-message">{errors.oldPassword}</p>
-              )}
             </Grid>
 
             <Grid container spacing={2} size={{ xs: 12 }} sx={{ padding: 2 }}>
@@ -112,6 +110,9 @@ export const Profile = () => {
             </Grid>
           </Grid>
           {error && <p className="error-message fade-out4s">{error}</p>}
+          {successMessage && (
+            <p className="success-message fade-out4s">{successMessage}</p>
+          )}
         </form>
       </AuthLayout>
     </>
