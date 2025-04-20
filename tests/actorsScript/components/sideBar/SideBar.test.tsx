@@ -1,5 +1,5 @@
 import { useMediaQuery } from "@mui/material";
-import { fireEvent, render } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { SideBar } from "../../../../src/actorsScript/components/sidebar/SideBar";
 import { useDispatch, useSelector, Provider } from "react-redux";
@@ -62,35 +62,40 @@ describe("SideBar Component", () => {
       (useMediaQuery as jest.Mock).mockReturnValue(false);
     });
 
-    it("renders the header", () => {
-      const { getByText } = render(
-        <Provider store={store}>
-          <SideBar header="Test Header" mobileOpen={false} />
-        </Provider>
-      );
-      expect(getByText("Test Header")).toBeInTheDocument();
+    it("renders the header", async () => {
+      await act(async () => {
+        render(
+          <Provider store={store}>
+            <SideBar header="Test Header" mobileOpen={false} />
+          </Provider>
+        );
+      })
+      expect(screen.getByText("Test Header")).toBeInTheDocument();
     });
 
-    it("renders the character info correctly", () => {
-      const { getByText } = render(
-        <Provider store={store}>
-          <SideBar mobileOpen={false} />
-        </Provider>
-      );
-
-      expect(getByText("Play 1")).toBeInTheDocument();
-      expect(getByText("Character 1")).toBeInTheDocument();
-      expect(getByText("Scene 1")).toBeInTheDocument();
+    it("renders the character info correctly", async () => {
+      await act(async () => {
+        render(
+          <Provider store={store}>
+            <SideBar mobileOpen={false} />
+          </Provider>
+        );
+      })
+      expect(screen.getByText("Play 1")).toBeInTheDocument();
+      expect(screen.getByText("Character 1")).toBeInTheDocument();
+      expect(screen.getByText("Scene 1")).toBeInTheDocument();
     });
 
-    it("dispatches selection when scene is clicked", () => {
-      const { getByText } = render(
-        <Provider store={store}>
-          <SideBar mobileOpen={false} />
-        </Provider>
-      );
+    it("dispatches selection when scene is clicked", async () => {
+      await act(async () => {
+        render(
+          <Provider store={store}>
+            <SideBar mobileOpen={false} />
+          </Provider>
+        );
+      })
 
-      fireEvent.click(getByText("Scene 1"));
+      fireEvent.click(screen.getByText("Scene 1"));
 
       expect(mockDispatch).toHaveBeenCalledWith(
         clearSelectedCharacterBuilding()
@@ -110,35 +115,41 @@ describe("SideBar Component", () => {
       (useMediaQuery as jest.Mock).mockReturnValue(true);
     });
 
-    it("renders the header", () => {
-      const { getByText } = render(
-        <Provider store={store}>
-          <SideBar header="Test Header" mobileOpen />
-        </Provider>
-      );
-      expect(getByText("Test Header")).toBeInTheDocument();
+    it("renders the header", async () => {
+      await act(async () => {
+        render(
+          <Provider store={store}>
+            <SideBar header="Test Header" mobileOpen />
+          </Provider>
+        );
+      })
+      expect(screen.getByText("Test Header")).toBeInTheDocument();
     });
 
-    it("renders the character info correctly", () => {
-      const { getByText } = render(
-        <Provider store={store}>
-          <SideBar mobileOpen />
-        </Provider>
-      );
+    it("renders the character info correctly", async () => {
+      await act(async () => {
+        render(
+          <Provider store={store}>
+            <SideBar mobileOpen />
+          </Provider>
+        );
+      })
 
-      expect(getByText("Play 1")).toBeInTheDocument();
-      expect(getByText("Character 1")).toBeInTheDocument();
-      expect(getByText("Scene 1")).toBeInTheDocument();
+      expect(screen.getByText("Play 1")).toBeInTheDocument();
+      expect(screen.getByText("Character 1")).toBeInTheDocument();
+      expect(screen.getByText("Scene 1")).toBeInTheDocument();
     });
 
-    it("dispatches selection when scene is clicked", () => {
-      const { getByText } = render(
-        <Provider store={store}>
-          <SideBar mobileOpen />
-        </Provider>
-      );
+    it("dispatches selection when scene is clicked", async () => {
+      await act(async () => {
+        render(
+          <Provider store={store}>
+            <SideBar mobileOpen />
+          </Provider>
+        );
+      })
 
-      fireEvent.click(getByText("Scene 1"));
+      fireEvent.click(screen.getByText("Scene 1"));
 
       expect(mockDispatch).toHaveBeenCalledWith(
         clearSelectedCharacterBuilding()
