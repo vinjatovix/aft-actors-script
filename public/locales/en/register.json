@@ -1,0 +1,10 @@
+{
+  "header": "Register",
+  "username": "Username",
+  "email": "Email",
+  "password": "Password",
+  "repeatPassword": "Repeat password",
+  "callToAction": "Already have an account?",
+  "action": "Login",
+  "submit": "Register"
+}

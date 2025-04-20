@@ -1,0 +1,38 @@
+{
+  "header": "Construcción de Personajes",
+  "builds": "Construcciones",
+  "at": "en",
+  "updated": "Actualizado",
+  "save": "Guardar",
+  "center": {
+    "label": "Centro",
+    "instinctive": "Instintivo",
+    "emotional": "Emocional",
+    "mental": "Mental"
+  },
+  "sceneCircumstances": {
+    "label": "Circunstancias de la Escena",
+    "placeholder": "Es la cena de cumpleaños del abuelo"
+  },
+  "previousCircumstances": {
+    "label": "Circunstancias Previas",
+    "placeholder": "El Doctor acaba de decirle a Brick que el abuelo sí tiene cáncer"
+  },
+  "startingPoint": {
+    "label": "Punto de Partida",
+    "placeholder": "Brick está medio borracho y solo quiere evadirse"
+  },
+  "relationshipCircumstances": "Circunstancias de Relación",
+  "character": "Personaje",
+  "circumstance": "Circunstancia",
+  "actionUnits": {
+    "label": "Unidades de Acción",
+    "action": "Acción",
+    "strategies": "Estrategias",
+    "strategy": "Estrategia"
+  },
+  "delete": "Eliminar",
+  "add": "Añadir",
+  "loading": "Cargando construcciones",
+  "noAvailable": "No hay construcciones disponibles"
+}

@@ -1,16 +1,18 @@
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../redux/types";
-import { useEffect, useState } from "react";
-import { getAllCharacterBuildings } from "../../redux/thunks/characterBuildingThunks";
-import EngineeringIcon from "@mui/icons-material/Engineering";
-import { CharacterBuildingsLayout } from "../layout/CharacterBuildingsLayout";
-import { Box, Typography } from "@mui/material";
-import { NothingSelectedView } from "../views/NothingSelectedView";
-import { CharacterBuildingView } from "../views/CharacterBuildingView";
-import { AddButton } from "../components/buttons/AddButton";
-import { CreateCharacterBuildingModal } from "../components/characterBuildings/CreateCharacterBuildingModal";
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../redux/types';
+import { useEffect, useState } from 'react';
+import { getAllCharacterBuildings } from '../../redux/thunks/characterBuildingThunks';
+import EngineeringIcon from '@mui/icons-material/Engineering';
+import { CharacterBuildingsLayout } from '../layout/CharacterBuildingsLayout';
+import { Box, Typography } from '@mui/material';
+import { NothingSelectedView } from '../views/NothingSelectedView';
+import { CharacterBuildingView } from '../views/CharacterBuildingView';
+import { AddButton } from '../components/buttons/AddButton';
+import { CreateCharacterBuildingModal } from '../components/characterBuildings/CreateCharacterBuildingModal';
+import { useTranslation } from 'react-i18next';
 
 export const CharacterBuildingsPage = () => {
+  const { t } = useTranslation('characterBuilding');
   const dispatch = useDispatch<AppDispatch>();
   const { token } = useSelector((state: RootState) => state.auth);
   const { characterBuildings, loading, error, selectedCharacterBuilding } =
@@ -34,21 +36,21 @@ export const CharacterBuildingsPage = () => {
     <CharacterBuildingsLayout>
       <Box
         sx={{
-          width: { xs: "100%", sm: "calc(95vw - 240px)" },
+          width: { xs: '100%', sm: 'calc(95vw - 240px)' }
         }}
       >
-        {loading && <p>Cargando construcciones...</p>}
+        {loading && <p>{t('loading')}</p>}
 
         {error && <p>Error: {error}</p>}
 
         {!loading && !characterBuildings.length && (
           <Typography
             sx={{
-              textAlign: "center",
-              color: "#666",
+              textAlign: 'center',
+              color: '#666'
             }}
           >
-            No hay construcciones disponibles
+            {t('noAvailable')}
           </Typography>
         )}
 

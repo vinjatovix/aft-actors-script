@@ -1,0 +1,38 @@
+{
+  "header": "Character Building",
+  "builds": "Builds",
+  "at": "at",
+  "updated": "Updated",
+  "save": "Save",
+  "center": {
+    "label": "Center",
+    "instinctive": "Instinctive",
+    "emotional": "Emotional",
+    "mental": "Mental"
+  },
+  "sceneCircumstances": {
+    "label": "Scene Circumstances",
+    "placeholder": "It's grandpa's birthday dinner"
+  },
+  "previousCircumstances": {
+    "label": "Previous Circumstances",
+    "placeholder": "The Doctor just told Brick that grandpa does have cancer"
+  },
+  "startingPoint": {
+    "label": "Starting Point",
+    "placeholder": "Brick is half drunk and just wants to escape"
+  },
+  "relationshipCircumstances": "Relationship Circumstances",
+  "character": "Character",
+  "circumstance": "Circumstance",
+  "actionUnits": {
+    "label": "Action Units",
+    "action": "Action",
+    "strategies": "Strategies",
+    "strategy": "Strategy"
+  },
+  "delete": "Delete",
+  "add": "Add",
+  "loading": "Loading builds",
+  "noAvailable": "No builds available"
+}

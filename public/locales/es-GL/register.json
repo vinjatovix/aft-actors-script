@@ -1,0 +1,10 @@
+{
+  "header": "Rexistro",
+  "username": "Nome",
+  "email": "Correo",
+  "password": "Contrasinal",
+  "repeatPassword": "Confirma contrasinal",
+  "callToAction": "Xa tes conta?",
+  "action": "Entra",
+  "submit": "Rexístrate"
+}
