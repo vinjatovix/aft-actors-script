@@ -1,0 +1,9 @@
+{
+  "required": "This field is required.",
+  "invalidEmail": "The email is not valid.",
+  "passwordsDontMatch": "The passwords do not match.",
+  "weakPassword": "The password is weak.",
+  "invalidUsername": "The username is not valid.",
+  "injectionError": "Don't get carried away! -9001",
+  "valueExceeds": "The value exceeds {{max}} characters."
+}

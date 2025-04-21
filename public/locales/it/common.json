@@ -1,0 +1,19 @@
+{
+  "home": "Home",
+  "authors": "Autori",
+  "author": "Autore",
+  "books": "Opere",
+  "book": "Opera",
+  "characters": "Personaggi",
+  "character": "Personaggio",
+  "scenes": "Scene",
+  "scene": "Scena",
+  "builds": "Costruzioni",
+  "build": "Costruzione",
+  "close": "Chiudere",
+  "create": "Creare",
+  "profile": "Profilo",
+  "settings": "Impostazioni",
+  "logout": "Disconnettersi",
+  "login": "Accedi"
+}

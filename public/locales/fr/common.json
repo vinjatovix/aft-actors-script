@@ -1,0 +1,19 @@
+{
+  "home": "Accueil",
+  "authors": "Auteurs",
+  "author": "Auteur",
+  "books": "Pièces",
+  "book": "Pièce",
+  "characters": "Personnages",
+  "character": "Personnage",
+  "scenes": "Scènes",
+  "scene": "Scène",
+  "builds": "Constructions",
+  "build": "Construction",
+  "close": "Fermer",
+  "create": "Créer",
+  "profile": "Profil",
+  "settings": "Paramètres",
+  "logout": "Déconnexion",
+  "login": "Connexion"
+}

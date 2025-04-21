@@ -8,6 +8,12 @@
   "character": "Character",
   "scenes": "Scenes",
   "scene": "Scene",
+  "builds": "Builds",
+  "build": "Build",
   "close": "Close",
-  "create": "Create"
+  "create": "Create",
+  "profile": "Profile",
+  "settings": "Settings",
+  "logout": "Logout",
+  "login": "Login"
 }

@@ -1,0 +1,38 @@
+{
+  "header": "Pertsonaia Eraikuntza",
+  "builds": "Eraikuntzak",
+  "at": "etan",
+  "updated": "Eguneratua",
+  "save": "Gorde",
+  "center": {
+    "label": "Zentroa",
+    "instinctive": "Instintiboa",
+    "emotional": "Emozionala",
+    "mental": "Mentala"
+  },
+  "sceneCircumstances": {
+    "label": "Eszenaren Ingurugiroa",
+    "placeholder": "Aitonaren urtebetetze afaria da"
+  },
+  "previousCircumstances": {
+    "label": "Aurreko Ingurugiroa",
+    "placeholder": "Doktoreak Brick-i esan dio aitonak minbizia duela"
+  },
+  "startingPoint": {
+    "label": "Hasierako Puntua",
+    "placeholder": "Brick erdi mozkortuta dago eta ihes egin nahi du"
+  },
+  "relationshipCircumstances": "Harremanaren Ingurugiroa",
+  "character": "Pertsonaia",
+  "circumstance": "Ingurugiroa",
+  "actionUnits": {
+    "label": "Ekintza Unitateak",
+    "action": "Ekintza",
+    "strategies": "Estrategiak",
+    "strategy": "Estrategia"
+  },
+  "delete": "Ezabatu",
+  "add": "Gehitu",
+  "loading": "Eraikuntzak kargatzen",
+  "noAvailable": "Ez dago eraikuntzarik eskuragarri"
+}

@@ -8,6 +8,12 @@
   "character": "Personaxe",
   "scenes": "Esceas",
   "scene": "Escea",
+  "builds": "Construccións",
+  "build": "Construcción",
   "close": "Pechar",
-  "create": "Crear"
+  "create": "Crear",
+  "profile": "Perfil",
+  "settings": "Configuración",
+  "logout": "Sair",
+  "login": "Acceder"
 }

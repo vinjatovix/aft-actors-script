@@ -8,6 +8,12 @@
   "character": "Personaje",
   "scenes": "Escenas",
   "scene": "Escena",
+  "builds": "Construcciones",
+  "build": "Construcción",
   "close": "Cerrar",
-  "create": "Crear"
+  "create": "Crear",
+  "profile": "Perfil",
+  "settings": "Configuración",
+  "logout": "Cerrar sesión",
+  "login": "Iniciar sesión"
 }

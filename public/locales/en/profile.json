@@ -1,0 +1,10 @@
+{
+  "updatePasswordSuccess": "Password updated successfully.",
+  "adminProfile": "Admin profile",
+  "userProfile": "User profile",
+  "profile": "Profile",
+  "newPassword": "New password",
+  "repeatPassword": "Repeat password",
+  "currentPassword": "Current password",
+  "updatePassword": "Update password"
+}

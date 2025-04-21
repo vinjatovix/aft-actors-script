@@ -1,0 +1,9 @@
+{
+  "required": "És obligatori.",
+  "invalidEmail": "El correu no és vàlid.",
+  "passwordsDontMatch": "Les contrasenyes no coincideixen.",
+  "weakPassword": "La contrasenya és feble.",
+  "invalidUsername": "El nom d'usuari no és vàlid.",
+  "injectionError": "No et flipis! -9001",
+  "valueExceeds": "El valor excedeix {{max}} caràcters."
+}

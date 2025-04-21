@@ -1,0 +1,10 @@
+{
+  "header": "Erregistratu",
+  "username": "Erabiltzaile izena",
+  "email": "Posta elektronikoa",
+  "password": "Pasahitza",
+  "repeatPassword": "Errepikatu pasahitza",
+  "callToAction": "Baduzu konturik?",
+  "action": "Saioa hasi",
+  "submit": "Erregistratu"
+}

@@ -1,0 +1,10 @@
+{
+  "updatePasswordSuccess": "Senha atualizada com sucesso.",
+  "adminProfile": "Perfil de administrador",
+  "userProfile": "Perfil de usuário",
+  "profile": "Perfil",
+  "newPassword": "Nova senha",
+  "repeatPassword": "Repetir senha",
+  "currentPassword": "Senha atual",
+  "updatePassword": "Atualizar senha"
+}

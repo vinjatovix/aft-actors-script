@@ -1,0 +1,38 @@
+{
+  "header": "Costruzione del Personaggio",
+  "builds": "Costruzioni",
+  "at": "alle",
+  "updated": "Aggiornato",
+  "save": "Salva",
+  "center": {
+    "label": "Centro",
+    "instinctive": "Istintivo",
+    "emotional": "Emotivo",
+    "mental": "Mentale"
+  },
+  "sceneCircumstances": {
+    "label": "Circostanze della Scena",
+    "placeholder": "È la cena di compleanno del nonno"
+  },
+  "previousCircumstances": {
+    "label": "Circostanze Precedenti",
+    "placeholder": "Il dottore ha appena detto a Brick che il nonno ha il cancro"
+  },
+  "startingPoint": {
+    "label": "Punto di Partenza",
+    "placeholder": "Brick è mezzo ubriaco e vuole solo scappare"
+  },
+  "relationshipCircumstances": "Circostanze della Relazione",
+  "character": "Personaggio",
+  "circumstance": "Circostanza",
+  "actionUnits": {
+    "label": "Unità di Azione",
+    "action": "Azione",
+    "strategies": "Strategie",
+    "strategy": "Strategia"
+  },
+  "delete": "Elimina",
+  "add": "Aggiungi",
+  "loading": "Caricamento costruzioni",
+  "noAvailable": "Nessuna costruzione disponibile"
+}

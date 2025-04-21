@@ -1,0 +1,10 @@
+{
+  "updatePasswordSuccess": "Parola a fost actualizată cu succes.",
+  "adminProfile": "Profil administrator",
+  "userProfile": "Profil utilizator",
+  "profile": "Profil",
+  "newPassword": "Parolă nouă",
+  "repeatPassword": "Repetă parola",
+  "currentPassword": "Parola curentă",
+  "updatePassword": "Actualizează parola"
+}

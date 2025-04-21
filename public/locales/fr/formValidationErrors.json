@@ -1,0 +1,9 @@
+{
+  "required": "Ce champ est requis.",
+  "invalidEmail": "L'email n'est pas valide.",
+  "passwordsDontMatch": "Les mots de passe ne correspondent pas.",
+  "weakPassword": "Le mot de passe est faible.",
+  "invalidUsername": "Le nom d'utilisateur n'est pas valide.",
+  "injectionError": "Ne déconne pas ! -9001",
+  "valueExceeds": "La valeur dépasse {{max}} caractères."
+}

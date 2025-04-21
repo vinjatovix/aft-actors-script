@@ -1,0 +1,10 @@
+{
+  "updatePasswordSuccess": "Contrasenya actualitzada amb èxit.",
+  "adminProfile": "Perfil d'administrador",
+  "userProfile": "Perfil d'usuari",
+  "profile": "Perfil",
+  "newPassword": "Nova contrasenya",
+  "repeatPassword": "Repetir contrasenya",
+  "currentPassword": "Contrasenya actual",
+  "updatePassword": "Actualitzar contrasenya"
+}
