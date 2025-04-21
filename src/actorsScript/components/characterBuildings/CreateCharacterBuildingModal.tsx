@@ -6,45 +6,47 @@ import {
   InputLabel,
   MenuItem,
   Modal,
-  Select,
-} from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../redux/types";
-import { useEffect, useState } from "react";
-import { getBooksByAuthorId } from "../../../redux/thunks/bookThunks";
-import { getCharactersByBookId } from "../../../redux/thunks/characterThunks";
-import { getScenesByCharacterId } from "../../../redux/thunks/sceneThunks";
+  Select
+} from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../../redux/types';
+import { useEffect, useState } from 'react';
+import { getBooksByAuthorId } from '../../../redux/thunks/bookThunks';
+import { getCharactersByBookId } from '../../../redux/thunks/characterThunks';
+import { getScenesByCharacterId } from '../../../redux/thunks/sceneThunks';
 import {
   clearSelectedCharacterBuilding,
-  setSelectedCharacterBuilding,
-} from "../../../redux/slices/characterBuildingSlice";
-import { v4 as uuidv4 } from "uuid";
+  setSelectedCharacterBuilding
+} from '../../../redux/slices/characterBuildingSlice';
+import { v4 as uuidv4 } from 'uuid';
 import {
   createCharacterBuilding,
-  getAllCharacterBuildings,
-} from "../../../redux/thunks/characterBuildingThunks";
-import { commonTranslationMap } from "../../../i18n/commonTranslationMap";
-import { authors } from "../../../../tests/data";
+  getAllCharacterBuildings
+} from '../../../redux/thunks/characterBuildingThunks';
+import { authors } from '../../../../tests/data';
+import { useTranslation } from 'react-i18next';
 
 const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
   width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
   boxShadow: 24,
-  p: 4,
+  p: 4
 };
 
 export const CreateCharacterBuildingModal = ({
   open,
-  handleModalClose,
+  handleModalClose
 }: {
   open: boolean;
   handleModalClose: () => void;
 }) => {
+  const { t } = useTranslation('common');
+
   const dispatch = useDispatch<AppDispatch>();
   const [author, setAuthor] = useState<{ id: string; name: string } | null>(
     null
@@ -90,9 +92,6 @@ export const CreateCharacterBuildingModal = ({
     handleModalClose();
   };
 
-  const currentLanguage = localStorage.getItem("language") ?? "es_gl";
-  const translationMap = commonTranslationMap[currentLanguage];
-
   return (
     <div>
       <Modal
@@ -102,14 +101,14 @@ export const CreateCharacterBuildingModal = ({
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <button onClick={clearAndClose}>{translationMap.close}</button>
+          <button onClick={clearAndClose}>{t('close')}</button>
 
           <FormControl fullWidth sx={{ mt: 2 }}>
-            <InputLabel id="author-label">{translationMap.author}</InputLabel>
+            <InputLabel id="author-label">{t('author')}</InputLabel>
             <Select
               labelId="author-label"
               variant="filled"
-              value={author?.id ?? ""}
+              value={author?.id ?? ''}
               onChange={(e) => {
                 const selectedAuthor = authors.find(
                   (a) => a.id === e.target.value
@@ -133,11 +132,11 @@ export const CreateCharacterBuildingModal = ({
 
           {author && books.length > 0 && (
             <FormControl fullWidth sx={{ mt: 2 }}>
-              <InputLabel id="book-label">{translationMap.book}</InputLabel>
+              <InputLabel id="book-label">{t('book')}</InputLabel>
               <Select
                 labelId="book-label"
                 variant="filled"
-                value={book?.id ?? ""}
+                value={book?.id ?? ''}
                 onChange={(e) => {
                   const selectedBook = books.find(
                     (b) => b.id === e.target.value
@@ -161,13 +160,11 @@ export const CreateCharacterBuildingModal = ({
 
           {book && characters.length > 0 && (
             <FormControl fullWidth sx={{ mt: 2 }}>
-              <InputLabel id="character-label">
-                {translationMap.character}
-              </InputLabel>
+              <InputLabel id="character-label">{t('character')}</InputLabel>
               <Select
                 labelId="character-label"
                 variant="filled"
-                value={character?.id ?? ""}
+                value={character?.id ?? ''}
                 onChange={(e) => {
                   const selectedCharacter = characters.find(
                     (c) => c.id === e.target.value
@@ -189,11 +186,11 @@ export const CreateCharacterBuildingModal = ({
 
           {character && scenes.length > 0 && (
             <FormControl fullWidth sx={{ mt: 2 }}>
-              <InputLabel id="scene-label">{translationMap.scene}</InputLabel>
+              <InputLabel id="scene-label">{t('scene')}</InputLabel>
               <Select
                 labelId="scene-label"
                 variant="filled"
-                value={scene?.id ?? ""}
+                value={scene?.id ?? ''}
                 onChange={(e) => {
                   const selectedScene = scenes.find(
                     (s) => s.id === e.target.value
@@ -218,7 +215,7 @@ export const CreateCharacterBuildingModal = ({
                 color="primary"
                 variant="outlined"
                 size="small"
-                sx={{ padding: 1, textTransform: "none", mt: 2 }}
+                sx={{ padding: 1, textTransform: 'none', mt: 2 }}
                 onClick={() => {
                   dispatch(clearSelectedCharacterBuilding());
                   const id = uuidv4();
@@ -229,7 +226,7 @@ export const CreateCharacterBuildingModal = ({
                       character,
                       book,
                       scene,
-                      author,
+                      author
                     })
                   );
                   dispatch(getAllCharacterBuildings());
@@ -242,7 +239,7 @@ export const CreateCharacterBuildingModal = ({
                       scene,
                       relationshipCircumstances: [],
                       actionUnits: [],
-                      center: "instinctive",
+                      center: 'instinctive'
                     })
                   );
                   clearAndClose();
@@ -252,11 +249,11 @@ export const CreateCharacterBuildingModal = ({
                 <span
                   style={{
                     fontSize: 14,
-                    fontWeight: "light",
-                    color: "primary.main",
+                    fontWeight: 'light',
+                    color: 'primary.main'
                   }}
                 >
-                  {translationMap.create} {translationMap.character}
+                  {t('create')} {t('character')}
                 </span>
               </Button>
             </Grid>
