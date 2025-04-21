@@ -120,10 +120,6 @@ export const CharacterBuildingView = ({
             'startingPoint'
           ] as const
         ).map((field) => {
-          console.log('Rendering TextField:', field, formData[field]);
-          console.log('Label:', t(`${field}.label`));
-          console.log('Placeholder:', t(`${field}.placeholder`));
-
           return (
             <TextField
               key={field}

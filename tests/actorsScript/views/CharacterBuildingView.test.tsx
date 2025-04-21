@@ -1,4 +1,4 @@
-import { fireEvent, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { CharacterBuildingView } from '../../../src/actorsScript/views/CharacterBuildingView';
 import { useDispatch } from 'react-redux';
@@ -10,45 +10,23 @@ import {
 import { clearSelectedCharacterBuilding } from '../../../src/redux/slices/characterBuildingSlice';
 import { characterBuildings, users } from '../../data';
 import { i18n as I18nType } from 'i18next';
-import { mockStore } from '../../__mocks__/mockStore';
 import { initializeI18n } from '../../test-utils/i18nTest';
-import { renderWithProviders } from '../../test-utils/renderWithProviders';
 
 jest.mock('react-redux', () => ({
   useDispatch: jest.fn()
 }));
 
-jest.mock('../../../src/redux/thunks/characterBuildingThunks', () => {
-  return {
-    deleteCharacterBuilding: jest.fn(() => ({
-      type: 'characterBuilding/deleteCharacterBuilding/fulfilled'
-    })),
-    getAllCharacterBuildings: jest.fn(() => ({
-      type: 'characterBuilding/getAllCharacterBuildings/fulfilled',
-      payload: [] // importante!
-    })),
-    updateCharacterBuilding: jest.fn(() => ({
-      type: 'characterBuilding/updateCharacterBuilding/fulfilled'
-    }))
-  };
-});
+jest.mock("../../../src/redux/thunks/characterBuildingThunks", () => ({
+  ...jest.requireActual("../../../src/redux/thunks/characterBuildingThunks"),
+  deleteCharacterBuilding: jest.fn().mockResolvedValue(undefined),
+  getAllCharacterBuildings: jest.fn().mockResolvedValue([]),
+  updateCharacterBuilding: jest.fn().mockResolvedValue(undefined),
+}));
 
 const AUTH = users[0];
-const CHARACTER_BUILDING_MOCK = {
-  ...characterBuildings[0],
-  character: {
-    ...characterBuildings[0].character,
-    name: characterBuildings[0]?.character?.name || 'Default Character Name'
-  },
-  scene: {
-    ...characterBuildings[0].scene,
-    description:
-      characterBuildings[0]?.scene?.description || 'Default Scene Description'
-  }
-};
+const CHARACTER_BUILDING_MOCK = characterBuildings[0];
 
 let mockDispatch = jest.fn();
-let store: ReturnType<typeof mockStore>;
 let i18nTest: I18nType;
 let t: (key: string, ns?: string) => string;
 
@@ -61,7 +39,6 @@ describe('CharacterBuildingView', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    store = mockStore();
     mockDispatch = jest.fn();
 
     (useDispatch as unknown as jest.Mock).mockReturnValue(mockDispatch);
@@ -78,20 +55,15 @@ describe('CharacterBuildingView', () => {
     });
   });
 
-  const renderComponent = () =>
-    renderWithProviders({
-      store,
-      ui: <CharacterBuildingView characterBuilding={CHARACTER_BUILDING_MOCK} />,
-      i18nInstance: i18nTest
-    });
+  it('renders the CharacterBuildingHeader with correct props', async () => {
+    render(
+      <CharacterBuildingView characterBuilding={CHARACTER_BUILDING_MOCK} />
+    );
 
-  it('renders the CharacterBuildingHeader with correct props', () => {
-    renderComponent();
-
-    const characterName = screen.getByText(
+    const characterName = await screen.findByText(
       new RegExp(CHARACTER_BUILDING_MOCK.character.name)
     );
-    const sceneDescription = screen.getByText(
+    const sceneDescription = await screen.findByText(
       new RegExp(CHARACTER_BUILDING_MOCK.scene.description)
     );
 
@@ -100,7 +72,9 @@ describe('CharacterBuildingView', () => {
   });
 
   it('calls handleSubmit when SaveButton is clicked', async () => {
-    renderComponent();
+    render(
+      <CharacterBuildingView characterBuilding={CHARACTER_BUILDING_MOCK} />
+    );
     fireEvent.click(screen.getByText(t('save')));
 
     expect(updateCharacterBuilding).toHaveBeenCalledWith({
@@ -131,7 +105,9 @@ describe('CharacterBuildingView', () => {
   });
 
   it('calls handleDelete when Delete button is clicked', async () => {
-    renderComponent();
+    render(
+      <CharacterBuildingView characterBuilding={CHARACTER_BUILDING_MOCK} />
+    );
     fireEvent.click(screen.getByText(t('delete')));
 
     expect(deleteCharacterBuilding).toHaveBeenCalledWith(
@@ -146,7 +122,9 @@ describe('CharacterBuildingView', () => {
 
   it('updates formData when input fields change', () => {
     const updatedValue = 'Updated Value';
-    renderComponent();
+    render(
+      <CharacterBuildingView characterBuilding={CHARACTER_BUILDING_MOCK} />
+    );
     const input = screen.getByLabelText(
       t('sceneCircumstances.label')
     ) as HTMLInputElement;
