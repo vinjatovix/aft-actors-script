@@ -34,5 +34,6 @@
   "delete": "Elimina",
   "add": "Aggiungi",
   "loading": "Caricamento costruzioni",
-  "noAvailable": "Nessuna costruzione disponibile"
+  "noAvailable": "Nessuna costruzione disponibile",
+  "nothingSelected": "Seleziona o costruisci un personaggio"
 }

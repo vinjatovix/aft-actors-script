@@ -34,5 +34,6 @@
   "delete": "Delete",
   "add": "Add",
   "loading": "Loading builds",
-  "noAvailable": "No builds available"
+  "noAvailable": "No builds available",
+  "nothingSelected": "Select or build a character"
 }

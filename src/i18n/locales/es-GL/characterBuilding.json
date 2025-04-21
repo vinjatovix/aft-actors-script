@@ -34,5 +34,6 @@
   "delete": "Eliminar",
   "add": "Engadir",
   "loading": "Cargando construccións",
-  "noAvailable": "Non hai construcións dispoñibles"
+  "noAvailable": "Non hai construcións dispoñibles",
+  "nothingSelected": "Selecciona ou construe unha personaxe"
 }

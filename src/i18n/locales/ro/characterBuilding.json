@@ -34,5 +34,6 @@
   "delete": "Șterge",
   "add": "Adaugă",
   "loading": "Se încarcă construcțiile",
-  "noAvailable": "Nicio construcție disponibilă"
+  "noAvailable": "Nicio construcție disponibilă",
+  "nothingSelected": "Selectează sau construiește un personaj"
 }

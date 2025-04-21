@@ -34,5 +34,6 @@
   "delete": "Ezabatu",
   "add": "Gehitu",
   "loading": "Eraikuntzak kargatzen",
-  "noAvailable": "Ez dago eraikuntzarik eskuragarri"
+  "noAvailable": "Ez dago eraikuntzarik eskuragarri",
+  "nothingSelected": "Hautatu edo eraiki pertsonaia bat"
 }
