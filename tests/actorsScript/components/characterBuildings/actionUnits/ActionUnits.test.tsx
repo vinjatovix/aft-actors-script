@@ -1,9 +1,7 @@
 import { screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { ActionUnits } from '../../../../../src/actorsScript/components/characterBuildings/actionUnits/ActionUnits';
-import { i18n as I18nType } from 'i18next';
 import { mockStore } from '../../../../__mocks__/mockStore';
-import { initializeI18n } from '../../../../test-utils/i18nTest';
 import { renderWithProviders } from '../../../../test-utils/renderWithProviders';
 
 const mockSetFormData = jest.fn();
@@ -19,13 +17,8 @@ const mockFormData = {
 };
 
 let store: ReturnType<typeof mockStore>;
-let i18nTest: I18nType;
 
 describe('ActionUnits Component', () => {
-  beforeAll(async () => {
-    i18nTest = await initializeI18n();
-  });
-
   beforeEach(() => {
     jest.clearAllMocks();
     store = mockStore();
@@ -39,8 +32,7 @@ describe('ActionUnits Component', () => {
           formData={formData ?? mockFormData}
           setFormData={mockSetFormData}
         />
-      ),
-      i18nInstance: i18nTest
+      )
     });
 
   it('renders the component with initial action units', () => {

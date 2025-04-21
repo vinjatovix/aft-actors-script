@@ -1,12 +1,11 @@
 import '@testing-library/jest-dom';
 import { screen, fireEvent } from '@testing-library/react';
-import { i18n as I18nType } from 'i18next';
 
 import { renderWithProviders } from '../../../../test-utils/renderWithProviders';
-import { initializeI18n } from '../../../../test-utils/i18nTest';
 import { mockStore } from '../../../../__mocks__/mockStore';
 
 import { RelationshipCircumstances } from '../../../../../src/actorsScript/components/characterBuildings/relationshipCircumstances/RelationshipCircumstances';
+import i18n from '../../../../../src/i18n';
 
 const mockSetRelations = jest.fn();
 const mockHandleRelationChange = jest.fn();
@@ -32,19 +31,15 @@ const renderComponent = () =>
         setFormData={mockSetFormData}
         handleRelationChange={mockHandleRelationChange}
       />
-    ),
-    i18nInstance: i18nTest
+    )
   });
 
 let store: ReturnType<typeof mockStore>;
-let i18nTest: I18nType;
 let t: (key: string, ns?: string) => string;
 
 describe('RelationshipCircumstances Component', () => {
   beforeAll(async () => {
-    i18nTest = await initializeI18n();
-    t = (key: string, ns: string = 'characterBuilding') =>
-      i18nTest.t(key, { ns });
+    t = (key: string, ns: string = 'characterBuilding') => i18n.t(key, { ns });
   });
 
   beforeEach(() => {

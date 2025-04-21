@@ -1,27 +1,23 @@
 import { screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { i18n as I18nType } from 'i18next';
 
-import { initializeI18n } from '../test-utils/i18nTest';
 import { renderWithProviders } from '../test-utils/renderWithProviders';
 import { mockStore } from '../__mocks__/mockStore';
 
 import ResponsiveAppBar from '../../src/ui/ResponsiveAppBar';
+import i18n from '../../src/i18n';
 
-let i18nTest: I18nType;
 let t: (key: string, ns?: string) => string;
 
 describe('ResponsiveAppBar Component', () => {
   beforeAll(async () => {
-    i18nTest = await initializeI18n();
-    t = (key: string, ns: string = 'common') => i18nTest.t(key, { ns });
+    t = (key: string, ns: string = 'common') => i18n.t(key, { ns });
   });
 
   const renderComponent = (store: ReturnType<typeof mockStore>) =>
     renderWithProviders({
       store,
-      ui: <ResponsiveAppBar />,
-      i18nInstance: i18nTest
+      ui: <ResponsiveAppBar />
     });
 
   beforeEach(() => {

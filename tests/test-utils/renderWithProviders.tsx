@@ -2,7 +2,7 @@ import { render } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '../../src/i18n';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 import { Store } from '@reduxjs/toolkit';
 
 type RenderWithProvidersArgs = {
@@ -18,11 +18,11 @@ export const renderWithProviders = ({
 }: RenderWithProvidersArgs) => {
   return render(
     <Provider store={store}>
-      <BrowserRouter
+      <MemoryRouter
         future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
       >
         <I18nextProvider i18n={i18nInstance}>{ui}</I18nextProvider>
-      </BrowserRouter>
+      </MemoryRouter>
     </Provider>
   );
 };

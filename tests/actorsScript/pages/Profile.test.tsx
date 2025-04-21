@@ -1,21 +1,20 @@
 import '@testing-library/jest-dom';
 import { act, fireEvent, screen } from '@testing-library/react';
-import { i18n as I18nType } from 'i18next';
 
 import { Profile } from '../../../src/actorsScript/pages/Profile';
 
 import { handleFetch } from '../../../src/utils/handleFetch';
-import { initializeI18n } from '../../test-utils/i18nTest';
 import { renderWithProviders } from '../../test-utils/renderWithProviders';
 import { mockStore } from '../../__mocks__/mockStore';
 import { users } from '../../data';
+import i18n from '../../../src/i18n';
 
 jest.mock('../../../src/utils/handleFetch', () => ({
   handleFetch: jest.fn()
 }));
 
 const renderComponent = (store: ReturnType<typeof mockStore>) =>
-  renderWithProviders({ store, ui: <Profile />, i18nInstance: i18nTest });
+  renderWithProviders({ store, ui: <Profile /> });
 
 const fillForm = (
   newPassword: string,
@@ -34,13 +33,11 @@ const fillForm = (
 };
 
 let store: ReturnType<typeof mockStore>;
-let i18nTest: I18nType;
 let t: (key: string, ns?: string) => string;
 
 describe('Profile', () => {
   beforeAll(async () => {
-    i18nTest = await initializeI18n();
-    t = (key: string, ns: string = 'profile') => i18nTest.t(key, { ns });
+    t = (key: string, ns: string = 'profile') => i18n.t(key, { ns });
   });
 
   beforeEach(() => {

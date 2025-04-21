@@ -1,20 +1,17 @@
 import '@testing-library/jest-dom';
 import { screen, fireEvent, act } from '@testing-library/react';
-import { i18n as I18nType } from 'i18next';
 
 import { Settings } from '../../../src/actorsScript/pages/Settings';
 import { mockStore } from '../../__mocks__/mockStore';
-import { initializeI18n } from '../../test-utils/i18nTest';
 import { renderWithProviders } from '../../test-utils/renderWithProviders';
+import i18n from '../../../src/i18n';
 
 let store: ReturnType<typeof mockStore>;
-let i18nTest: I18nType;
 let t: (key: string, ns?: string) => string;
 
 describe('Settings Page', () => {
   beforeAll(async () => {
-    i18nTest = await initializeI18n();
-    t = (key: string, ns: string = 'settings') => i18nTest.t(key, { ns });
+    t = (key: string, ns: string = 'settings') => i18n.t(key, { ns });
   });
 
   beforeEach(() => {
@@ -28,7 +25,7 @@ describe('Settings Page', () => {
   });
 
   const renderSettingsPage = () =>
-    renderWithProviders({ store, ui: <Settings />, i18nInstance: i18nTest });
+    renderWithProviders({ store, ui: <Settings /> });
 
   it('should render the settings page with language options', () => {
     renderSettingsPage();

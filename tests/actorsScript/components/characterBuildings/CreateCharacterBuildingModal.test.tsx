@@ -7,8 +7,7 @@ import { authors, books, characters, scenes } from '../../../data';
 import { getBooksByAuthorId } from '../../../../src/redux/thunks/bookThunks';
 import { getCharactersByBookId } from '../../../../src/redux/thunks/characterThunks';
 import { getScenesByCharacterId } from '../../../../src/redux/thunks/sceneThunks';
-import { i18n as I18nType } from 'i18next';
-import { initializeI18n } from '../../../test-utils/i18nTest';
+import i18n from '../../../../src/i18n';
 
 jest.mock('react-redux', () => ({
   useDispatch: jest.fn(),
@@ -30,13 +29,11 @@ jest.mock('../../../../src/redux/thunks/sceneThunks', () => ({
 }));
 
 let mockDispatch = jest.fn();
-let i18nTest: I18nType;
 let t: (key: string, ns?: string) => string;
 
 describe('CreateCharacterBuildingModal', () => {
   beforeAll(async () => {
-    i18nTest = await initializeI18n();
-    t = (key: string, ns: string = 'common') => i18nTest.t(key, { ns });
+    t = (key: string, ns: string = 'common') => i18n.t(key, { ns });
   });
 
   beforeEach(() => {
@@ -49,10 +46,6 @@ describe('CreateCharacterBuildingModal', () => {
       characters,
       scenes
     });
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
   });
 
   it('renders the modal when open is true', () => {

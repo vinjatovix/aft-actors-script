@@ -1,13 +1,12 @@
 import { screen, fireEvent, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { jest } from '@jest/globals';
-import { i18n as I18nType } from 'i18next';
 
-import { initializeI18n } from '../test-utils/i18nTest';
 import { renderWithProviders } from '../test-utils/renderWithProviders';
 import { mockStore } from '../__mocks__/mockStore';
 
 import Login from '../../src/auth/pages/Login';
+import i18n from '../../src/i18n';
 
 jest.mock('../../src/utils/handleFetch', () => ({
   handleFetch: jest
@@ -25,13 +24,11 @@ const fillLoginForm = (email: string, password: string) => {
 };
 
 let store: ReturnType<typeof mockStore>;
-let i18nTest: I18nType;
 let t: (key: string, ns?: string) => string;
 
 describe('Login Page', () => {
   beforeAll(async () => {
-    i18nTest = await initializeI18n();
-    t = (key: string, ns: string = 'login') => i18nTest.t(key, { ns });
+    t = (key: string, ns: string = 'login') => i18n.t(key, { ns });
   });
 
   beforeEach(() => {
@@ -43,8 +40,7 @@ describe('Login Page', () => {
     jest.restoreAllMocks();
   });
 
-  const renderLoginPage = () =>
-    renderWithProviders({ store, ui: <Login />, i18nInstance: i18nTest });
+  const renderLoginPage = () => renderWithProviders({ store, ui: <Login /> });
 
   it('should render the login form', () => {
     renderLoginPage();

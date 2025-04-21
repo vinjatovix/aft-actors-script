@@ -1,29 +1,25 @@
 import { act, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { i18n as I18nType } from 'i18next';
 
 import { handleFetch } from '../../../src/utils/handleFetch';
 import * as characterBuildingThunks from '../../../src/redux/thunks/characterBuildingThunks';
 import { CharacterBuildingsPage } from '../../../src/actorsScript/pages/CharacterBuildingsPage';
 
-import { initializeI18n } from '../../test-utils/i18nTest';
 import { renderWithProviders } from '../../test-utils/renderWithProviders';
 import { mockStore } from '../../__mocks__/mockStore';
 import { users } from '../../data';
+import i18n from '../../../src/i18n';
 
 jest.mock('../../../src/utils/handleFetch', () => ({
   handleFetch: jest.fn()
 }));
 
 let store: ReturnType<typeof mockStore>;
-let i18nTest: I18nType;
 let t: (key: string, ns?: string) => string;
 
 describe('CharacterBuildingsPage', () => {
   beforeAll(async () => {
-    i18nTest = await initializeI18n();
-    t = (key: string, ns: string = 'characterBuilding') =>
-      i18nTest.t(key, { ns });
+    t = (key: string, ns: string = 'characterBuilding') => i18n.t(key, { ns });
   });
 
   beforeEach(() => {
@@ -41,8 +37,7 @@ describe('CharacterBuildingsPage', () => {
   const renderComponent = () =>
     renderWithProviders({
       store,
-      ui: <CharacterBuildingsPage />,
-      i18nInstance: i18nTest
+      ui: <CharacterBuildingsPage />
     });
 
   it('dispatches getAllCharacterBuildings when token is available', async () => {
@@ -76,7 +71,7 @@ describe('CharacterBuildingsPage', () => {
     expect(await screen.findByText(/BackEndError/i)).toBeInTheDocument();
   });
 
-  it("renders not available translation when there are no character buildings", async () => {
+  it('renders not available translation when there are no character buildings', async () => {
     await act(async () => {
       renderComponent();
     });

@@ -1,12 +1,11 @@
 import '@testing-library/jest-dom';
 import { fireEvent, screen } from '@testing-library/react';
-import { i18n as I18nType } from 'i18next';
 
 import { Relation } from '../../../../../src/actorsScript/components/characterBuildings/relationshipCircumstances/Relation';
 
 import { mockStore } from '../../../../__mocks__/mockStore';
-import { initializeI18n } from '../../../../test-utils/i18nTest';
 import { renderWithProviders } from '../../../../test-utils/renderWithProviders';
+import i18n from '../../../../../src/i18n';
 
 const MOCK_CHARACTERS = [
   { id: '1', name: 'Character 1' },
@@ -22,14 +21,11 @@ const mockSetRelations = jest.fn();
 const mockHandleRemoveRelation = jest.fn();
 
 let store: ReturnType<typeof mockStore>;
-let i18nTest: I18nType;
 let t: (key: string, ns?: string) => string;
 
 describe('Relation Component', () => {
   beforeAll(async () => {
-    i18nTest = await initializeI18n();
-    t = (key: string, ns: string = 'characterBuilding') =>
-      i18nTest.t(key, { ns });
+    t = (key: string, ns: string = 'characterBuilding') => i18n.t(key, { ns });
   });
   beforeEach(() => {
     jest.clearAllMocks();
@@ -49,8 +45,7 @@ describe('Relation Component', () => {
           handleRemoveRelation={mockHandleRemoveRelation}
           characters={MOCK_CHARACTERS}
         />
-      ),
-      i18nInstance: i18nTest
+      )
     });
 
   it('renders the component with existing relation', () => {

@@ -1,12 +1,11 @@
 import '@testing-library/jest-dom';
 import { screen, fireEvent, act } from '@testing-library/react';
-import { i18n as I18nType } from 'i18next';
 
-import { initializeI18n } from '../test-utils/i18nTest';
 import { renderWithProviders } from '../test-utils/renderWithProviders';
 import { mockStore } from '../__mocks__/mockStore';
 
 import { Register } from '../../src/auth/pages/Register';
+import i18n from '../../src/i18n';
 
 jest.mock('../../src/utils/handleFetch', () => ({
   handleFetch: jest
@@ -35,13 +34,11 @@ const fillRegisterForm = (
 };
 
 let store: ReturnType<typeof mockStore>;
-let i18nTest: I18nType;
 let t: (key: string, ns?: string) => string;
 
 describe('Register Page', () => {
   beforeAll(async () => {
-    i18nTest = await initializeI18n();
-    t = (key: string, ns: string = 'register') => i18nTest.t(key, { ns });
+    t = (key: string, ns: string = 'register') => i18n.t(key, { ns });
   });
 
   beforeEach(() => {
@@ -55,7 +52,7 @@ describe('Register Page', () => {
   });
 
   const renderRegisterPage = () =>
-    renderWithProviders({ store, ui: <Register />, i18nInstance: i18nTest });
+    renderWithProviders({ store, ui: <Register /> });
 
   it('should render the registration form', () => {
     const labels = [

@@ -9,8 +9,7 @@ import {
 } from '../../../src/redux/thunks/characterBuildingThunks';
 import { clearSelectedCharacterBuilding } from '../../../src/redux/slices/characterBuildingSlice';
 import { characterBuildings, users } from '../../data';
-import { i18n as I18nType } from 'i18next';
-import { initializeI18n } from '../../test-utils/i18nTest';
+import i18n from '../../../src/i18n';
 
 jest.mock('react-redux', () => ({
   useDispatch: jest.fn()
@@ -27,14 +26,12 @@ const AUTH = users[0];
 const CHARACTER_BUILDING_MOCK = characterBuildings[0];
 
 let mockDispatch = jest.fn();
-let i18nTest: I18nType;
 let t: (key: string, ns?: string) => string;
 
 describe('CharacterBuildingView', () => {
   beforeAll(async () => {
-    i18nTest = await initializeI18n();
     t = (key: string, ns: string = 'characterBuilding') =>
-      i18nTest.t(key, { ns });
+      i18n.t(key, { ns });
   });
 
   beforeEach(() => {
