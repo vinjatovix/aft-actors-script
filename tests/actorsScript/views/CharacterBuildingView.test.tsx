@@ -1,61 +1,97 @@
-import { fireEvent, render } from "@testing-library/react";
-import "@testing-library/jest-dom";
-import { CharacterBuildingView } from "../../../src/actorsScript/views/CharacterBuildingView";
-import { useDispatch } from "react-redux";
+import { fireEvent, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import { CharacterBuildingView } from '../../../src/actorsScript/views/CharacterBuildingView';
+import { useDispatch } from 'react-redux';
 import {
   deleteCharacterBuilding,
   getAllCharacterBuildings,
-  updateCharacterBuilding,
-} from "../../../src/redux/thunks/characterBuildingThunks";
-import { clearSelectedCharacterBuilding } from "../../../src/redux/slices/characterBuildingSlice";
-import { characterBuildings, users } from "../../data";
-import { characterBuildingTranslationMap } from "../../../src/i18n/characterBuildingTranslationMap";
+  updateCharacterBuilding
+} from '../../../src/redux/thunks/characterBuildingThunks';
+import { clearSelectedCharacterBuilding } from '../../../src/redux/slices/characterBuildingSlice';
+import { characterBuildings, users } from '../../data';
+import { i18n as I18nType } from 'i18next';
+import { mockStore } from '../../__mocks__/mockStore';
+import { initializeI18n } from '../../test-utils/i18nTest';
+import { renderWithProviders } from '../../test-utils/renderWithProviders';
 
-jest.mock("react-redux", () => ({
-  useDispatch: jest.fn(),
+jest.mock('react-redux', () => ({
+  useDispatch: jest.fn()
 }));
 
-jest.mock("../../../src/redux/thunks/characterBuildingThunks", () => ({
-  ...jest.requireActual("../../../src/redux/thunks/characterBuildingThunks"),
-  deleteCharacterBuilding: jest.fn().mockResolvedValue(undefined),
-  getAllCharacterBuildings: jest.fn().mockResolvedValue([]),
-  updateCharacterBuilding: jest.fn().mockResolvedValue(undefined),
-}));
+jest.mock('../../../src/redux/thunks/characterBuildingThunks', () => {
+  return {
+    deleteCharacterBuilding: jest.fn(() => ({
+      type: 'characterBuilding/deleteCharacterBuilding/fulfilled'
+    })),
+    getAllCharacterBuildings: jest.fn(() => ({
+      type: 'characterBuilding/getAllCharacterBuildings/fulfilled',
+      payload: [] // importante!
+    })),
+    updateCharacterBuilding: jest.fn(() => ({
+      type: 'characterBuilding/updateCharacterBuilding/fulfilled'
+    }))
+  };
+});
 
 const AUTH = users[0];
-const CHARACTER_BUILDING_MOCK = characterBuildings[0];
-const LOCALE = "es_gl";
-const TRANSLATION_MAP = characterBuildingTranslationMap[LOCALE];
+const CHARACTER_BUILDING_MOCK = {
+  ...characterBuildings[0],
+  character: {
+    ...characterBuildings[0].character,
+    name: characterBuildings[0]?.character?.name || 'Default Character Name'
+  },
+  scene: {
+    ...characterBuildings[0].scene,
+    description:
+      characterBuildings[0]?.scene?.description || 'Default Scene Description'
+  }
+};
 
 let mockDispatch = jest.fn();
+let store: ReturnType<typeof mockStore>;
+let i18nTest: I18nType;
+let t: (key: string, ns?: string) => string;
 
-describe("CharacterBuildingView", () => {
+describe('CharacterBuildingView', () => {
+  beforeAll(async () => {
+    i18nTest = await initializeI18n();
+    t = (key: string, ns: string = 'characterBuilding') =>
+      i18nTest.t(key, { ns });
+  });
+
   beforeEach(() => {
+    jest.clearAllMocks();
+    store = mockStore();
     mockDispatch = jest.fn();
 
     (useDispatch as unknown as jest.Mock).mockReturnValue(mockDispatch);
     mockDispatch.mockImplementation((action) => {
-      if (typeof action === "function") {
+      if (typeof action === 'function') {
         return action(mockDispatch, () => ({
           auth: AUTH,
           characterBuilding: {
-            selectedCharacterBuilding: CHARACTER_BUILDING_MOCK,
-          },
+            selectedCharacterBuilding: CHARACTER_BUILDING_MOCK
+          }
         }));
       }
       return action;
     });
   });
 
-  it("renders the CharacterBuildingHeader with correct props", () => {
-    const { getByText } = render(
-      <CharacterBuildingView characterBuilding={CHARACTER_BUILDING_MOCK} />
-    );
+  const renderComponent = () =>
+    renderWithProviders({
+      store,
+      ui: <CharacterBuildingView characterBuilding={CHARACTER_BUILDING_MOCK} />,
+      i18nInstance: i18nTest
+    });
 
-    const characterName = getByText(
+  it('renders the CharacterBuildingHeader with correct props', () => {
+    renderComponent();
+
+    const characterName = screen.getByText(
       new RegExp(CHARACTER_BUILDING_MOCK.character.name)
     );
-    const sceneDescription = getByText(
+    const sceneDescription = screen.getByText(
       new RegExp(CHARACTER_BUILDING_MOCK.scene.description)
     );
 
@@ -63,12 +99,9 @@ describe("CharacterBuildingView", () => {
     expect(sceneDescription).toBeInTheDocument();
   });
 
-  it("calls handleSubmit when SaveButton is clicked", async () => {
-    const { getByText } = render(
-      <CharacterBuildingView characterBuilding={CHARACTER_BUILDING_MOCK} />
-    );
-
-    fireEvent.click(getByText(TRANSLATION_MAP.save));
+  it('calls handleSubmit when SaveButton is clicked', async () => {
+    renderComponent();
+    fireEvent.click(screen.getByText(t('save')));
 
     expect(updateCharacterBuilding).toHaveBeenCalledWith({
       id: CHARACTER_BUILDING_MOCK.id,
@@ -81,28 +114,25 @@ describe("CharacterBuildingView", () => {
           character:
             CHARACTER_BUILDING_MOCK.relationshipCircumstances[0].character.id,
           circumstance:
-            CHARACTER_BUILDING_MOCK.relationshipCircumstances[0].circumstance,
-        },
+            CHARACTER_BUILDING_MOCK.relationshipCircumstances[0].circumstance
+        }
       ],
       actionUnits: [
         {
           action: CHARACTER_BUILDING_MOCK.actionUnits[0].action,
-          strategies: CHARACTER_BUILDING_MOCK.actionUnits[0].strategies,
+          strategies: CHARACTER_BUILDING_MOCK.actionUnits[0].strategies
         },
         {
           action: CHARACTER_BUILDING_MOCK.actionUnits[1].action,
-          strategies: CHARACTER_BUILDING_MOCK.actionUnits[1].strategies,
-        },
-      ],
+          strategies: CHARACTER_BUILDING_MOCK.actionUnits[1].strategies
+        }
+      ]
     });
   });
 
-  it("calls handleDelete when Delete button is clicked", async () => {
-    const { getByText } = render(
-      <CharacterBuildingView characterBuilding={CHARACTER_BUILDING_MOCK} />
-    );
-
-    fireEvent.click(getByText(TRANSLATION_MAP.delete));
+  it('calls handleDelete when Delete button is clicked', async () => {
+    renderComponent();
+    fireEvent.click(screen.getByText(t('delete')));
 
     expect(deleteCharacterBuilding).toHaveBeenCalledWith(
       CHARACTER_BUILDING_MOCK.id
@@ -114,13 +144,11 @@ describe("CharacterBuildingView", () => {
     expect(getAllCharacterBuildings).toHaveBeenCalled();
   });
 
-  it("updates formData when input fields change", () => {
-    const updatedValue = "Updated Value";
-    const { getByLabelText } = render(
-      <CharacterBuildingView characterBuilding={CHARACTER_BUILDING_MOCK} />
-    );
-    const input = getByLabelText(
-      TRANSLATION_MAP.sceneCircumstances.label
+  it('updates formData when input fields change', () => {
+    const updatedValue = 'Updated Value';
+    renderComponent();
+    const input = screen.getByLabelText(
+      t('sceneCircumstances.label')
     ) as HTMLInputElement;
 
     fireEvent.change(input, { target: { value: updatedValue } });

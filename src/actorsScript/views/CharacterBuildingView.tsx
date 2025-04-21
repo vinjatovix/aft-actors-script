@@ -1,45 +1,47 @@
-import { Button, Grid, TextField, Typography } from "@mui/material";
-import { useState } from "react";
+import { Button, Grid, TextField, Typography } from '@mui/material';
+import { useState } from 'react';
 
-import { CharacterBuilding } from "../../redux/interfaces/characterBuildingInterfaces";
-import { characterBuildingTranslationMap } from "../../i18n/translationMap";
-import { SaveButton } from "../components/buttons/SaveButton";
-import { RelationshipCircumstances } from "../components/characterBuildings/relationshipCircumstances/RelationshipCircumstances";
-import { ActionUnits } from "../components/characterBuildings/actionUnits/ActionUnits";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../redux/types";
+import { CharacterBuilding } from '../../redux/interfaces/characterBuildingInterfaces';
+import { SaveButton } from '../components/buttons/SaveButton';
+import { RelationshipCircumstances } from '../components/characterBuildings/relationshipCircumstances/RelationshipCircumstances';
+import { ActionUnits } from '../components/characterBuildings/actionUnits/ActionUnits';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../redux/types';
 import {
   deleteCharacterBuilding,
   getAllCharacterBuildings,
-  updateCharacterBuilding,
-} from "../../redux/thunks/characterBuildingThunks";
-import { Delete } from "@mui/icons-material";
-import { clearSelectedCharacterBuilding } from "../../redux/slices/characterBuildingSlice";
-import { CharacterBuildingHeader } from "../components/characterBuildings/CharacterBuildingHeader";
-import { CharacterBuildingCenterSelector } from "../components/characterBuildings/CharacterBuildingCenterSelector";
+  updateCharacterBuilding
+} from '../../redux/thunks/characterBuildingThunks';
+import { Delete } from '@mui/icons-material';
+import { clearSelectedCharacterBuilding } from '../../redux/slices/characterBuildingSlice';
+import { CharacterBuildingHeader } from '../components/characterBuildings/CharacterBuildingHeader';
+import { CharacterBuildingCenterSelector } from '../components/characterBuildings/CharacterBuildingCenterSelector';
+import { useTranslation } from 'react-i18next';
 
 export const CharacterBuildingView = ({
-  characterBuilding,
+  characterBuilding
 }: {
   characterBuilding: CharacterBuilding;
 }) => {
+  const { t } = useTranslation('characterBuilding');
+
   const dispatch = useDispatch<AppDispatch>();
 
   const [formData, setFormData] = useState({
     center: characterBuilding.center,
-    sceneCircumstances: characterBuilding.sceneCircumstances ?? "",
-    previousCircumstances: characterBuilding.previousCircumstances ?? "",
-    startingPoint: characterBuilding.startingPoint ?? "",
+    sceneCircumstances: characterBuilding.sceneCircumstances ?? '',
+    previousCircumstances: characterBuilding.previousCircumstances ?? '',
+    startingPoint: characterBuilding.startingPoint ?? '',
     relationshipCircumstances: (
       characterBuilding.relationshipCircumstances ?? []
     ).map((relation) => ({
       character: relation.character.id,
-      circumstance: relation.circumstance,
+      circumstance: relation.circumstance
     })),
     actionUnits: (characterBuilding.actionUnits ?? []).map((unit) => ({
       action: unit.action,
-      strategies: unit.strategies ?? [],
-    })),
+      strategies: unit.strategies ?? []
+    }))
   });
 
   const [relations, setRelations] = useState<
@@ -66,8 +68,8 @@ export const CharacterBuildingView = ({
       ...formData,
       relationshipCircumstances: updatedRelations.map((relation) => ({
         character: relation.character.id,
-        circumstance: relation.circumstance,
-      })),
+        circumstance: relation.circumstance
+      }))
     });
   };
 
@@ -75,7 +77,7 @@ export const CharacterBuildingView = ({
     dispatch(
       updateCharacterBuilding({
         id: characterBuilding.id,
-        ...formData,
+        ...formData
       })
     );
   };
@@ -86,23 +88,20 @@ export const CharacterBuildingView = ({
     dispatch(getAllCharacterBuildings());
   };
 
-  const currentLanguage = localStorage.getItem("language") ?? "es_gl";
-  const translationMap = characterBuildingTranslationMap[currentLanguage];
-
   return (
     <Grid
       container
       direction="row"
       alignItems="center"
       justifyContent="space-between"
-      sx={{ mb: 1, width: "100%" }}
+      sx={{ mb: 1, width: '100%' }}
     >
       <CharacterBuildingHeader
         name={characterBuilding.character.name}
         description={characterBuilding.scene.description}
         updatedAt={characterBuilding.metadata?.updatedAt}
       />
-      <SaveButton text={translationMap.save} handleSubmit={handleSubmit} />
+      <SaveButton text={t('save')} handleSubmit={handleSubmit} />
 
       <Grid container spacing={2} sx={{ mt: 2 }}>
         <CharacterBuildingCenterSelector
@@ -112,33 +111,35 @@ export const CharacterBuildingView = ({
               React.SetStateAction<{ center: string }>
             >
           }
-          translationMap={translationMap.center}
         />
 
         {(
           [
-            "sceneCircumstances",
-            "previousCircumstances",
-            "startingPoint",
-          ] as Array<
-            "sceneCircumstances" | "previousCircumstances" | "startingPoint"
-          >
-        ).map((field) => (
-          <TextField
-            key={field}
-            name={field}
-            type="text"
-            variant="filled"
-            fullWidth
-            placeholder={translationMap[field].placeholder}
-            label={translationMap[field].label}
-            value={formData[field]}
-            onChange={handleInputChange}
-          />
-        ))}
+            'sceneCircumstances',
+            'previousCircumstances',
+            'startingPoint'
+          ] as const
+        ).map((field) => {
+          console.log('Rendering TextField:', field, formData[field]);
+          console.log('Label:', t(`${field}.label`));
+          console.log('Placeholder:', t(`${field}.placeholder`));
+
+          return (
+            <TextField
+              key={field}
+              name={field}
+              type="text"
+              variant="filled"
+              fullWidth
+              placeholder={t(`${field}.placeholder`)}
+              label={t(`${field}.label`)}
+              value={formData[field]}
+              onChange={handleInputChange}
+            />
+          );
+        })}
 
         <RelationshipCircumstances
-          translationMap={translationMap}
           relations={relations}
           setRelations={setRelations}
           handleRelationChange={handleRelationChange}
@@ -155,7 +156,7 @@ export const CharacterBuildingView = ({
         <Button variant="contained" color="error" onClick={handleDelete}>
           <Delete sx={{ fontSize: 30, mr: 1 }} />
           <Typography fontSize={14} fontWeight="bold" color="secondary.main">
-            {translationMap.delete}
+            {t('delete')}
           </Typography>
         </Button>
       </Grid>

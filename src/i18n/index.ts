@@ -10,8 +10,15 @@ i18n
   .init({
     lng: 'es-GL',
     fallbackLng: 'es',
-    supportedLngs: ['en', 'es', 'es-GL'],
-    ns: ['common', 'login', 'register', 'characterBuilding'],
+    supportedLngs: ['en', 'es', 'es-GL', 'ca', 'eu', 'fr', 'it', 'pt', 'ro'],
+    ns: [
+      'common',
+      'login',
+      'register',
+      'characterBuilding',
+      'profile',
+      'formValidationErrors'
+    ],
     defaultNS: 'common',
     interpolation: {
       escapeValue: false

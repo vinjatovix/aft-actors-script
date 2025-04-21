@@ -1,20 +1,14 @@
-import { Grid } from "@mui/material";
-import { RelationshipCircumstancesHeader } from "./RelationshipCircumstancesHeader";
-import { Relation } from "./Relation";
+import { Grid } from '@mui/material';
+import { RelationshipCircumstancesHeader } from './RelationshipCircumstancesHeader';
+import { Relation } from './Relation';
 
 export const RelationshipCircumstances = ({
-  translationMap,
   setRelations,
   relations,
   handleRelationChange,
   characters,
-  setFormData,
+  setFormData
 }: {
-  translationMap: {
-    relationshipCircumstances: string;
-    character: string;
-    circumstance: string;
-  };
   setRelations: React.Dispatch<
     React.SetStateAction<
       { character: { id: string; name: string }; circumstance: string }[]
@@ -43,7 +37,7 @@ export const RelationshipCircumstances = ({
   const handleAddRelation = () => {
     setRelations([
       ...relations,
-      { character: { id: "", name: "" }, circumstance: "" },
+      { character: { id: '', name: '' }, circumstance: '' }
     ]);
   };
 
@@ -55,24 +49,20 @@ export const RelationshipCircumstances = ({
       ...prevFormData,
       relationshipCircumstances: updatedRelations.map((relation) => ({
         character: relation.character.id,
-        circumstance: relation.circumstance,
-      })),
+        circumstance: relation.circumstance
+      }))
     }));
   };
 
   return (
     <Grid size={{ xs: 12 }}>
-      <RelationshipCircumstancesHeader
-        translationMap={translationMap}
-        handleAddRelation={handleAddRelation}
-      />
+      <RelationshipCircumstancesHeader handleAddRelation={handleAddRelation} />
       {relations?.map((relation, index) => (
         <Relation
           key={relation.character.id}
           relation={relation}
           relations={relations}
           index={index}
-          translationMap={translationMap}
           handleRelationChange={handleRelationChange}
           handleRemoveRelation={handleRemoveRelation}
           characters={characters.filter(

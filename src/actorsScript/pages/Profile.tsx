@@ -8,8 +8,11 @@ import { updatePassword } from '../../redux/thunks/authThunks';
 import { useEffect, useState } from 'react';
 import { autoClearError } from '../../redux/slices/authSlice';
 import { PasswordField } from '../../components/PasswordField';
+import { useTranslation } from 'react-i18next';
 
 export const Profile = () => {
+  const { t } = useTranslation('profile');
+
   const dispatch = useDispatch<AppDispatch>();
 
   const { user } = useSelector((state: RootState) => state.auth);
@@ -29,7 +32,7 @@ export const Profile = () => {
     const action = await dispatch(updatePassword(formData));
     if (updatePassword.fulfilled.match(action)) {
       resetForm();
-      setSuccessMessage('Contrasinal actualizado con éxito.');
+      setSuccessMessage(t('updatePasswordSuccess'));
 
       setTimeout(() => {
         setSuccessMessage('');
@@ -47,10 +50,10 @@ export const Profile = () => {
   return (
     <>
       <Typography variant="h4" sx={{ textAlign: 'center', marginTop: 2 }}>
-        {userRole === 'admin' ? 'Perfil de administrador' : 'Perfil de usuario'}
+        {userRole === 'admin' ? t('adminProfile') : t('userProfile')}
       </Typography>
 
-      <AuthLayout title={user.username ?? 'Perfil'}>
+      <AuthLayout title={user.username ?? t('profile')}>
         <form onSubmit={handleSubmit}>
           <Grid
             container
@@ -64,7 +67,7 @@ export const Profile = () => {
             <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
               <PasswordField
                 name="password"
-                label="Novo contrasinal"
+                label={t('newPassword')}
                 value={formData.password}
                 onChange={handleInputChange}
                 error={errors?.password}
@@ -76,7 +79,7 @@ export const Profile = () => {
             <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
               <PasswordField
                 name="repeatPassword"
-                label="Repita o novo contrasinal"
+                label={t('repeatPassword')}
                 value={formData.repeatPassword}
                 onChange={handleInputChange}
                 error={errors?.repeatPassword}
@@ -88,7 +91,7 @@ export const Profile = () => {
             <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
               <PasswordField
                 name="oldPassword"
-                label="Contrasinal actual"
+                label={t('currentPassword')}
                 value={formData.oldPassword}
                 onChange={handleInputChange}
                 error={errors?.oldPassword}
@@ -103,7 +106,7 @@ export const Profile = () => {
                   <Loader />
                 ) : (
                   <Button variant="contained" fullWidth type="submit">
-                    Actualizar
+                    {t('updatePassword')}
                   </Button>
                 )}
               </Grid>

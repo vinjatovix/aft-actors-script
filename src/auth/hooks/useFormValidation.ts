@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { isInjectionFree } from '../../utils/isInjectionFree';
 import { REGEX } from '../../constants';
+import { useTranslation } from 'react-i18next';
 
 export interface FormData {
   [key: string]: string;
@@ -15,6 +16,8 @@ export const useFormValidation = <
 >(
   initialFormData: T
 ) => {
+  const { t } = useTranslation('formValidationErrors');
+
   const initialErrors: FormErrors = Object.keys(
     initialFormData
   ).reduce<FormErrors>(
@@ -39,37 +42,40 @@ export const useFormValidation = <
     let valid = true;
 
     if (typeof value === 'string' && value.length > REGEX.maxInputLength) {
-      newErrors[field] = `O valor excede ${REGEX.maxInputLength} caracteres.`;
+      newErrors[field] = t('valueExceeds').replace(
+        '{{max}}',
+        REGEX.maxInputLength.toString()
+      );
       valid = false;
     } else if (typeof value === 'string' && !value.trim()) {
-      newErrors[field] = 'É obrigatorio.';
+      newErrors[field] = t('required');
       valid = false;
     } else if (typeof value === 'string' && !isInjectionFree(value)) {
-      newErrors[field] = 'Amodo oh! -9001';
+      newErrors[field] = t('injectionError');
       valid = false;
     } else if (
       field === 'email' &&
       typeof value === 'string' &&
       !validateEmail(value)
     ) {
-      newErrors.email = 'O correo non é válido.';
+      newErrors.email = t('invalidEmail');
       valid = false;
     } else if (
       field === 'password' &&
       typeof value === 'string' &&
       !validatePassword(value)
     ) {
-      newErrors.password = 'O contrasinal é feble.';
+      newErrors.password = t('weakPassword');
       valid = false;
     } else if (field === 'repeatPassword' && value !== formData.password) {
-      newErrors.repeatPassword = 'Os contrasinais non coinciden.';
+      newErrors.repeatPassword = t('passwordsDontMatch');
       valid = false;
     } else if (
       field === 'username' &&
       typeof value === 'string' &&
       !REGEX.username.test(value)
     ) {
-      newErrors.username = 'O nome de usuario non é válido.';
+      newErrors.username = t('invalidUsername');
       valid = false;
     }
 

@@ -1,15 +1,14 @@
-import { Add } from "@mui/icons-material";
-import { Button, Grid, Typography } from "@mui/material";
+import { Add } from '@mui/icons-material';
+import { Button, Grid, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 export const RelationshipCircumstancesHeader = ({
-  translationMap,
-  handleAddRelation,
+  handleAddRelation
 }: {
-  translationMap: {
-    relationshipCircumstances: string;
-  };
   handleAddRelation: () => void;
 }) => {
+  const { t } = useTranslation('characterBuilding');
+
   return (
     <Grid container spacing={2} alignItems="baseline">
       <Button
@@ -21,9 +20,7 @@ export const RelationshipCircumstancesHeader = ({
       >
         <Add />
       </Button>
-      <Typography variant="h6">
-        {translationMap.relationshipCircumstances}
-      </Typography>
+      <Typography variant="h6">{t('relationshipCircumstances')}</Typography>
     </Grid>
   );
 };
