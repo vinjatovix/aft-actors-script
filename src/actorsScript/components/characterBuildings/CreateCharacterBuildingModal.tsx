@@ -31,11 +31,12 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  width: '90%', // Use width 90% for responsiveness
+  maxWidth: 600, // Max width to avoid it getting too big on larger screens
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
-  p: 4
+  p: 4, // Padding inside the modal
 };
 
 export const CreateCharacterBuildingModal = ({
@@ -101,7 +102,11 @@ export const CreateCharacterBuildingModal = ({
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <button onClick={clearAndClose}>{t('close')}</button>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Button variant="contained" color="warning" onClick={clearAndClose}>
+              {t('close')}
+            </Button>
+          </Box>
 
           <FormControl fullWidth sx={{ mt: 2 }}>
             <InputLabel id="author-label">{t('author')}</InputLabel>
@@ -210,12 +215,12 @@ export const CreateCharacterBuildingModal = ({
           )}
 
           {scene && (
-            <Grid>
+            <Grid sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
               <Button
-                color="primary"
-                variant="outlined"
+                color="success"
+                variant="contained"
                 size="small"
-                sx={{ padding: 1, textTransform: 'none', mt: 2 }}
+                sx={{ textTransform: 'none', mt: 2 }}
                 onClick={() => {
                   dispatch(clearSelectedCharacterBuilding());
                   const id = uuidv4();
