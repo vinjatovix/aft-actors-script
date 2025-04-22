@@ -1,40 +1,51 @@
-import { render } from "@testing-library/react";
-import "@testing-library/jest-dom";
-import { CharacterBuildingHeader } from "../../../../src/actorsScript/components/characterBuildings/CharacterBuildingHeader";
-import { characterBuildingTranslationMap } from "../../../../src/i18n/translationMap";
+import { screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
 
-const currentLanguage = "es_gl";
-const translationMap = characterBuildingTranslationMap[currentLanguage];
-const CHARACTER_NAME = "Name";
-const SCENE_DESCRIPTION = "Description";
+import { renderWithProviders } from '../../../test-utils/renderWithProviders';
+import { mockStore } from '../../../__mocks__/mockStore';
 
-describe("CharacterBuildingHeader", () => {
-  it("renders the name and description correctly", () => {
-    const { getByText } = render(
-      <CharacterBuildingHeader
-        name={CHARACTER_NAME}
-        description={SCENE_DESCRIPTION}
-        updatedAt={null}
-      />
-    );
+import { CharacterBuildingHeader } from '../../../../src/actorsScript/components/characterBuildings/CharacterBuildingHeader';
+import i18n from '../../../../src/i18n';
+
+const CHARACTER_NAME = 'Name';
+const SCENE_DESCRIPTION = 'Description';
+const t = (key: string, ns: string = 'characterBuilding') =>
+  i18n.t(key, { ns });
+
+let store: ReturnType<typeof mockStore>;
+
+describe('CharacterBuildingHeader', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    store = mockStore();
+  });
+
+  const renderComponent = (updatedAt?: string) =>
+    renderWithProviders({
+      store,
+      ui: (
+        <CharacterBuildingHeader
+          name={CHARACTER_NAME}
+          description={SCENE_DESCRIPTION}
+          updatedAt={updatedAt ?? null}
+        />
+      )
+    });
+
+  it('renders the name and description correctly', () => {
+    renderComponent();
 
     expect(
-      getByText(`${CHARACTER_NAME} ${translationMap.at} ${SCENE_DESCRIPTION}`)
+      screen.getByText(`${CHARACTER_NAME} ${t('at')} ${SCENE_DESCRIPTION}`)
     ).toBeInTheDocument();
   });
 
-  it("renders the updatedAt text when provided", () => {
+  it('renders the updatedAt text when provided', () => {
     const mockUpdatedAt = new Date().toISOString();
-    const regex = new RegExp(`${translationMap.updated}`, "i");
+    const regex = new RegExp(t('updated'), 'i');
 
-    const { getByText } = render(
-      <CharacterBuildingHeader
-        name={CHARACTER_NAME}
-        description={SCENE_DESCRIPTION}
-        updatedAt={mockUpdatedAt}
-      />
-    );
+    renderComponent(mockUpdatedAt);
 
-    expect(getByText(regex)).toBeInTheDocument();
+    expect(screen.getByText(regex)).toBeInTheDocument();
   });
 });

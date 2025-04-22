@@ -1,37 +1,28 @@
-import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
-import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../redux/slices/authSlice";
-import { useNavigate } from "react-router-dom";
-import { RootState } from "../redux/types";
-
-const allPages = [
-  { text: "Fogar", path: "/home" },
-  { text: "DramaturgX", path: "/authors" },
-  { text: "Obras", path: "/plays" },
-  { text: "Persoaxes", path: "/characters" },
-  { text: "Esceas", path: "/scenes" },
-  { text: "Construccións", path: "/character-buildings" },
-];
-const publicPages = [{ text: "Fogar", path: "/home" }];
-const settings = ["Profile", "Settings", "Logout"];
+import * as React from 'react';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Menu from '@mui/material/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
+import Container from '@mui/material/Container';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
+import MenuItem from '@mui/material/MenuItem';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../redux/slices/authSlice';
+import { useNavigate } from 'react-router-dom';
+import { RootState } from '../redux/types';
+import { useTranslation } from 'react-i18next';
 
 function ResponsiveAppBar({
-  drawerWidth = 240,
+  drawerWidth = 240
 }: {
   readonly drawerWidth?: number;
 }) {
+  const { t } = useTranslation('common');
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user, token } = useSelector((state: RootState) => state.auth);
@@ -62,16 +53,31 @@ function ResponsiveAppBar({
 
   const handleLogout = () => {
     dispatch(logout());
-    localStorage.removeItem("token");
+    localStorage.removeItem('token');
     handleCloseUserMenu();
-    navigate("/login");
+    navigate('/login');
   };
 
+  const allPages = [
+    { text: t('home'), path: '/home' },
+    { text: t('authors'), path: '/authors' },
+    { text: t('books'), path: '/plays' },
+    { text: t('characters'), path: '/characters' },
+    { text: t('scenes'), path: '/scenes' },
+    { text: t('builds'), path: '/character-buildings' }
+  ];
+  const publicPages = [{ text: t('home'), path: '/home' }];
+  const settings = [
+    { text: t('profile'), path: 'Profile' },
+    { text: t('settings'), path: 'Settings' },
+    { text: t('logout'), path: 'Logout' }
+  ];
+
   const pagesToShowInBar = token ? allPages : publicPages;
-  const pagsWithDrawer = ["/character-buildings"];
-  const width = pagsWithDrawer.includes(window.location.pathname)
+  const pagesWithDrawer = ['/character-buildings'];
+  const width = pagesWithDrawer.includes(window.location.pathname)
     ? `calc(100% - ${drawerWidth}px)`
-    : "100%";
+    : '100%';
 
   return (
     <>
@@ -80,17 +86,17 @@ function ResponsiveAppBar({
         sx={{
           zIndex: (theme) => theme.zIndex.drawer + 1,
           width: {
-            xs: "100%",
-            md: width,
+            xs: '100%',
+            md: width
           },
           ml: {
-            md: `${drawerWidth}px`,
-          },
+            md: `${drawerWidth}px`
+          }
         }}
       >
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
               <IconButton
                 size="large"
                 aria-label="menu"
@@ -119,12 +125,12 @@ function ResponsiveAppBar({
               </Menu>
             </Box>
 
-            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
               {pagesToShowInBar.map((page) => (
                 <Button
                   key={page.text}
                   onClick={() => handleCloseNavMenu(page.path)}
-                  sx={{ my: 2, color: "white" }}
+                  sx={{ my: 2, color: 'white' }}
                 >
                   {page.text}
                 </Button>
@@ -136,36 +142,38 @@ function ResponsiveAppBar({
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     <Avatar
-                      alt={user?.username ?? "User"}
+                      alt={user?.username ?? 'User'}
                       src="/static/images/avatar/2.jpg"
                     />
                   </IconButton>
                 </Tooltip>
                 <Menu
-                  sx={{ mt: "45px" }}
+                  sx={{ mt: '45px' }}
                   anchorEl={anchorElUser}
                   open={Boolean(anchorElUser)}
                   onClose={() => handleCloseUserMenu()}
                 >
                   {settings.map((setting) => (
                     <MenuItem
-                      key={setting}
+                      key={setting.text}
                       onClick={
-                        setting === "Logout"
+                        setting.path === 'Logout'
                           ? handleLogout
                           : () =>
-                              handleCloseUserMenu(`/${setting.toLowerCase()}`)
+                              handleCloseUserMenu(
+                                `/${setting.path.toLowerCase()}`
+                              )
                       }
                     >
-                      <Typography>{setting}</Typography>
+                      <Typography>{setting.text}</Typography>
                     </MenuItem>
                   ))}
                 </Menu>
               </Box>
             ) : (
               <Box sx={{ flexGrow: 0 }}>
-                <Button color="inherit" onClick={() => navigate("/login")}>
-                  Login
+                <Button color="inherit" onClick={() => navigate('/login')}>
+                  {t('login')}
                 </Button>
               </Box>
             )}

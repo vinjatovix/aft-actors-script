@@ -1,22 +1,18 @@
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 export const CharacterBuildingCenterSelector = ({
   formData,
-  setFormData,
-  translationMap,
+  setFormData
 }: {
   formData: { center: string };
   setFormData: React.Dispatch<React.SetStateAction<{ center: string }>>;
-  translationMap: {
-    label: string;
-    instinctive: string;
-    mental: string;
-    emotional: string;
-  };
 }) => {
+  const { t } = useTranslation('characterBuilding');
+
   return (
     <FormControl fullWidth>
-      <InputLabel id="center-label">{translationMap.label}</InputLabel>
+      <InputLabel id="center-label">{t('center.label')}</InputLabel>
       <Select
         labelId="center-label"
         variant="filled"
@@ -27,9 +23,9 @@ export const CharacterBuildingCenterSelector = ({
         }}
         name="center"
       >
-        <MenuItem value="instinctive">{translationMap.instinctive}</MenuItem>
-        <MenuItem value="mental">{translationMap.mental}</MenuItem>
-        <MenuItem value="emotional">{translationMap.emotional}</MenuItem>
+        <MenuItem value="instinctive">{t('center.instinctive')}</MenuItem>
+        <MenuItem value="mental">{t('center.mental')}</MenuItem>
+        <MenuItem value="emotional">{t('center.emotional')}</MenuItem>
       </Select>
     </FormControl>
   );

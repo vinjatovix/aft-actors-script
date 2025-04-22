@@ -1,0 +1,9 @@
+{
+  "required": "Acest câmp este obligatoriu.",
+  "invalidEmail": "Adresa de email nu este validă.",
+  "passwordsDontMatch": "Parolele nu se potrivesc.",
+  "weakPassword": "Parola este slabă.",
+  "invalidUsername": "Numele de utilizator nu este valid.",
+  "injectionError": "Nu exagera! -9001",
+  "valueExceeds": "Valoarea depășește {{max}} caractere."
+}

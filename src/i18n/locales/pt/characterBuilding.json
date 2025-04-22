@@ -1,0 +1,39 @@
+{
+  "header": "Construção de Personagem",
+  "builds": "Construções",
+  "at": "às",
+  "updated": "Atualizado",
+  "save": "Salvar",
+  "center": {
+    "label": "Centro",
+    "instinctive": "Instintivo",
+    "emotional": "Emocional",
+    "mental": "Mental"
+  },
+  "sceneCircumstances": {
+    "label": "Circunstâncias da Cena",
+    "placeholder": "É o jantar de aniversário do avô"
+  },
+  "previousCircumstances": {
+    "label": "Circunstâncias Anteriores",
+    "placeholder": "O médico acabou de dizer ao Brick que o avô tem câncer"
+  },
+  "startingPoint": {
+    "label": "Ponto de Partida",
+    "placeholder": "Brick está meio bêbado e só quer fugir"
+  },
+  "relationshipCircumstances": "Circunstâncias do Relacionamento",
+  "character": "Personagem",
+  "circumstance": "Circunstância",
+  "actionUnits": {
+    "label": "Unidades de Ação",
+    "action": "Ação",
+    "strategies": "Estratégias",
+    "strategy": "Estratégia"
+  },
+  "delete": "Excluir",
+  "add": "Adicionar",
+  "loading": "Carregando construções",
+  "noAvailable": "Nenhuma construção disponível",
+  "nothingSelected": "Selecione ou construa um personagem"
+}

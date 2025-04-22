@@ -1,61 +1,61 @@
-import { fireEvent, render } from "@testing-library/react";
-import "@testing-library/jest-dom";
-import { CharacterBuildingView } from "../../../src/actorsScript/views/CharacterBuildingView";
-import { useDispatch } from "react-redux";
+import { fireEvent, render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import { CharacterBuildingView } from '../../../src/actorsScript/views/CharacterBuildingView';
+import { useDispatch } from 'react-redux';
 import {
   deleteCharacterBuilding,
   getAllCharacterBuildings,
-  updateCharacterBuilding,
-} from "../../../src/redux/thunks/characterBuildingThunks";
-import { clearSelectedCharacterBuilding } from "../../../src/redux/slices/characterBuildingSlice";
-import { characterBuildings, users } from "../../data";
-import { characterBuildingTranslationMap } from "../../../src/i18n/characterBuildingTranslationMap";
+  updateCharacterBuilding
+} from '../../../src/redux/thunks/characterBuildingThunks';
+import { clearSelectedCharacterBuilding } from '../../../src/redux/slices/characterBuildingSlice';
+import { characterBuildings, users } from '../../data';
+import i18n from '../../../src/i18n';
 
-jest.mock("react-redux", () => ({
-  useDispatch: jest.fn(),
+jest.mock('react-redux', () => ({
+  useDispatch: jest.fn()
 }));
 
-jest.mock("../../../src/redux/thunks/characterBuildingThunks", () => ({
-  ...jest.requireActual("../../../src/redux/thunks/characterBuildingThunks"),
+jest.mock('../../../src/redux/thunks/characterBuildingThunks', () => ({
+  ...jest.requireActual('../../../src/redux/thunks/characterBuildingThunks'),
   deleteCharacterBuilding: jest.fn().mockResolvedValue(undefined),
   getAllCharacterBuildings: jest.fn().mockResolvedValue([]),
-  updateCharacterBuilding: jest.fn().mockResolvedValue(undefined),
+  updateCharacterBuilding: jest.fn().mockResolvedValue(undefined)
 }));
 
 const AUTH = users[0];
 const CHARACTER_BUILDING_MOCK = characterBuildings[0];
-const LOCALE = "es_gl";
-const TRANSLATION_MAP = characterBuildingTranslationMap[LOCALE];
+const t = (key: string, ns: string = 'characterBuilding') =>
+  i18n.t(key, { ns });
 
 let mockDispatch = jest.fn();
 
-describe("CharacterBuildingView", () => {
+describe('CharacterBuildingView', () => {
   beforeEach(() => {
+    jest.clearAllMocks();
     mockDispatch = jest.fn();
-
     (useDispatch as unknown as jest.Mock).mockReturnValue(mockDispatch);
     mockDispatch.mockImplementation((action) => {
-      if (typeof action === "function") {
+      if (typeof action === 'function') {
         return action(mockDispatch, () => ({
           auth: AUTH,
           characterBuilding: {
-            selectedCharacterBuilding: CHARACTER_BUILDING_MOCK,
-          },
+            selectedCharacterBuilding: CHARACTER_BUILDING_MOCK
+          }
         }));
       }
       return action;
     });
   });
 
-  it("renders the CharacterBuildingHeader with correct props", () => {
-    const { getByText } = render(
+  it('renders the CharacterBuildingHeader with correct props', async () => {
+    render(
       <CharacterBuildingView characterBuilding={CHARACTER_BUILDING_MOCK} />
     );
 
-    const characterName = getByText(
+    const characterName = await screen.findByText(
       new RegExp(CHARACTER_BUILDING_MOCK.character.name)
     );
-    const sceneDescription = getByText(
+    const sceneDescription = await screen.findByText(
       new RegExp(CHARACTER_BUILDING_MOCK.scene.description)
     );
 
@@ -63,12 +63,11 @@ describe("CharacterBuildingView", () => {
     expect(sceneDescription).toBeInTheDocument();
   });
 
-  it("calls handleSubmit when SaveButton is clicked", async () => {
-    const { getByText } = render(
+  it('calls handleSubmit when SaveButton is clicked', async () => {
+    render(
       <CharacterBuildingView characterBuilding={CHARACTER_BUILDING_MOCK} />
     );
-
-    fireEvent.click(getByText(TRANSLATION_MAP.save));
+    fireEvent.click(screen.getByText(t('save')));
 
     expect(updateCharacterBuilding).toHaveBeenCalledWith({
       id: CHARACTER_BUILDING_MOCK.id,
@@ -81,28 +80,27 @@ describe("CharacterBuildingView", () => {
           character:
             CHARACTER_BUILDING_MOCK.relationshipCircumstances[0].character.id,
           circumstance:
-            CHARACTER_BUILDING_MOCK.relationshipCircumstances[0].circumstance,
-        },
+            CHARACTER_BUILDING_MOCK.relationshipCircumstances[0].circumstance
+        }
       ],
       actionUnits: [
         {
           action: CHARACTER_BUILDING_MOCK.actionUnits[0].action,
-          strategies: CHARACTER_BUILDING_MOCK.actionUnits[0].strategies,
+          strategies: CHARACTER_BUILDING_MOCK.actionUnits[0].strategies
         },
         {
           action: CHARACTER_BUILDING_MOCK.actionUnits[1].action,
-          strategies: CHARACTER_BUILDING_MOCK.actionUnits[1].strategies,
-        },
-      ],
+          strategies: CHARACTER_BUILDING_MOCK.actionUnits[1].strategies
+        }
+      ]
     });
   });
 
-  it("calls handleDelete when Delete button is clicked", async () => {
-    const { getByText } = render(
+  it('calls handleDelete when Delete button is clicked', async () => {
+    render(
       <CharacterBuildingView characterBuilding={CHARACTER_BUILDING_MOCK} />
     );
-
-    fireEvent.click(getByText(TRANSLATION_MAP.delete));
+    fireEvent.click(screen.getByText(t('delete')));
 
     expect(deleteCharacterBuilding).toHaveBeenCalledWith(
       CHARACTER_BUILDING_MOCK.id
@@ -114,13 +112,13 @@ describe("CharacterBuildingView", () => {
     expect(getAllCharacterBuildings).toHaveBeenCalled();
   });
 
-  it("updates formData when input fields change", () => {
-    const updatedValue = "Updated Value";
-    const { getByLabelText } = render(
+  it('updates formData when input fields change', () => {
+    const updatedValue = 'Updated Value';
+    render(
       <CharacterBuildingView characterBuilding={CHARACTER_BUILDING_MOCK} />
     );
-    const input = getByLabelText(
-      TRANSLATION_MAP.sceneCircumstances.label
+    const input = screen.getByLabelText(
+      t('sceneCircumstances.label')
     ) as HTMLInputElement;
 
     fireEvent.change(input, { target: { value: updatedValue } });

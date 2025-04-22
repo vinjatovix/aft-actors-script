@@ -1,0 +1,39 @@
+{
+  "header": "Construirea Personajului",
+  "builds": "Construcții",
+  "at": "la",
+  "updated": "Actualizat",
+  "save": "Salvează",
+  "center": {
+    "label": "Centru",
+    "instinctive": "Instinctiv",
+    "emotional": "Emoțional",
+    "mental": "Mental"
+  },
+  "sceneCircumstances": {
+    "label": "Circumstanțele Scenei",
+    "placeholder": "Este cina de ziua bunicului"
+  },
+  "previousCircumstances": {
+    "label": "Circumstanțe Anterioare",
+    "placeholder": "Doctorul tocmai i-a spus lui Brick că bunicul are cancer"
+  },
+  "startingPoint": {
+    "label": "Punct de Pornire",
+    "placeholder": "Brick este pe jumătate beat și vrea doar să fugă"
+  },
+  "relationshipCircumstances": "Circumstanțele Relației",
+  "character": "Personaj",
+  "circumstance": "Circumstanță",
+  "actionUnits": {
+    "label": "Unități de Acțiune",
+    "action": "Acțiune",
+    "strategies": "Strategii",
+    "strategy": "Strategie"
+  },
+  "delete": "Șterge",
+  "add": "Adaugă",
+  "loading": "Se încarcă construcțiile",
+  "noAvailable": "Nicio construcție disponibilă",
+  "nothingSelected": "Selectează sau construiește un personaj"
+}

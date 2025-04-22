@@ -1,0 +1,10 @@
+{
+  "updatePasswordSuccess": "Pasahitza arrakastaz eguneratua.",
+  "adminProfile": "Admin profila",
+  "userProfile": "Erabiltzailearen profila",
+  "profile": "Profila",
+  "newPassword": "Pasahitz berria",
+  "repeatPassword": "Errepikatu pasahitza",
+  "currentPassword": "Pasahitz eguneratua",
+  "updatePassword": "Eguneratu pasahitza"
+}

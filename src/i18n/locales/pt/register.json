@@ -1,0 +1,10 @@
+{
+  "header": "Registrar",
+  "username": "Nome de usuário",
+  "email": "Email",
+  "password": "Senha",
+  "repeatPassword": "Repita a senha",
+  "callToAction": "Já tem uma conta?",
+  "action": "Entrar",
+  "submit": "Registrar"
+}

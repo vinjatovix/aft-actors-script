@@ -1,0 +1,39 @@
+{
+  "header": "Construcción de Persoaxes",
+  "builds": "Construccións",
+  "at": "no",
+  "updated": "Actualizado",
+  "save": "Gardar",
+  "center": {
+    "label": "Centro",
+    "instinctive": "Instintivo",
+    "emotional": "Emocional",
+    "mental": "Mental"
+  },
+  "sceneCircumstances": {
+    "label": "Circunstancias da Escea",
+    "placeholder": "É a cea de cumpreanos do avó"
+  },
+  "previousCircumstances": {
+    "label": "Circunstancias Previas",
+    "placeholder": "O Doutor acaba de dicirlle a Brick que o avó ten cancro"
+  },
+  "startingPoint": {
+    "label": "Punto de Partida",
+    "placeholder": "Brick está medio borracho e só quere evadirse"
+  },
+  "relationshipCircumstances": "Circunstancias de Relación",
+  "character": "Personaxe",
+  "circumstance": "Circunstancia",
+  "actionUnits": {
+    "label": "Unidades de Acción",
+    "action": "Acción",
+    "strategies": "Estratexias",
+    "strategy": "Estratexia"
+  },
+  "delete": "Eliminar",
+  "add": "Engadir",
+  "loading": "Cargando construccións",
+  "noAvailable": "Non hai construcións dispoñibles",
+  "nothingSelected": "Selecciona ou construe unha personaxe"
+}

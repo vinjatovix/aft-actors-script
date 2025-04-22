@@ -1,0 +1,8 @@
+{
+  "header": "Login",
+  "email": "Email",
+  "password": "Password",
+  "callToAction": "Don't have an account?",
+  "action": "Register",
+  "submit": "Login"
+}

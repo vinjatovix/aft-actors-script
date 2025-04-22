@@ -1,0 +1,10 @@
+{
+  "updatePasswordSuccess": "Contrasinal actualizado con éxito.",
+  "adminProfile": "Perfil de administrador",
+  "userProfile": "Perfil de usuario",
+  "profile": "Perfil",
+  "newPassword": "Novo contrasinal",
+  "repeatPassword": "Repetir contrasinal",
+  "currentPassword": "Contrasinal actual",
+  "updatePassword": "Actualizar contrasinal"
+}

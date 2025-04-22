@@ -1,21 +1,19 @@
-import { act, render, screen } from "@testing-library/react";
-import "@testing-library/jest-dom";
-import { Scenes } from "../../../src/actorsScript/pages/Scenes";
-import { Provider } from "react-redux";
-import { store } from "../../../src/redux/store";
+import { act, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import { Scenes } from '../../../src/actorsScript/pages/Scenes';
+import i18n from '../../../src/i18n';
+import { renderWithProviders } from '../../test-utils/renderWithProviders';
 
-describe("Scenes Page", () => {
-  it("renders the Scenes page with a title and author names", async () => {
+const t = (key: string, ns: string = 'common') => i18n.t(key, { ns });
+
+describe('Scenes Page', () => {
+  it('renders the Scenes page with a title and author names', async () => {
     await act(async () => {
-      render(
-        <Provider store={store}>
-          <Scenes />
-        </Provider>
-      );
+      renderWithProviders({ ui: <Scenes /> });
     });
 
-    expect(screen.getByRole("heading", { level: 5 })).toHaveTextContent(
-      "Esceas"
+    expect(screen.getByRole('heading', { level: 5 })).toHaveTextContent(
+      t('scenes')
     );
   });
 });

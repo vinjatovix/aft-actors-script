@@ -1,0 +1,22 @@
+{
+  "home": "Acasă",
+  "authors": "Autori",
+  "author": "Autor",
+  "books": "Piese",
+  "book": "Piesă",
+  "characters": "Personaje",
+  "character": "Personaj",
+  "scenes": "Scene",
+  "scene": "Scenă",
+  "builds": "Construcții",
+  "build": "Construcție",
+  "close": "Închide",
+  "create": "Creează",
+  "profile": "Profil",
+  "settings": "Setări",
+  "logout": "Deconectare",
+  "login": "Autentificare",
+  "loading": "Se încarcă",
+  "noAvailable": "Niciunul disponibil",
+  "updatedBy": "Actualizat de"
+}

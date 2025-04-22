@@ -1,52 +1,52 @@
-import { act, fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { Provider } from 'react-redux';
-import { mockStore } from '../../__mocks__/mockStore';
+import { act, fireEvent, screen } from '@testing-library/react';
+
 import { Profile } from '../../../src/actorsScript/pages/Profile';
-import { users } from '../../data';
+
 import { handleFetch } from '../../../src/utils/handleFetch';
+import { renderWithProviders } from '../../test-utils/renderWithProviders';
+import { mockStore } from '../../__mocks__/mockStore';
+import { users } from '../../data';
+import i18n from '../../../src/i18n';
 
 jest.mock('../../../src/utils/handleFetch', () => ({
   handleFetch: jest.fn()
 }));
 
-const renderWithProvider = (store: ReturnType<typeof mockStore>) =>
-  render(
-    <Provider store={store}>
-      <Profile />
-    </Provider>
-  );
-
+const t = (key: string, ns: string = 'profile') => i18n.t(key, { ns });
+const renderComponent = (store: ReturnType<typeof mockStore>) =>
+  renderWithProviders({ store, ui: <Profile /> });
 const fillForm = (
   newPassword: string,
   repeatPassword: string,
   oldPassword: string
 ) => {
-  fireEvent.change(screen.getByLabelText('Novo contrasinal'), {
+  fireEvent.change(screen.getByLabelText(t('newPassword')), {
     target: { value: newPassword }
   });
-  fireEvent.change(screen.getByLabelText('Repita o novo contrasinal'), {
+  fireEvent.change(screen.getByLabelText(t('repeatPassword')), {
     target: { value: repeatPassword }
   });
-  fireEvent.change(screen.getByLabelText('Contrasinal actual'), {
+  fireEvent.change(screen.getByLabelText(t('currentPassword')), {
     target: { value: oldPassword }
   });
 };
 
-describe('Profile', () => {
-  let store: ReturnType<typeof mockStore>;
+let store: ReturnType<typeof mockStore>;
 
+describe('Profile', () => {
   beforeEach(() => {
+    jest.clearAllMocks();
     store = mockStore({
       auth: { token: 'mockToken', user: users[0] }
     });
   });
 
   it('renders the Profile page with an user title', () => {
-    renderWithProvider(store);
+    renderComponent(store);
 
     expect(screen.getByRole('heading', { level: 4 })).toHaveTextContent(
-      'Perfil de usuario'
+      t('userProfile')
     );
   });
 
@@ -55,23 +55,21 @@ describe('Profile', () => {
       auth: { token: 'mockToken', user: users[1] }
     });
 
-    renderWithProvider(store);
+    renderComponent(store);
 
     expect(screen.getByRole('heading', { level: 4 })).toHaveTextContent(
-      'Perfil de administrador'
+      t('adminProfile')
     );
   });
 
   it('should render the update password form', () => {
-    renderWithProvider(store);
+    renderComponent(store);
 
-    expect(screen.getByLabelText('Novo contrasinal')).toBeInTheDocument();
+    ['newPassword', 'repeatPassword', 'currentPassword'].forEach((field) => {
+      expect(screen.getByLabelText(t(field))).toBeInTheDocument();
+    });
     expect(
-      screen.getByLabelText('Repita o novo contrasinal')
-    ).toBeInTheDocument();
-    expect(screen.getByLabelText('Contrasinal actual')).toBeInTheDocument();
-    expect(
-      screen.getByRole('button', { name: 'Actualizar' })
+      screen.getByRole('button', { name: t('updatePassword') })
     ).toBeInTheDocument();
   });
 
@@ -79,18 +77,20 @@ describe('Profile', () => {
     store = mockStore({
       auth: { token: 'mockToken', user: users[0], loading: true }
     });
-    renderWithProvider(store);
+    renderComponent(store);
 
     expect(screen.getByTestId('loader')).toBeInTheDocument();
   });
 
   it('should display validation errors when form is submitted with invalid data', async () => {
-    renderWithProvider(store);
+    renderComponent(store);
 
     fillForm('', '', '');
 
     await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: 'Actualizar' }));
+      fireEvent.click(
+        screen.getByRole('button', { name: t('updatePassword') })
+      );
     });
 
     expect(screen.getAllByText('É obrigatorio.')).toHaveLength(3);
@@ -100,11 +100,13 @@ describe('Profile', () => {
     (handleFetch as jest.Mock).mockImplementation(() => {
       throw new Error('BackEndError');
     });
-    renderWithProvider(store);
+    renderComponent(store);
     fillForm('SuperSecr3tPassword%', 'SuperSecr3tPassword%', 'oldPassword');
 
     await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: 'Actualizar' }));
+      fireEvent.click(
+        screen.getByRole('button', { name: t('updatePassword') })
+      );
     });
 
     expect(await screen.findByText(/BackEndError/i)).toBeInTheDocument();
@@ -112,7 +114,7 @@ describe('Profile', () => {
 
   it('should dispatch updatePassword action when form is submitted', async () => {
     const dispatchSpy = jest.spyOn(store, 'dispatch');
-    renderWithProvider(store);
+    renderComponent(store);
     fillForm(
       'Sup3rSecretPassword%',
       'Sup3rSecretPassword%',
@@ -120,7 +122,9 @@ describe('Profile', () => {
     );
 
     await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: 'Actualizar' }));
+      fireEvent.click(
+        screen.getByRole('button', { name: t('updatePassword') })
+      );
     });
 
     expect(dispatchSpy).toHaveBeenCalled();

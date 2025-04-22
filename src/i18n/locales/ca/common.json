@@ -1,0 +1,21 @@
+{
+  "home": "Inici",
+  "authors": "Autors",
+  "author": "Autor",
+  "books": "Obres",
+  "book": "Obra",
+  "characters": "Personatges",
+  "character": "Personatge",
+  "scenes": "Escenes",
+  "scene": "Escena",
+  "builds": "Construccions",
+  "build": "Construcció",
+  "close": "Tancar",
+  "create": "Crear",
+  "profile": "Perfil",
+  "settings": "Configuració",
+  "logout": "Tancar sessió",
+  "loading": "Carregant",
+  "noAvailable": "No hi ha disponibles",
+  "updatedBy": "Actualitzat per"
+}

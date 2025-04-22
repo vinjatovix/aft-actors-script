@@ -1,0 +1,9 @@
+{
+  "required": "Beharrezkoa da.",
+  "invalidEmail": "Posta elektronikoa ez da baliogarria.",
+  "passwordsDontMatch": "Pasahitzak ez dira bat etorri.",
+  "weakPassword": "Pasahitza ahula da.",
+  "invalidUsername": "Erabiltzaile izena ez da baliogarria.",
+  "injectionError": "Ez geure buruaz gehiegi fiatu! -9001",
+  "valueExceeds": "Balioa {{max}} karaktere baino gehiago da."
+}

@@ -1,0 +1,22 @@
+{
+  "home": "Fogar",
+  "authors": "DramaturgXs",
+  "author": "DramaturgX",
+  "books": "Obras",
+  "book": "Obra",
+  "characters": "Personaxes",
+  "character": "Personaxe",
+  "scenes": "Esceas",
+  "scene": "Escea",
+  "builds": "Construccións",
+  "build": "Construcción",
+  "close": "Pechar",
+  "create": "Crear",
+  "profile": "Perfil",
+  "settings": "Configuración",
+  "logout": "Sair",
+  "login": "Acceder",
+  "loading": "Cargando",
+  "noAvailable": "Non hai dispoñibles",
+  "updatedBy": "Actualizado por"
+}

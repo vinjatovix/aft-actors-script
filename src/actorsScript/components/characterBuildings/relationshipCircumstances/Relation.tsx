@@ -5,26 +5,21 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  TextField,
-} from "@mui/material";
-import React from "react";
-import { DeleteButton } from "../../buttons/DeleteButton";
+  TextField
+} from '@mui/material';
+import React from 'react';
+import { DeleteButton } from '../../buttons/DeleteButton';
+import { useTranslation } from 'react-i18next';
 
 export const Relation = ({
-  translationMap,
   relation,
   index,
   handleRelationChange,
   relations,
   setRelations,
   handleRemoveRelation,
-  characters,
+  characters
 }: {
-  translationMap: {
-    relationshipCircumstances: string;
-    character: string;
-    circumstance: string;
-  };
   relation: {
     character: { id: string; name: string };
     circumstance: string;
@@ -46,6 +41,8 @@ export const Relation = ({
     name: string;
   }[];
 }) => {
+  const { t } = useTranslation('characterBuilding');
+
   return (
     <Grid
       container
@@ -65,7 +62,7 @@ export const Relation = ({
         ) : (
           <FormControl fullWidth>
             <InputLabel id={`character-select-label-${index}`}>
-              {translationMap.character}
+              {t('character')}
             </InputLabel>
             <Select
               labelId={`character-select-label-${index}`}
@@ -82,8 +79,8 @@ export const Relation = ({
                           ...rel,
                           character: {
                             id: selectedRelation.id,
-                            name: selectedRelation.name,
-                          },
+                            name: selectedRelation.name
+                          }
                         }
                       : rel
                   );
@@ -110,11 +107,11 @@ export const Relation = ({
       <Grid size={{ xs: 7 }}>
         <TextField
           fullWidth
-          label={translationMap.circumstance}
+          label={t('circumstance')}
           variant="filled"
           value={relation.circumstance}
           onChange={(e) =>
-            handleRelationChange(index, "circumstance", e.target.value)
+            handleRelationChange(index, 'circumstance', e.target.value)
           }
         />
       </Grid>

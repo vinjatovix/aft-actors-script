@@ -1,82 +1,71 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
-import { BrowserRouter } from 'react-router-dom';
-import authReducer from '../../src/redux/slices/authSlice';
-import ResponsiveAppBar from '../../src/ui/ResponsiveAppBar';
 
-const mockStore = (preloadedState = {}) =>
-  configureStore({
-    reducer: { auth: authReducer },
-    preloadedState
+import { renderWithProviders } from '../test-utils/renderWithProviders';
+import { mockStore } from '../__mocks__/mockStore';
+
+import ResponsiveAppBar from '../../src/ui/ResponsiveAppBar';
+import i18n from '../../src/i18n';
+import { users } from '../data';
+
+const t = (key: string, ns: string = 'common') => i18n.t(key, { ns });
+const renderComponent = (store: ReturnType<typeof mockStore>) =>
+  renderWithProviders({
+    store,
+    ui: <ResponsiveAppBar />
   });
 
-const renderWithProviders = (store: ReturnType<typeof mockStore>) =>
-  render(
-    <Provider store={store}>
-      <BrowserRouter
-        future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-      >
-        <ResponsiveAppBar />
-      </BrowserRouter>
-    </Provider>
-  );
+let store: ReturnType<typeof mockStore>;
 
 describe('ResponsiveAppBar Component', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    store = mockStore({
+      auth: { token: 'mockToken', user: users[0] }
+    });
+  });
+
   it('should render the home link', () => {
     const store = mockStore({ auth: { user: null, token: null } });
 
-    renderWithProviders(store);
+    renderComponent(store);
 
-    expect(screen.getByText('Fogar')).toBeInTheDocument();
-    expect(screen.queryByText('DramaturgX')).not.toBeInTheDocument();
+    expect(screen.getByText(t('home'))).toBeInTheDocument();
+    expect(screen.queryByText(t('author'))).not.toBeInTheDocument();
   });
 
   it('should render login link when user is not authenticated', () => {
     const store = mockStore({ auth: { user: null, token: null } });
 
-    renderWithProviders(store);
+    renderComponent(store);
 
-    expect(screen.getByText('Login')).toBeInTheDocument();
+    expect(screen.getByText(t('login'))).toBeInTheDocument();
   });
 
   it('should render navigation items when user is authenticated', () => {
-    const store = mockStore({
-      auth: { user: { username: 'testuser' }, token: 'testtoken' }
+    renderComponent(store);
+
+    ['home', 'authors', 'books', 'characters', 'scenes'].forEach((item) => {
+      expect(screen.getByText(t(item))).toBeInTheDocument();
     });
-
-    renderWithProviders(store);
-
-    expect(screen.getByText('Fogar')).toBeInTheDocument();
-    expect(screen.getByText('DramaturgX')).toBeInTheDocument();
-    expect(screen.getByText('Obras')).toBeInTheDocument();
-    expect(screen.getByText('Persoaxes')).toBeInTheDocument();
-    expect(screen.getByText('Esceas')).toBeInTheDocument();
   });
 
   it('should render the settings menu when user is authenticated', () => {
-    const store = mockStore({
-      auth: { user: { username: 'testuser' }, token: 'testtoken' }
-    });
-    renderWithProviders(store);
+    renderComponent(store);
 
     fireEvent.click(screen.getByLabelText('Open settings'));
 
-    expect(screen.getByText('Profile')).toBeInTheDocument();
-    expect(screen.getByText('Settings')).toBeInTheDocument();
-    expect(screen.getByText('Logout')).toBeInTheDocument();
+    ['profile', 'settings', 'logout'].forEach((item) => {
+      expect(screen.getByText(t(item))).toBeInTheDocument();
+    });
   });
 
   it('should logout when logout button is clicked', () => {
-    const store = mockStore({
-      auth: { user: { username: 'testuser' }, token: 'testtoken' }
-    });
     const dispatchSpy = jest.spyOn(store, 'dispatch');
-    renderWithProviders(store);
+    renderComponent(store);
     fireEvent.click(screen.getByLabelText('Open settings'));
 
-    fireEvent.click(screen.getByText('Logout'));
+    fireEvent.click(screen.getByText(t('logout')));
 
     expect(dispatchSpy).toHaveBeenCalledWith({ type: 'auth/logout' });
   });

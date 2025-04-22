@@ -1,29 +1,26 @@
-import { useEffect } from "react";
-import { Link as RouterLink } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { Button, Grid, Link, TextField, Typography } from "@mui/material";
-import { Google } from "@mui/icons-material";
-import { autoClearError } from "../../redux/slices/authSlice";
-import Loader from "../../actorsScript/components/Loader";
-import { PasswordField } from "../../components/PasswordField";
-import { useFormValidation } from "../hooks/useFormValidation";
-import { AppDispatch, RootState } from "../../redux/types";
-import { loginUser } from "../../redux/thunks/authThunks";
-import { loginTranslationMap } from "../../i18n/translationMap";
-import { LoginPayload } from "../../redux/interfaces/authInterfaces";
-import { AuthLayout } from "../layout/AuthLayout";
+import { useEffect } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Button, Grid, Link, TextField, Typography } from '@mui/material';
+import { Google } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
+import { autoClearError } from '../../redux/slices/authSlice';
+import Loader from '../../actorsScript/components/Loader';
+import { PasswordField } from '../../components/PasswordField';
+import { useFormValidation } from '../hooks/useFormValidation';
+import { AppDispatch, RootState } from '../../redux/types';
+import { loginUser } from '../../redux/thunks/authThunks';
+import { LoginPayload } from '../../redux/interfaces/authInterfaces';
+import { AuthLayout } from '../layout/AuthLayout';
 
 const Login = () => {
+  const { t } = useTranslation('login');
   const dispatch = useDispatch<AppDispatch>();
-  const {
-    validateForm,
-    handleInputChange,
-    formData,
-    errors,
-  } = useFormValidation<LoginPayload>({
-    email: "",
-    password: "",
-  });
+  const { validateForm, handleInputChange, formData, errors } =
+    useFormValidation<LoginPayload>({
+      email: '',
+      password: ''
+    });
   const { loading, error } = useSelector((state: RootState) => state.auth);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -39,17 +36,23 @@ const Login = () => {
     }
   }, [error, dispatch]);
 
-  const currentLanguage = localStorage.getItem("language") ?? "es_gl";
-  const translationMap = loginTranslationMap[currentLanguage];
-
   return (
-    <AuthLayout title={translationMap.header}>
+    <AuthLayout title={t('header')}>
       <form onSubmit={handleSubmit}>
-        <Grid container alignItems={"center"} sx={{ border: "1px solid #e0e0e0", borderRadius: 2, padding: 2, mt: 2 }}>
+        <Grid
+          container
+          alignItems={'center'}
+          sx={{
+            border: '1px solid #e0e0e0',
+            borderRadius: 2,
+            padding: 2,
+            mt: 2
+          }}
+        >
           <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
             <TextField
               name="email"
-              label={translationMap.email}
+              label={t('email')}
               type="email"
               placeholder="aaron@swartz.com"
               fullWidth
@@ -63,7 +66,7 @@ const Login = () => {
           <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
             <PasswordField
               name="password"
-              label={translationMap.password}
+              label={t('password')}
               value={formData.password}
               onChange={handleInputChange}
               error={errors?.password}
@@ -72,7 +75,12 @@ const Login = () => {
             />
           </Grid>
 
-          <Grid container spacing={2} size={{ xs: 12 }} sx={{ mb: 2, padding: 2, mt: 2 }}>
+          <Grid
+            container
+            spacing={2}
+            size={{ xs: 12 }}
+            sx={{ mb: 2, padding: 2, mt: 2 }}
+          >
             <Grid size={{ xs: 12, sm: 6 }} sx={{ mt: 2 }}>
               <Button variant="contained" fullWidth disabled>
                 <Google />
@@ -81,15 +89,34 @@ const Login = () => {
             </Grid>
 
             <Grid size={{ xs: 12, sm: 6 }} sx={{ mt: 2 }}>
-              {loading ? <Loader /> : <Button variant="contained" fullWidth type="submit">{translationMap.submit}</Button>}
+              {loading ? (
+                <Loader />
+              ) : (
+                <Button variant="contained" fullWidth type="submit">
+                  {t('submit')}
+                </Button>
+              )}
             </Grid>
           </Grid>
 
-          <Grid container size={{ xs: 12 }} direction="row" justifyContent="end" sx={{ mt: 2 }}>
-            <Typography variant="body2" sx={{ color: 'primary.main', fontWeight: 'bold' }}>
-              {translationMap.callToAction}
-              <Link component={RouterLink} to="/register" sx={{ ml: 1, color: 'red', fontWeight: 'bold' }}>
-                {translationMap.action}
+          <Grid
+            container
+            size={{ xs: 12 }}
+            direction="row"
+            justifyContent="end"
+            sx={{ mt: 2 }}
+          >
+            <Typography
+              variant="body2"
+              sx={{ color: 'primary.main', fontWeight: 'bold' }}
+            >
+              {t('callToAction')}
+              <Link
+                component={RouterLink}
+                to="/register"
+                sx={{ ml: 1, color: 'red', fontWeight: 'bold' }}
+              >
+                {t('action')}
               </Link>
             </Typography>
           </Grid>

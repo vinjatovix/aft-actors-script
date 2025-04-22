@@ -1,88 +1,79 @@
-import { act, render, screen } from "@testing-library/react";
-import "@testing-library/jest-dom";
-import { Provider } from "react-redux";
-import { mockStore } from "../../__mocks__/mockStore";
+import { act, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
 
-import { CharacterBuildingsPage } from "../../../src/actorsScript/pages/CharacterBuildingsPage";
-import { users } from "../../data";
-import { handleFetch } from "../../../src/utils/handleFetch";
-import * as characterBuildingThunks from "../../../src/redux/thunks/characterBuildingThunks";
+import { handleFetch } from '../../../src/utils/handleFetch';
+import * as characterBuildingThunks from '../../../src/redux/thunks/characterBuildingThunks';
+import { CharacterBuildingsPage } from '../../../src/actorsScript/pages/CharacterBuildingsPage';
 
-jest.mock("../../../src/utils/handleFetch", () => ({
-  handleFetch: jest.fn(),
+import { renderWithProviders } from '../../test-utils/renderWithProviders';
+import { mockStore } from '../../__mocks__/mockStore';
+import { users } from '../../data';
+import i18n from '../../../src/i18n';
+
+jest.mock('../../../src/utils/handleFetch', () => ({
+  handleFetch: jest.fn()
 }));
 
-describe("CharacterBuildingsPage", () => {
-  let store: ReturnType<typeof mockStore>;
+const t = (key: string, ns: string = 'characterBuilding') =>
+  i18n.t(key, { ns });
 
+let store: ReturnType<typeof mockStore>;
+
+describe('CharacterBuildingsPage', () => {
   beforeEach(() => {
     store = mockStore({
-      auth: { token: "mockToken", user: users[0] },
+      auth: { token: 'mockToken', user: users[0] },
       characterBuilding: {
         characterBuildings: [],
         loading: false,
         error: null,
-        selectedCharacterBuilding: null,
-      },
+        selectedCharacterBuilding: null
+      }
     });
   });
 
-  it("dispatches getAllCharacterBuildings when token is available", async () => {
+  const renderComponent = () =>
+    renderWithProviders({
+      store,
+      ui: <CharacterBuildingsPage />
+    });
+
+  it('dispatches getAllCharacterBuildings when token is available', async () => {
     const mockGetAllCharacterBuildings = jest.spyOn(
       characterBuildingThunks,
-      "getAllCharacterBuildings"
+      'getAllCharacterBuildings'
     );
 
     await act(async () => {
-      render(
-        <Provider store={store}>
-          <CharacterBuildingsPage />
-        </Provider>
-      );
+      renderComponent();
     });
 
     expect(mockGetAllCharacterBuildings).toHaveBeenCalled();
   });
 
-  it("renders loading state when loading is true", () => {
-    render(
-      <Provider store={store}>
-        <CharacterBuildingsPage />
-      </Provider>
-    );
+  it('renders loading state when loading is true', () => {
+    renderComponent();
 
-    expect(screen.getByText("Cargando construcciones...")).toBeInTheDocument();
+    expect(screen.getByText(t('loading'))).toBeInTheDocument();
   });
 
-  it("renders error message when there is an error", async () => {
+  it('renders error message when there is an error', async () => {
     (handleFetch as jest.Mock).mockImplementation(() => {
-      throw new Error("Error al cargar construcciones");
+      throw new Error('BackEndError');
     });
 
     await act(async () => {
-      render(
-        <Provider store={store}>
-          <CharacterBuildingsPage />
-        </Provider>
-      );
+      renderComponent();
     });
 
-    expect(
-      await screen.findByText(/Error al cargar construcciones/i)
-    ).toBeInTheDocument();
+    expect(await screen.findByText(/BackEndError/i)).toBeInTheDocument();
   });
 
-  it("renders 'No hay construcciones disponibles' when there are no character buildings", async () => {
+  it('renders not available translation when there are no character buildings', async () => {
     await act(async () => {
-      render(
-        <Provider store={store}>
-          <CharacterBuildingsPage />
-        </Provider>
-      );
+      renderComponent();
     });
 
-    expect(
-      await screen.findByText("No hay construcciones disponibles")
-    ).toBeInTheDocument();
+    expect(await screen.findByText(t('noAvailable'))).toBeInTheDocument();
   });
 });

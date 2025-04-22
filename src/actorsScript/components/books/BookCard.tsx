@@ -1,19 +1,24 @@
-import { Typography } from "@mui/material";
-import { Book } from "../../../redux/interfaces/bookInterfaces";
-import { getTimeAgo } from "../../../utils/getTimeAgo";
+import { Typography } from '@mui/material';
+import { Book } from '../../../redux/interfaces/bookInterfaces';
+import { getTimeAgo } from '../../../utils/getTimeAgo';
+import { useTranslation } from 'react-i18next';
+import React from 'react';
 
-export const BookCard = (book: Book) => {
+export const BookCard = React.memo((book: Book) => {
+  const { i18n } = useTranslation();
+  const currentLanguage = i18n.language;
+  const { t } = useTranslation('common');
+  
   return (
-    <div key={book.id} className="card">
+    <div className="card">
       <h2>{book.title}</h2>
+      <p>{book.author.name}</p>
       {book.metadata && (
         <Typography variant="body2" color="textSecondary">
-          actualizado por {book.metadata.updatedBy}{" "}
-          {getTimeAgo(book.metadata.updatedAt)}
+          {t('updatedBy')} {book.metadata.updatedBy}{' '}
+          {getTimeAgo(book.metadata.updatedAt, currentLanguage)}
         </Typography>
       )}
-      <p>Autor: {book.author.name}</p>
-      <p>Pages: {book.pages}</p>
     </div>
   );
-};
+});

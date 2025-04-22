@@ -1,0 +1,10 @@
+{
+  "header": "Registro",
+  "username": "Nombre",
+  "email": "Correo",
+  "password": "Contraseña",
+  "repeatPassword": "Repite la contraseña",
+  "callToAction": "¿Ya tienes cuenta?",
+  "action": "Inicia sesión",
+  "submit": "Regístrate"
+}

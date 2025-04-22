@@ -1,9 +1,9 @@
-import { Add } from "@mui/icons-material";
-import { Button, Grid, TextField, Typography } from "@mui/material";
-import { v4 as uuidv4 } from "uuid";
-import { characterBuildingTranslationMap } from "../../../../i18n/translationMap";
-import { useState } from "react";
-import { DeleteButton } from "../../buttons/DeleteButton";
+import { Add } from '@mui/icons-material';
+import { Button, Grid, TextField, Typography } from '@mui/material';
+import { v4 as uuidv4 } from 'uuid';
+import { useState } from 'react';
+import { DeleteButton } from '../../buttons/DeleteButton';
+import { useTranslation } from 'react-i18next';
 
 interface ActionUnit {
   id: string;
@@ -30,27 +30,26 @@ const extractStrategyTexts = (unit: ActionUnit): string[] => {
 };
 
 export const ActionUnits = ({ formData, setFormData }: ActionUnitsProps) => {
+  const { t } = useTranslation('characterBuilding');
+
   const [actionUnits, setActionUnits] = useState<ActionUnit[]>(
     formData?.actionUnits.map((unit) => ({
       id: uuidv4(),
       action: unit.action,
       strategies: unit.strategies.map((strategy) => ({
         id: uuidv4(),
-        text: strategy,
-      })),
+        text: strategy
+      }))
     }))
   );
-
-  const currentLanguage = localStorage.getItem("language") ?? "es_gl";
-  const translationMap = characterBuildingTranslationMap[currentLanguage];
 
   const updateFormData = (updatedUnits: ActionUnit[]) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
       actionUnits: updatedUnits.map((unit) => ({
         action: unit.action,
-        strategies: extractStrategyTexts(unit),
-      })),
+        strategies: extractStrategyTexts(unit)
+      }))
     }));
   };
 
@@ -62,7 +61,7 @@ export const ActionUnits = ({ formData, setFormData }: ActionUnitsProps) => {
   const handleAddActionUnit = () => {
     updateActionUnits([
       ...actionUnits,
-      { id: uuidv4(), action: "", strategies: [] },
+      { id: uuidv4(), action: '', strategies: [] }
     ]);
   };
 
@@ -84,7 +83,7 @@ export const ActionUnits = ({ formData, setFormData }: ActionUnitsProps) => {
         unit.id === unitId
           ? {
               ...unit,
-              strategies: [...unit.strategies, { id: uuidv4(), text: "" }],
+              strategies: [...unit.strategies, { id: uuidv4(), text: '' }]
             }
           : unit
       )
@@ -105,7 +104,7 @@ export const ActionUnits = ({ formData, setFormData }: ActionUnitsProps) => {
                 strategy.id === strategyId
                   ? { ...strategy, text: value }
                   : strategy
-              ),
+              )
             }
           : unit
       )
@@ -120,7 +119,7 @@ export const ActionUnits = ({ formData, setFormData }: ActionUnitsProps) => {
               ...unit,
               strategies: unit.strategies.filter(
                 (strategy) => strategy.id !== strategyId
-              ),
+              )
             }
           : unit
       )
@@ -140,14 +139,13 @@ export const ActionUnits = ({ formData, setFormData }: ActionUnitsProps) => {
           <Add />
         </Button>
         <Typography variant="h6" sx={{ mt: 3 }}>
-          {translationMap.actionUnits.label}
+          {t('actionUnits.label')}
         </Typography>
       </Grid>
       {actionUnits.map((unit) => (
         <ActionUnitRow
           key={unit.id}
           unit={unit}
-          translationMap={translationMap}
           onActionChange={handleActionUnitChange}
           onAddStrategy={handleAddStrategy}
           onStrategyChange={handleStrategyChange}
@@ -161,14 +159,6 @@ export const ActionUnits = ({ formData, setFormData }: ActionUnitsProps) => {
 
 interface ActionUnitRowProps {
   unit: ActionUnit;
-  translationMap: {
-    actionUnits: {
-      action: string;
-      strategies: string;
-      strategy: string;
-      label: string;
-    };
-  };
   onActionChange: (unitId: string, value: string) => void;
   onAddStrategy: (unitId: string) => void;
   onStrategyChange: (unitId: string, strategyId: string, value: string) => void;
@@ -178,13 +168,14 @@ interface ActionUnitRowProps {
 
 const ActionUnitRow = ({
   unit,
-  translationMap,
   onActionChange,
   onAddStrategy,
   onStrategyChange,
   onRemoveStrategy,
-  onRemoveUnit,
+  onRemoveUnit
 }: ActionUnitRowProps) => {
+  const { t } = useTranslation('characterBuilding');
+
   return (
     <Grid container spacing={2} alignItems="center" sx={{ mt: 1 }}>
       <DeleteButton
@@ -194,7 +185,7 @@ const ActionUnitRow = ({
       <Grid size={{ xs: 3 }}>
         <TextField
           fullWidth
-          label={translationMap.actionUnits.action}
+          label={t('actionUnits.action')}
           variant="filled"
           value={unit.action}
           onChange={(e) => onActionChange(unit.id, e.target.value)}
@@ -203,7 +194,7 @@ const ActionUnitRow = ({
       <Grid size={{ xs: 6 }}>
         <Grid container spacing={2} alignItems="baseline">
           <Typography variant="body2" sx={{ mb: 1 }}>
-            {translationMap.actionUnits.strategies}
+            {t('actionUnits.strategies')}
           </Typography>
           <Button
             variant="contained"
@@ -220,7 +211,7 @@ const ActionUnitRow = ({
             <Grid size={{ xs: 8 }}>
               <TextField
                 fullWidth
-                label={`${translationMap.actionUnits.strategy} ${index + 1}`}
+                label={t('actionUnits.strategy') + ` ${index + 1}`}
                 variant="filled"
                 value={strategy.text}
                 onChange={(e) =>

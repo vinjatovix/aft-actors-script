@@ -1,36 +1,52 @@
-import { render, screen, fireEvent } from "@testing-library/react";
-import "@testing-library/jest-dom";
-import { ActionUnits } from "../../../../../src/actorsScript/components/characterBuildings/actionUnits/ActionUnits";
+import { screen, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import { ActionUnits } from '../../../../../src/actorsScript/components/characterBuildings/actionUnits/ActionUnits';
+import { mockStore } from '../../../../__mocks__/mockStore';
+import { renderWithProviders } from '../../../../test-utils/renderWithProviders';
 
-describe("ActionUnits Component", () => {
-  const mockSetFormData = jest.fn();
-  const mockFormData = {
-    center: "",
-    sceneCircumstances: "",
-    previousCircumstances: "",
-    startingPoint: "",
-    relationshipCircumstances: [],
-    actionUnits: [
-      { action: "Test Action", strategies: ["Strategy 1", "Strategy 2"] },
-    ],
-  };
+const mockSetFormData = jest.fn();
+const mockFormData = {
+  center: '',
+  sceneCircumstances: '',
+  previousCircumstances: '',
+  startingPoint: '',
+  relationshipCircumstances: [],
+  actionUnits: [
+    { action: 'Test Action', strategies: ['Strategy 1', 'Strategy 2'] }
+  ]
+};
 
+let store: ReturnType<typeof mockStore>;
+
+describe('ActionUnits Component', () => {
   beforeEach(() => {
-    mockSetFormData.mockClear();
+    jest.clearAllMocks();
+    store = mockStore();
   });
 
-  it("renders the component with initial action units", () => {
-    render(<ActionUnits formData={mockFormData} setFormData={mockSetFormData} />);
+  const renderComponent = (formData?: typeof mockFormData) =>
+    renderWithProviders({
+      store,
+      ui: (
+        <ActionUnits
+          formData={formData ?? mockFormData}
+          setFormData={mockSetFormData}
+        />
+      )
+    });
 
-    expect(screen.getByDisplayValue("Test Action")).toBeInTheDocument();
-    expect(screen.getByDisplayValue("Strategy 1")).toBeInTheDocument();
-    expect(screen.getByDisplayValue("Strategy 2")).toBeInTheDocument();
+  it('renders the component with initial action units', () => {
+    renderComponent();
+
+    expect(screen.getByDisplayValue('Test Action')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('Strategy 1')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('Strategy 2')).toBeInTheDocument();
   });
 
-  it("adds a new action unit", () => {
-    render(<ActionUnits formData={mockFormData} setFormData={mockSetFormData} />);
+  it('adds a new action unit', () => {
+    renderComponent();
 
-    const addButton = screen.getByRole("button", { name: /add-action-unit/i });
+    const addButton = screen.getByRole('button', { name: /add-action-unit/i });
     fireEvent.click(addButton);
 
     expect(mockSetFormData).toHaveBeenCalledWith(expect.any(Function));
@@ -41,16 +57,16 @@ describe("ActionUnits Component", () => {
     expect(updatedFormData).toEqual(
       expect.objectContaining({
         actionUnits: expect.arrayContaining([
-          expect.objectContaining({ action: "", strategies: [] }),
-        ]),
+          expect.objectContaining({ action: '', strategies: [] })
+        ])
       })
     );
   });
 
-  it("removes an action unit", () => {
-    render(<ActionUnits formData={mockFormData} setFormData={mockSetFormData} />);
+  it('removes an action unit', () => {
+    renderComponent();
 
-    const deleteButton = screen.getByTestId("delete-action-unit");
+    const deleteButton = screen.getByTestId('delete-action-unit');
     fireEvent.click(deleteButton);
 
     expect(mockSetFormData).toHaveBeenCalledWith(expect.any(Function));
@@ -59,17 +75,17 @@ describe("ActionUnits Component", () => {
     expect(updatedFormData).toEqual(
       expect.objectContaining({
         actionUnits: expect.not.arrayContaining([
-          expect.objectContaining({ action: "Test Action" }),
-        ]),
+          expect.objectContaining({ action: 'Test Action' })
+        ])
       })
     );
   });
 
   it("updates an action unit's action", () => {
-    render(<ActionUnits formData={mockFormData} setFormData={mockSetFormData} />);
+    renderComponent();
 
-    const actionInput = screen.getByDisplayValue("Test Action");
-    fireEvent.change(actionInput, { target: { value: "Updated Action" } });
+    const actionInput = screen.getByDisplayValue('Test Action');
+    fireEvent.change(actionInput, { target: { value: 'Updated Action' } });
 
     expect(mockSetFormData).toHaveBeenCalledWith(expect.any(Function));
     const updaterFunction = mockSetFormData.mock.calls[0][0];
@@ -77,16 +93,18 @@ describe("ActionUnits Component", () => {
     expect(updatedFormData).toEqual(
       expect.objectContaining({
         actionUnits: expect.arrayContaining([
-          expect.objectContaining({ action: "Updated Action" }),
-        ]),
+          expect.objectContaining({ action: 'Updated Action' })
+        ])
       })
     );
   });
 
-  it("adds a new strategy to an action unit", () => {
-    render(<ActionUnits formData={mockFormData} setFormData={mockSetFormData} />);
+  it('adds a new strategy to an action unit', () => {
+    renderComponent();
 
-    const addStrategyButton = screen.getByRole("button", { name: /add-strategy/i });
+    const addStrategyButton = screen.getByRole('button', {
+      name: /add-strategy/i
+    });
     fireEvent.click(addStrategyButton);
 
     expect(mockSetFormData).toHaveBeenCalledWith(expect.any(Function));
@@ -96,26 +114,26 @@ describe("ActionUnits Component", () => {
       expect.objectContaining({
         actionUnits: expect.arrayContaining([
           expect.objectContaining({
-            strategies: expect.arrayContaining([""]),
-          }),
-        ]),
+            strategies: expect.arrayContaining([''])
+          })
+        ])
       })
     );
   });
 
-  it("removes a strategy from an action unit", () => {
+  it('removes a strategy from an action unit', () => {
     const mockFormDataWithStrategies = {
       ...mockFormData,
       actionUnits: [
         {
-          action: "Test Action",
-          strategies: ["Strategy 1"],
-        },
-      ],
+          action: 'Test Action',
+          strategies: ['Strategy 1']
+        }
+      ]
     };
-    render(<ActionUnits formData={mockFormDataWithStrategies} setFormData={mockSetFormData} />);
+    renderComponent(mockFormDataWithStrategies);
 
-    const deleteButton = screen.getByTestId("delete-strategy");
+    const deleteButton = screen.getByTestId('delete-strategy');
     fireEvent.click(deleteButton);
 
     expect(mockSetFormData).toHaveBeenCalledWith(expect.any(Function));
@@ -125,18 +143,17 @@ describe("ActionUnits Component", () => {
       expect.objectContaining({
         actionUnits: expect.arrayContaining([
           expect.objectContaining({
-            strategies: expect.not.arrayContaining(["Strategy 1"]),
-          }),
-        ]),
+            strategies: expect.not.arrayContaining(['Strategy 1'])
+          })
+        ])
       })
     );
   });
 
   it("updates a strategy's text", () => {
-    render(<ActionUnits formData={mockFormData} setFormData={mockSetFormData} />);
-
-    const strategyInput = screen.getByDisplayValue("Strategy 1");
-    fireEvent.change(strategyInput, { target: { value: "Updated Strategy" } });
+    renderComponent();
+    const strategyInput = screen.getByDisplayValue('Strategy 1');
+    fireEvent.change(strategyInput, { target: { value: 'Updated Strategy' } });
 
     expect(mockSetFormData).toHaveBeenCalledWith(expect.any(Function));
     const updaterFunction = mockSetFormData.mock.calls[0][0];
@@ -145,9 +162,9 @@ describe("ActionUnits Component", () => {
       expect.objectContaining({
         actionUnits: expect.arrayContaining([
           expect.objectContaining({
-            strategies: expect.arrayContaining(["Updated Strategy"]),
-          }),
-        ]),
+            strategies: expect.arrayContaining(['Updated Strategy'])
+          })
+        ])
       })
     );
   });

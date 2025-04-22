@@ -1,80 +1,75 @@
-import { render, screen, fireEvent, act } from "@testing-library/react";
-import "@testing-library/jest-dom";
-import { Provider } from "react-redux";
-import { Register } from "../../src/auth/pages/Register";
-import { mockStore } from "../__mocks__/mockStore";
+import '@testing-library/jest-dom';
+import { screen, fireEvent, act } from '@testing-library/react';
 
-jest.mock("../../src/utils/handleFetch", () => ({
+import { renderWithProviders } from '../test-utils/renderWithProviders';
+import { mockStore } from '../__mocks__/mockStore';
+
+import { Register } from '../../src/auth/pages/Register';
+import i18n from '../../src/i18n';
+
+jest.mock('../../src/utils/handleFetch', () => ({
   handleFetch: jest
     .fn()
-    .mockImplementation(() => Promise.reject(new Error("BackEndError"))),
+    .mockImplementation(() => Promise.reject(new Error('BackEndError')))
 }));
 
-import { BrowserRouter } from "react-router-dom";
-
-const renderWithProvider = (store: ReturnType<typeof mockStore>) => {
-  return render(
-    <Provider store={store}>
-      <BrowserRouter
-        future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-      >
-        <Register />
-      </BrowserRouter>
-    </Provider>
-  );
-};
-
+const t = (key: string, ns: string = 'register') => i18n.t(key, { ns });
 const fillRegisterForm = (
   username: string,
   email: string,
   password: string,
   repeatPassword: string
 ) => {
-  fireEvent.change(screen.getByLabelText("Nome"), {
-    target: { value: username },
+  fireEvent.change(screen.getByLabelText(t('username')), {
+    target: { value: username }
   });
-  fireEvent.change(screen.getByLabelText("Correo"), {
-    target: { value: email },
+  fireEvent.change(screen.getByLabelText(t('email')), {
+    target: { value: email }
   });
-  fireEvent.change(screen.getByLabelText("Contrasinal"), {
-    target: { value: password },
+  fireEvent.change(screen.getByLabelText(t('password')), {
+    target: { value: password }
   });
-  fireEvent.change(screen.getByLabelText("Confirma contrasinal"), {
-    target: { value: repeatPassword },
+  fireEvent.change(screen.getByLabelText(t('repeatPassword')), {
+    target: { value: repeatPassword }
   });
 };
+const renderRegisterPage = () =>
+  renderWithProviders({ store, ui: <Register /> });
 
-describe("Register Page", () => {
-  let store: ReturnType<typeof mockStore>;
+let store: ReturnType<typeof mockStore>;
 
+describe('Register Page', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     localStorage.clear();
     store = mockStore();
   });
 
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
+  it('should render the registration form', () => {
+    const labels = [
+      t('username'),
+      t('email'),
+      t('password'),
+      t('repeatPassword')
+    ];
 
-  it("should render the registration form", () => {
-    const labels = ["Nome", "Correo", "Contrasinal", "Confirma contrasinal"];
-
-    renderWithProvider(store);
+    renderRegisterPage();
 
     labels.forEach((label) => {
       expect(screen.getByLabelText(label)).toBeInTheDocument();
     });
-    expect(screen.getByRole("button", { name: "Rexístrate" })).toBeInTheDocument();
-
+    expect(
+      screen.getByRole('button', { name: t('submit') })
+    ).toBeInTheDocument();
   });
 
-  it("should display validation errors when form is submitted with invalid data", async () => {
-    const errorMessages = ["É obrigatorio."];
+  it('should display validation errors when form is submitted with invalid data', async () => {
+    const errorMessages = [t('required', 'formValidationErrors')];
 
-    renderWithProvider(store);
+    renderRegisterPage();
+
     await act(async () => {
-      fireEvent.click(screen.getByRole("button", { name: "Rexístrate" }));
+      fireEvent.click(screen.getByRole('button', { name: t('submit') }));
     });
 
     errorMessages.forEach((message) => {
@@ -82,111 +77,117 @@ describe("Register Page", () => {
     });
   });
 
-  it("should dispatch register action when form is submitted with valid data", async () => {
-    const dispatchSpy = jest.spyOn(store, "dispatch");
-    renderWithProvider(store);
+  it('should dispatch register action when form is submitted with valid data', async () => {
+    const dispatchSpy = jest.spyOn(store, 'dispatch');
+    renderRegisterPage();
     fillRegisterForm(
-      "TestUser",
-      "test@example.com",
-      "Password.123",
-      "Password.123"
+      'TestUser',
+      'test@example.com',
+      'Password.123',
+      'Password.123'
     );
 
     await act(async () => {
-      fireEvent.click(screen.getByRole("button", { name: "Rexístrate" }));
+      fireEvent.click(screen.getByRole('button', { name: t('submit') }));
     });
 
     expect(dispatchSpy).toHaveBeenCalled();
   });
 
-  it("should display error message when email is invalid", async () => {
-    renderWithProvider(store);
-    fireEvent.change(screen.getByPlaceholderText("aaron@swartz.op"), {
-      target: { value: "test@test" },
+  it('should display error message when email is invalid', async () => {
+    renderRegisterPage();
+    fireEvent.change(screen.getByPlaceholderText('aaron@swartz.op'), {
+      target: { value: 'test@test' }
     });
 
     await act(async () => {
-      fireEvent.click(screen.getByRole("button", { name: "Rexístrate" }));
-    });
-
-    expect(screen.getByText("O correo non é válido.")).toBeInTheDocument();
-  });
-
-  it("should display error message when passwords do not match", async () => {
-    renderWithProvider(store);
-    fillRegisterForm(
-      "Test User",
-      "test@da.com",
-      "Password@123",
-      "Password@456"
-    );
-
-    await act(async () => {
-      fireEvent.click(screen.getByRole("button", { name: "Rexístrate" }));
+      fireEvent.click(screen.getByRole('button', { name: t('submit') }));
     });
 
     expect(
-      screen.getByText("Os contrasinais non coinciden.")
+      screen.getByText(t('invalidEmail', 'formValidationErrors'))
     ).toBeInTheDocument();
   });
 
-  it("should display error message when password is invalid", async () => {
-    renderWithProvider(store);
-    fireEvent.change(screen.getByLabelText("Contrasinal"), {
-      target: { value: "password" },
-    });
-
-    await act(async () => {
-      fireEvent.click(screen.getByRole("button", { name: "Rexístrate" }));
-    });
-
-    expect(screen.getByText("O contrasinal é feble.")).toBeInTheDocument();
-  });
-
-  it("should display error message when username is invalid", async () => {
-    renderWithProvider(store);
+  it('should display error message when passwords do not match', async () => {
+    renderRegisterPage();
     fillRegisterForm(
-      "Test User",
-      "dsa@dsa.com",
-      "Password.123",
-      "Password.123"
+      'Test User',
+      'test@da.com',
+      'Password@123',
+      'Password@456'
     );
 
     await act(async () => {
-      fireEvent.click(screen.getByRole("button", { name: "Rexístrate" }));
+      fireEvent.click(screen.getByRole('button', { name: t('submit') }));
     });
 
     expect(
-      screen.getByText("O nome de usuario non é válido.")
+      screen.getByText(t('passwordsDontMatch', 'formValidationErrors'))
+    ).toBeInTheDocument();
+  });
+
+  it('should display error message when password is invalid', async () => {
+    renderRegisterPage();
+    fireEvent.change(screen.getByLabelText(t('password')), {
+      target: { value: 'password' }
+    });
+
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: t('submit') }));
+    });
+
+    expect(
+      screen.getByText(t('weakPassword', 'formValidationErrors'))
+    ).toBeInTheDocument();
+  });
+
+  it('should display error message when username is invalid', async () => {
+    renderRegisterPage();
+    fillRegisterForm(
+      'Test User',
+      'dsa@dsa.com',
+      'Password.123',
+      'Password.123'
+    );
+
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: t('submit') }));
+    });
+
+    expect(
+      screen.getByText(t('invalidUsername', 'formValidationErrors'))
     ).toBeInTheDocument();
   });
 
   test.each([
     "<script>alert('XSS')</script>",
-    "<img src=x onerror=alert(1)>",
-    "%0D%0A",
+    '<img src=x onerror=alert(1)>',
+    '%0D%0A'
   ])(
-    "should display error message when input contains injection characters: %p",
+    'should display error message when input contains injection characters: %p',
     async (inj) => {
-      renderWithProvider(store);
-      fillRegisterForm("testUser", "das@das.com", inj, "Password.123");
+      renderRegisterPage();
+      fillRegisterForm('testUser', 'das@das.com', inj, 'Password.123');
 
       await act(async () => {
-        fireEvent.click(screen.getByRole("button", { name: "Rexístrate" }));
+        fireEvent.click(screen.getByRole('button', { name: t('submit') }));
       });
 
-      expect(screen.getByText("Amodo oh! -9001")).toBeInTheDocument();
+      expect(
+        screen.getByText(t('injectionError', 'formValidationErrors'))
+      ).toBeInTheDocument();
     }
   );
 
-  it("should render the backend error message", async () => {
-    renderWithProvider(store);
-    fillRegisterForm("TestUser", "te@dsa.com", "Password.123", "Password.123");
+  it('should render the backend error message', async () => {
+    renderRegisterPage();
+    fillRegisterForm('TestUser', 'te@dsa.com', 'Password.123', 'Password.123');
 
     await act(async () => {
-      fireEvent.click(screen.getByRole("button", { name: "Rexístrate" }));
+      fireEvent.click(screen.getByRole('button', { name: t('submit') }));
     });
 
-    expect(screen.queryByText("BackEndError")).toBeInTheDocument();
+    expect(screen.queryByText('BackEndError')).toBeInTheDocument();
   });
 });

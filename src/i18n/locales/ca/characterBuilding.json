@@ -1,0 +1,39 @@
+{
+  "header": "Construcció de Personatge",
+  "builds": "Construccions",
+  "at": "a les",
+  "updated": "Actualitzat",
+  "save": "Desar",
+  "center": {
+    "label": "Centre",
+    "instinctive": "Instintiu",
+    "emotional": "Emocional",
+    "mental": "Mental"
+  },
+  "sceneCircumstances": {
+    "label": "Circumstàncies de l'Escena",
+    "placeholder": "És el sopar d'aniversari de l'avi"
+  },
+  "previousCircumstances": {
+    "label": "Circumstàncies Prèvies",
+    "placeholder": "El doctor acaba de dir-li a Brick que l'avi té càncer"
+  },
+  "startingPoint": {
+    "label": "Punt de Partida",
+    "placeholder": "En Brick està mig borratxo i només vol escapar"
+  },
+  "relationshipCircumstances": "Circumstàncies de la Relació",
+  "character": "Personatge",
+  "circumstance": "Circumstància",
+  "actionUnits": {
+    "label": "Unitats d'Acció",
+    "action": "Acció",
+    "strategies": "Estratègies",
+    "strategy": "Estratègia"
+  },
+  "delete": "Eliminar",
+  "add": "Afegir",
+  "loading": "Carregant construccions",
+  "noAvailable": "No hi ha construccions disponibles",
+  "nothingSelected": "Selecciona o construeix un personatge"
+}
