@@ -15,5 +15,8 @@
   "profile": "Perfil",
   "settings": "Configuración",
   "logout": "Sair",
-  "login": "Acceder"
+  "login": "Acceder",
+  "loading": "Cargando",
+  "noAvailable": "Non hai dispoñibles",
+  "updatedBy": "Actualizado por"
 }

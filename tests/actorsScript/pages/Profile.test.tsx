@@ -13,9 +13,9 @@ jest.mock('../../../src/utils/handleFetch', () => ({
   handleFetch: jest.fn()
 }));
 
+const t = (key: string, ns: string = 'profile') => i18n.t(key, { ns });
 const renderComponent = (store: ReturnType<typeof mockStore>) =>
   renderWithProviders({ store, ui: <Profile /> });
-
 const fillForm = (
   newPassword: string,
   repeatPassword: string,
@@ -33,13 +33,8 @@ const fillForm = (
 };
 
 let store: ReturnType<typeof mockStore>;
-let t: (key: string, ns?: string) => string;
 
 describe('Profile', () => {
-  beforeAll(async () => {
-    t = (key: string, ns: string = 'profile') => i18n.t(key, { ns });
-  });
-
   beforeEach(() => {
     jest.clearAllMocks();
     store = mockStore({

@@ -15,5 +15,8 @@
   "profile": "Profila",
   "settings": "Ezarpenak",
   "logout": "Saioa itxi",
-  "login": "Saioa hasi"
+  "login": "Saioa hasi",
+  "loading": "Kargatzen",
+  "noAvailable": "Ez dago eskuragarri",
+  "updatedBy": "Eguneratuta"
 }

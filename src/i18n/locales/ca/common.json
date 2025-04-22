@@ -14,5 +14,8 @@
   "create": "Crear",
   "profile": "Perfil",
   "settings": "Configuració",
-  "logout": "Tancar sessió"
+  "logout": "Tancar sessió",
+  "loading": "Carregant",
+  "noAvailable": "No hi ha disponibles",
+  "updatedBy": "Actualitzat per"
 }

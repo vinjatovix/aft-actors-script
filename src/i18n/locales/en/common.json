@@ -15,5 +15,8 @@
   "profile": "Profile",
   "settings": "Settings",
   "logout": "Logout",
-  "login": "Login"
+  "login": "Login",
+  "loading": "Loading",
+  "noAvailable": "No available",
+  "updatedBy": "Updated by"
 }

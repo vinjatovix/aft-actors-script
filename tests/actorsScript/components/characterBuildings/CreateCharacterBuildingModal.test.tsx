@@ -28,14 +28,11 @@ jest.mock('../../../../src/redux/thunks/sceneThunks', () => ({
   )
 }));
 
+const t = (key: string, ns: string = 'common') => i18n.t(key, { ns });
+
 let mockDispatch = jest.fn();
-let t: (key: string, ns?: string) => string;
 
 describe('CreateCharacterBuildingModal', () => {
-  beforeAll(async () => {
-    t = (key: string, ns: string = 'common') => i18n.t(key, { ns });
-  });
-
   beforeEach(() => {
     jest.clearAllMocks();
     mockDispatch = jest.fn();

@@ -6,26 +6,18 @@ import { mockStore } from '../../__mocks__/mockStore';
 import { renderWithProviders } from '../../test-utils/renderWithProviders';
 import i18n from '../../../src/i18n';
 
+const t = (key: string, ns: string = 'settings') => i18n.t(key, { ns });
+const renderSettingsPage = () =>
+  renderWithProviders({ store, ui: <Settings /> });
+
 let store: ReturnType<typeof mockStore>;
-let t: (key: string, ns?: string) => string;
 
 describe('Settings Page', () => {
-  beforeAll(async () => {
-    t = (key: string, ns: string = 'settings') => i18n.t(key, { ns });
-  });
-
   beforeEach(() => {
     jest.clearAllMocks();
     localStorage.clear();
     store = mockStore();
   });
-
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
-  const renderSettingsPage = () =>
-    renderWithProviders({ store, ui: <Settings /> });
 
   it('should render the settings page with language options', () => {
     renderSettingsPage();

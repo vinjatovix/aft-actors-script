@@ -15,5 +15,8 @@
   "profile": "Profil",
   "settings": "Setări",
   "logout": "Deconectare",
-  "login": "Autentificare"
+  "login": "Autentificare",
+  "loading": "Se încarcă",
+  "noAvailable": "Niciunul disponibil",
+  "updatedBy": "Actualizat de"
 }

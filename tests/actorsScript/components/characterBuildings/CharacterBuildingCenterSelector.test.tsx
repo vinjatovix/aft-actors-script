@@ -7,13 +7,10 @@ import { renderWithProviders } from '../../../test-utils/renderWithProviders';
 import i18n from '../../../../src/i18n';
 
 let store: ReturnType<typeof mockStore>;
-let t: (key: string, ns?: string) => string;
+const t = (key: string, ns: string = 'characterBuilding') =>
+  i18n.t(key, { ns });
 
 describe('CharacterBuildingCenterSelector', () => {
-  beforeAll(async () => {
-    t = (key: string, ns: string = 'characterBuilding') => i18n.t(key, { ns });
-  });
-
   beforeEach(() => {
     jest.clearAllMocks();
     store = mockStore();

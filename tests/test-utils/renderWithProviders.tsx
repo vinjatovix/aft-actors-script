@@ -4,9 +4,10 @@ import i18n from '../../src/i18n';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 import { Store } from '@reduxjs/toolkit';
+import { mockStore } from '../__mocks__/mockStore';
 
 type RenderWithProvidersArgs = {
-  store: Store;
+  store?: Store;
   ui: React.ReactElement;
   i18nInstance?: typeof i18n;
 };
@@ -17,7 +18,7 @@ export const renderWithProviders = ({
   i18nInstance = i18n
 }: RenderWithProvidersArgs) => {
   return render(
-    <Provider store={store}>
+    <Provider store={store ?? mockStore()}>
       <MemoryRouter
         future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
       >

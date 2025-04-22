@@ -9,15 +9,12 @@ import i18n from '../../../../src/i18n';
 
 const CHARACTER_NAME = 'Name';
 const SCENE_DESCRIPTION = 'Description';
+const t = (key: string, ns: string = 'characterBuilding') =>
+  i18n.t(key, { ns });
 
 let store: ReturnType<typeof mockStore>;
-let t: (key: string, ns?: string) => string;
 
 describe('CharacterBuildingHeader', () => {
-  beforeAll(async () => {
-    t = (key: string, ns: string = 'characterBuilding') => i18n.t(key, { ns });
-  });
-
   beforeEach(() => {
     jest.clearAllMocks();
     store = mockStore();

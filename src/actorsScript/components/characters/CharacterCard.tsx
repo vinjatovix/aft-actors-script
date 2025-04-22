@@ -1,14 +1,20 @@
-import { Typography } from "@mui/material";
-import { Character } from "../../../redux/interfaces/characterInterfaces";
-import { getTimeAgo } from "../../../utils/getTimeAgo";
+import { Typography } from '@mui/material';
+import { Character } from '../../../redux/interfaces/characterInterfaces';
+import { getTimeAgo } from '../../../utils/getTimeAgo';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 
-export const CharacterCard = (character: Character) => {
+export const CharacterCard = React.memo((character: Character) => {
+  const { i18n } = useTranslation();
+  const currentLanguage = i18n.language;
+  const { t } = useTranslation('common');
+
   return (
     <div className="card">
       {character.metadata && (
         <Typography variant="body2" color="textSecondary">
-          actualizado por {character.metadata.updatedBy}{" "}
-          {getTimeAgo(character.metadata.updatedAt)}
+          {t('updatedBy')} {character.metadata.updatedBy}{' '}
+          {getTimeAgo(character.metadata.updatedAt, currentLanguage)}
         </Typography>
       )}
 
@@ -17,4 +23,4 @@ export const CharacterCard = (character: Character) => {
       <p>Autor: {character.book?.author.name}</p>
     </div>
   );
-};
+});

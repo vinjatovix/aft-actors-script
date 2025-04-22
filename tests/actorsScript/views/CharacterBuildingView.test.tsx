@@ -15,29 +15,24 @@ jest.mock('react-redux', () => ({
   useDispatch: jest.fn()
 }));
 
-jest.mock("../../../src/redux/thunks/characterBuildingThunks", () => ({
-  ...jest.requireActual("../../../src/redux/thunks/characterBuildingThunks"),
+jest.mock('../../../src/redux/thunks/characterBuildingThunks', () => ({
+  ...jest.requireActual('../../../src/redux/thunks/characterBuildingThunks'),
   deleteCharacterBuilding: jest.fn().mockResolvedValue(undefined),
   getAllCharacterBuildings: jest.fn().mockResolvedValue([]),
-  updateCharacterBuilding: jest.fn().mockResolvedValue(undefined),
+  updateCharacterBuilding: jest.fn().mockResolvedValue(undefined)
 }));
 
 const AUTH = users[0];
 const CHARACTER_BUILDING_MOCK = characterBuildings[0];
+const t = (key: string, ns: string = 'characterBuilding') =>
+  i18n.t(key, { ns });
 
 let mockDispatch = jest.fn();
-let t: (key: string, ns?: string) => string;
 
 describe('CharacterBuildingView', () => {
-  beforeAll(async () => {
-    t = (key: string, ns: string = 'characterBuilding') =>
-      i18n.t(key, { ns });
-  });
-
   beforeEach(() => {
     jest.clearAllMocks();
     mockDispatch = jest.fn();
-
     (useDispatch as unknown as jest.Mock).mockReturnValue(mockDispatch);
     mockDispatch.mockImplementation((action) => {
       if (typeof action === 'function') {

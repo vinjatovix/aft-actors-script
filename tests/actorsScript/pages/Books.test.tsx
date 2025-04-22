@@ -1,21 +1,19 @@
-import { act, render, screen } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Books } from '../../../src/actorsScript/pages/Books';
-import { Provider } from 'react-redux';
-import { store } from '../../../src/redux/store';
+import i18n from '../../../src/i18n';
+import { renderWithProviders } from '../../test-utils/renderWithProviders';
+
+const t = (key: string, ns: string = 'common') => i18n.t(key, { ns });
 
 describe('Books Page', () => {
   it('renders the Books page with a title', async () => {
     await act(async () => {
-      render(
-        <Provider store={store}>
-          <Books />
-        </Provider>
-      );
+      renderWithProviders({ ui: <Books /> });
     });
 
     expect(screen.getByRole('heading', { level: 5 })).toHaveTextContent(
-      'Obras'
+      t('books')
     );
   });
 });

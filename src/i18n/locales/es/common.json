@@ -15,5 +15,8 @@
   "profile": "Perfil",
   "settings": "Configuración",
   "logout": "Cerrar sesión",
-  "login": "Iniciar sesión"
+  "login": "Iniciar sesión",
+  "loading": "Cargando",
+  "noAvailable": "No hay disponibles",
+  "updatedBy": "Actualizado por"
 }

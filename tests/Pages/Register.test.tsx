@@ -13,6 +13,7 @@ jest.mock('../../src/utils/handleFetch', () => ({
     .mockImplementation(() => Promise.reject(new Error('BackEndError')))
 }));
 
+const t = (key: string, ns: string = 'register') => i18n.t(key, { ns });
 const fillRegisterForm = (
   username: string,
   email: string,
@@ -32,27 +33,17 @@ const fillRegisterForm = (
     target: { value: repeatPassword }
   });
 };
+const renderRegisterPage = () =>
+  renderWithProviders({ store, ui: <Register /> });
 
 let store: ReturnType<typeof mockStore>;
-let t: (key: string, ns?: string) => string;
 
 describe('Register Page', () => {
-  beforeAll(async () => {
-    t = (key: string, ns: string = 'register') => i18n.t(key, { ns });
-  });
-
   beforeEach(() => {
     jest.clearAllMocks();
     localStorage.clear();
     store = mockStore();
   });
-
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
-  const renderRegisterPage = () =>
-    renderWithProviders({ store, ui: <Register /> });
 
   it('should render the registration form', () => {
     const labels = [

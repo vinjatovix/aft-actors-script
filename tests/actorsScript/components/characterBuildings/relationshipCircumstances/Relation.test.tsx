@@ -19,14 +19,12 @@ const MOCK_RELATIONS = [
 const mockHandleRelationChange = jest.fn();
 const mockSetRelations = jest.fn();
 const mockHandleRemoveRelation = jest.fn();
+const t = (key: string, ns: string = 'characterBuilding') =>
+  i18n.t(key, { ns });
 
 let store: ReturnType<typeof mockStore>;
-let t: (key: string, ns?: string) => string;
 
 describe('Relation Component', () => {
-  beforeAll(async () => {
-    t = (key: string, ns: string = 'characterBuilding') => i18n.t(key, { ns });
-  });
   beforeEach(() => {
     jest.clearAllMocks();
     store = mockStore();

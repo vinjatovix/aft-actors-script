@@ -15,5 +15,8 @@
   "profile": "Profilo",
   "settings": "Impostazioni",
   "logout": "Disconnettersi",
-  "login": "Accedi"
+  "login": "Accedi",
+  "loading": "Caricamento",
+  "noAvailable": "Non disponibile",
+  "updatedBy": "Aggiornato da"
 }

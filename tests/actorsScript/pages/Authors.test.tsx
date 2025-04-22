@@ -1,13 +1,17 @@
-import { render, screen } from "@testing-library/react";
-import "@testing-library/jest-dom";
-import { Authors } from "../../../src/actorsScript/pages/Authors";
+import { screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import { Authors } from '../../../src/actorsScript/pages/Authors';
+import i18n from '../../../src/i18n';
+import { renderWithProviders } from '../../test-utils/renderWithProviders';
 
-describe("Authors Page", () => {
-  it("renders the Authors page with a title and author names", () => {
-    render(<Authors />);
+const t = (key: string, ns: string = 'common') => i18n.t(key, { ns });
 
-    expect(screen.getByRole("heading", { level: 5 })).toHaveTextContent(
-      "DramaturgXs"
+describe('Authors Page', () => {
+  it('renders the Authors page with a title and author names', () => {
+    renderWithProviders({ ui: <Authors /> });
+
+    expect(screen.getByRole('heading', { level: 5 })).toHaveTextContent(
+      t('authors')
     );
   });
 });

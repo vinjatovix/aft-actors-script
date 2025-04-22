@@ -14,14 +14,12 @@ jest.mock('../../../src/utils/handleFetch', () => ({
   handleFetch: jest.fn()
 }));
 
+const t = (key: string, ns: string = 'characterBuilding') =>
+  i18n.t(key, { ns });
+
 let store: ReturnType<typeof mockStore>;
-let t: (key: string, ns?: string) => string;
 
 describe('CharacterBuildingsPage', () => {
-  beforeAll(async () => {
-    t = (key: string, ns: string = 'characterBuilding') => i18n.t(key, { ns });
-  });
-
   beforeEach(() => {
     store = mockStore({
       auth: { token: 'mockToken', user: users[0] },

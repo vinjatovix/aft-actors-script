@@ -14,6 +14,7 @@ jest.mock('../../src/utils/handleFetch', () => ({
     .mockImplementation(() => Promise.reject(new Error('BackEndError')))
 }));
 
+const t = (key: string, ns: string = 'login') => i18n.t(key, { ns });
 const fillLoginForm = (email: string, password: string) => {
   fireEvent.change(screen.getByLabelText(t('email')), {
     target: { value: email }
@@ -22,25 +23,16 @@ const fillLoginForm = (email: string, password: string) => {
     target: { value: password }
   });
 };
+const renderLoginPage = () => renderWithProviders({ store, ui: <Login /> });
 
 let store: ReturnType<typeof mockStore>;
-let t: (key: string, ns?: string) => string;
 
 describe('Login Page', () => {
-  beforeAll(async () => {
-    t = (key: string, ns: string = 'login') => i18n.t(key, { ns });
-  });
-
   beforeEach(() => {
     jest.clearAllMocks();
     localStorage.clear();
     store = mockStore();
   });
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
-  const renderLoginPage = () => renderWithProviders({ store, ui: <Login /> });
 
   it('should render the login form', () => {
     renderLoginPage();

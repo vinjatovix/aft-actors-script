@@ -6,22 +6,23 @@ import { mockStore } from '../__mocks__/mockStore';
 
 import ResponsiveAppBar from '../../src/ui/ResponsiveAppBar';
 import i18n from '../../src/i18n';
+import { users } from '../data';
 
-let t: (key: string, ns?: string) => string;
-
-describe('ResponsiveAppBar Component', () => {
-  beforeAll(async () => {
-    t = (key: string, ns: string = 'common') => i18n.t(key, { ns });
+const t = (key: string, ns: string = 'common') => i18n.t(key, { ns });
+const renderComponent = (store: ReturnType<typeof mockStore>) =>
+  renderWithProviders({
+    store,
+    ui: <ResponsiveAppBar />
   });
 
-  const renderComponent = (store: ReturnType<typeof mockStore>) =>
-    renderWithProviders({
-      store,
-      ui: <ResponsiveAppBar />
-    });
+let store: ReturnType<typeof mockStore>;
 
+describe('ResponsiveAppBar Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    store = mockStore({
+      auth: { token: 'mockToken', user: users[0] }
+    });
   });
 
   it('should render the home link', () => {
@@ -42,10 +43,6 @@ describe('ResponsiveAppBar Component', () => {
   });
 
   it('should render navigation items when user is authenticated', () => {
-    const store = mockStore({
-      auth: { user: { username: 'testUser' }, token: 'mockToken' }
-    });
-
     renderComponent(store);
 
     ['home', 'authors', 'books', 'characters', 'scenes'].forEach((item) => {
@@ -54,9 +51,6 @@ describe('ResponsiveAppBar Component', () => {
   });
 
   it('should render the settings menu when user is authenticated', () => {
-    const store = mockStore({
-      auth: { user: { username: 'testUser' }, token: 'mockToken' }
-    });
     renderComponent(store);
 
     fireEvent.click(screen.getByLabelText('Open settings'));
@@ -67,9 +61,6 @@ describe('ResponsiveAppBar Component', () => {
   });
 
   it('should logout when logout button is clicked', () => {
-    const store = mockStore({
-      auth: { user: { username: 'testUser' }, token: 'mockToken' }
-    });
     const dispatchSpy = jest.spyOn(store, 'dispatch');
     renderComponent(store);
     fireEvent.click(screen.getByLabelText('Open settings'));
