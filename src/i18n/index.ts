@@ -1,7 +1,6 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
-// import Backend from 'i18next-http-backend';
 
 import commonCa from './locales/ca/common.json';
 import loginCa from './locales/ca/login.json';
@@ -77,11 +76,10 @@ import formValidationErrorsEN from './locales/en/formValidationErrors.json';
 
 i18n
   .use(LanguageDetector)
-  // .use(Backend)
   .use(initReactI18next)
   .init({
     lng: 'es-GL',
-    fallbackLng: 'es',
+    fallbackLng: 'en',
     supportedLngs: ['en', 'es', 'es-GL', 'ca', 'eu', 'fr', 'it', 'pt', 'ro'],
     ns: [
       'common',
@@ -179,9 +177,6 @@ i18n
     interpolation: {
       escapeValue: false
     },
-    // backend: {
-    //   loadPath: '/locales/{{lng}}/{{ns}}.json'
-    // },
     react: {
       useSuspense: true
     }
