@@ -31,6 +31,13 @@ const API_MAP = {
       method: 'POST'
     }
   },
+  authors: {
+    getAll: { url: `${API_URL}/api/v1/Authors`, method: 'GET' },
+    getById: { url: `${API_URL}/api/v1/Authors/:id`, method: 'GET' },
+    create: { url: `${API_URL}/api/v1/Authors`, method: 'POST' },
+    update: { url: `${API_URL}/api/v1/Authors/:id`, method: 'PATCH' },
+    delete: { url: `${API_URL}/api/v1/Authors/:id`, method: 'DELETE' }
+  },
   books: {
     getAll: { url: `${API_URL}/api/v1/Books`, method: 'GET' },
     getById: { url: `${API_URL}/api/v1/Books/:id`, method: 'GET' },
