@@ -18,5 +18,7 @@
   "login": "Login",
   "loading": "Loading",
   "noAvailable": "No available",
-  "updatedBy": "Updated by"
+  "updatedBy": "Updated by",
+  "seeAll": "See all",
+  "search": "Search"
 }

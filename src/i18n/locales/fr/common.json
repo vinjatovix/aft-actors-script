@@ -18,5 +18,7 @@
   "login": "Connexion",
   "loading": "Chargement",
   "noAvailable": "Aucun disponible",
-  "updatedBy": "Mis à jour par"
+  "updatedBy": "Mis à jour par",
+  "seeAll": "Voir tout",
+  "search": "Rechercher"
 }

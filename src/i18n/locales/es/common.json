@@ -18,5 +18,7 @@
   "login": "Iniciar sesión",
   "loading": "Cargando",
   "noAvailable": "No hay disponibles",
-  "updatedBy": "Actualizado por"
+  "updatedBy": "Actualizado por",
+  "seeAll": "Ver todo",
+  "search": "Buscar"
 }

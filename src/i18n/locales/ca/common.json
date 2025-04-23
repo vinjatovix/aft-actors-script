@@ -17,5 +17,7 @@
   "logout": "Tancar sessió",
   "loading": "Carregant",
   "noAvailable": "No hi ha disponibles",
-  "updatedBy": "Actualitzat per"
+  "updatedBy": "Actualitzat per",
+  "seeAll": "Veure tot",
+  "search": "Cercar"
 }
