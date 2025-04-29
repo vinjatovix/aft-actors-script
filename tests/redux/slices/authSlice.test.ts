@@ -216,12 +216,12 @@ describe('authSlice', () => {
   it('should handle logout', () => {
     const action = { type: 'auth/logout' };
 
-    const state = authReducer(INITIAL_STATE, action);
-
-    expect(state).toEqual({
+    const state = authReducer({
       ...INITIAL_STATE,
-      token: null,
-      user: INITIAL_STATE.user
-    });
+      token: 'mockToken',
+      user: users[0]
+    }, action);
+
+    expect(state).toEqual(INITIAL_STATE);
   });
 });
