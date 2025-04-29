@@ -10,8 +10,8 @@ import { CharacterCard } from '../components/characters/CharacterCard';
 import Groups3OutlinedIcon from '@mui/icons-material/Groups3Outlined';
 import { PageHeader } from '../components/PageHeader';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { Button } from '@mui/material';
+import { useLocation } from 'react-router-dom';
+// import { Button } from '@mui/material';
 
 export const Characters = () => {
   const { t } = useTranslation('common');
@@ -21,7 +21,7 @@ export const Characters = () => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const bookId = params.get('book');
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const { characters, loading, error } = useSelector(
     (state: RootState) => state.character,

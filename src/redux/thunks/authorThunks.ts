@@ -32,7 +32,7 @@ export const getAllAuthors = createAsyncThunk(
         }
       });
 
-      return data;
+      return data?.sort((a, b) => a.name.localeCompare(b.name));
     } catch (error) {
       return rejectWithValue(
         handleError(error, 'Error al obtener los autores')

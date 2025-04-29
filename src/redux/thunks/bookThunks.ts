@@ -34,7 +34,7 @@ export const getAllBooks = createAsyncThunk(
         }
       });
 
-      return data;
+      return data?.sort((a, b) => a.title.localeCompare(b.title));
     } catch (error) {
       return rejectWithValue(handleError(error, 'Error al obtener los libros'));
     }
@@ -67,7 +67,7 @@ export const getBooksByAuthorId = createAsyncThunk(
         }
       });
 
-      return data;
+      return data?.sort((a, b) => a.title.localeCompare(b.title));
     } catch (error) {
       return rejectWithValue(handleError(error, 'Error al obtener los libros'));
     }
