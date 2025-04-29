@@ -9,6 +9,7 @@ import { Author } from '../../redux/interfaces/authorInterfaces';
 import { AuthorCard } from '../components/authors/AuthorCard';
 import { Button } from '@mui/material';
 import { AddButton } from '../components/buttons/AddButton';
+import { CreateAuthorModal } from '../components/authors/CreateAuthorModal';
 
 export const Authors = () => {
   const { t } = useTranslation('common');
@@ -19,9 +20,19 @@ export const Authors = () => {
     shallowEqual
   );
 
+  const [modalOpen, setModalOpen] = useState(false);
+
+
   useEffect(() => {
     dispatch(getAllAuthors());
   }, [dispatch]);
+
+  const handleModalOpen = () => {
+    setModalOpen(true);
+  };
+  const handleModalClose = () => {
+    setModalOpen(false);
+  };
 
   const filteredAuthors = useMemo(() => {
     const term = searchTerm.toLowerCase().trim();
@@ -70,10 +81,15 @@ export const Authors = () => {
 
       <AddButton
         icon={<AssignmentIndIcon />}
-        handleClick={() => {
-          console.log('Add Author button clicked');
-        }}
+        handleClick={handleModalOpen}
       />
+      {modalOpen && (
+
+        <CreateAuthorModal
+          open={modalOpen}
+          handleModalClose={handleModalClose}
+        />
+      )}
     </div>
   );
 };
