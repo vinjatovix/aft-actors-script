@@ -1,5 +1,8 @@
 import { API_MAP } from '../../../src/constants';
-import { getAllAuthors } from '../../../src/redux/thunks/authorThunks';
+import {
+  createAuthor,
+  getAllAuthors
+} from '../../../src/redux/thunks/authorThunks';
 import { handleFetch } from '../../../src/utils/handleFetch';
 import { authors } from '../../data';
 
@@ -61,6 +64,57 @@ describe('authorThunks', () => {
       const result = await thunk(mockDispatch, mockGetState, undefined);
 
       expect(result.type).toBe('authors/getAll/rejected');
+      expect(result.payload).toBe(errorMessage);
+    });
+  });
+
+  describe('createAuthor thunk', () => {
+    const author = {
+      name: 'John Doe',
+      id: '12345'
+    };
+
+    it('dispatches fulfilled action with created author data', async () => {
+      mockedHandleFetch.mockResolvedValueOnce({});
+
+      const thunk = createAuthor(author);
+      const result = await thunk(mockDispatch, mockGetState, undefined);
+
+      expect(result.type).toBe('authors/create/fulfilled');
+      expect(result.payload).toEqual(author);
+      expect(mockedHandleFetch).toHaveBeenCalledWith(
+        API_MAP.authors.create.url,
+        {
+          method: API_MAP.authors.create.method,
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${mockToken}`
+          },
+          body: JSON.stringify(author)
+        }
+      );
+      expect(mockDispatch).toHaveBeenCalledWith(result);
+    });
+
+    it('dispatches rejected action if token is missing', async () => {
+      const thunk = createAuthor(author);
+      const result = await thunk(
+        mockDispatch,
+        () => ({ auth: { token: null } }),
+        undefined
+      );
+
+      expect(result.type).toBe('authors/create/rejected');
+      expect(result.payload).toBe('No hay token disponible');
+    });
+
+    it('dispatches rejected action if fetch fails', async () => {
+      const errorMessage = 'Error de red';
+      mockedHandleFetch.mockRejectedValueOnce(new Error(errorMessage));
+      const thunk = createAuthor(author);
+      const result = await thunk(mockDispatch, mockGetState, undefined);
+
+      expect(result.type).toBe('authors/create/rejected');
       expect(result.payload).toBe(errorMessage);
     });
   });

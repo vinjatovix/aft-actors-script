@@ -40,3 +40,32 @@ export const getAllAuthors = createAsyncThunk(
     }
   }
 );
+
+export const createAuthor = createAsyncThunk(
+  'authors/create',
+  async (author: Author, { rejectWithValue, getState }) => {
+    try {
+      const {
+        auth: { token }
+      } = getState() as { auth: AuthState };
+
+      if (!token) {
+        throw new Error('No hay token disponible');
+      }
+
+      const url = API_MAP.authors.create.url;
+      await handleFetch<Author>(url, {
+        method: API_MAP.authors.create.method,
+        headers: {
+          ...DEFAULT_HEADERS,
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(author)
+      });
+
+      return author;
+    } catch (error) {
+      return rejectWithValue(handleError(error, 'Error al crear el autor'));
+    }
+  }
+);
