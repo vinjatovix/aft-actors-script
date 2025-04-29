@@ -72,4 +72,38 @@ describe('authorSlice', () => {
     };
     expect(authorReducer(INITIAL_STATE, action)).toEqual(expectedState);
   });
+
+  it('should handle createAuthor.pending', () => {
+    const action = { type: 'authors/create/pending' };
+    const expectedState = {
+      ...INITIAL_STATE,
+      loading: true,
+      error: null
+    };
+    expect(authorReducer(INITIAL_STATE, action)).toEqual(expectedState);
+  });
+
+  it('should handle createAuthor.fulfilled', () => {
+    const newAuthor = { id: '3', name: 'New Author' };
+    const action = {
+      type: 'authors/create/fulfilled',
+      payload: newAuthor
+    };
+    const expectedState = {
+      ...INITIAL_STATE,
+      loading: false,
+      authors: [...INITIAL_STATE.authors, newAuthor]
+    };
+    expect(authorReducer(INITIAL_STATE, action)).toEqual(expectedState);
+  });
+
+  it('should handle createAuthor.rejected', () => {
+    const action = { type: 'authors/create/rejected', payload: 'Error' };
+    const expectedState = {
+      ...INITIAL_STATE,
+      loading: false,
+      error: 'Error'
+    };
+    expect(authorReducer(INITIAL_STATE, action)).toEqual(expectedState);
+  });
 });
