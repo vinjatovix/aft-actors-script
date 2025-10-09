@@ -9,6 +9,8 @@ import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import { PageHeader } from '../components/PageHeader';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
+import { AddButton } from '../components/buttons/AddButton';
+import { CreateBookModal } from '../components/books/CreateBookModal';
 
 export const Books = () => {
   const { t } = useTranslation('common');
@@ -29,6 +31,8 @@ export const Books = () => {
     shallowEqual
   );
 
+  const [modalOpen, setModalOpen] = useState(false);
+
   useEffect(() => {
     if (authorId) {
       dispatch(getBooksByAuthorId(authorId));
@@ -36,6 +40,18 @@ export const Books = () => {
       dispatch(getAllBooks());
     }
   }, [dispatch, authorId]);
+
+  const handleModalOpen = () => {
+    setModalOpen(true);
+  };
+  const handleModalClose = () => {
+    setModalOpen(false);
+    if (authorId) {
+      dispatch(getBooksByAuthorId(authorId));
+    } else {
+      dispatch(getAllBooks());
+    }
+  };
 
   const filteredBooks = useMemo(() => {
     const term = searchTerm.toLowerCase().trim();
@@ -100,6 +116,11 @@ export const Books = () => {
 
       {!loading && !!books.length && (
         <div className="card-container">{bookCards}</div>
+      )}
+
+      <AddButton icon={<AutoStoriesIcon />} handleClick={handleModalOpen} />
+      {modalOpen && (
+        <CreateBookModal open={modalOpen} handleModalClose={handleModalClose} />
       )}
     </div>
   );

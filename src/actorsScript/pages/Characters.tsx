@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, /* useState */ } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/types';
 import {
@@ -12,6 +12,7 @@ import { PageHeader } from '../components/PageHeader';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 // import { Button } from '@mui/material';
+// import { books } from '../../../tests/data/books';
 
 export const Characters = () => {
   const { t } = useTranslation('common');
@@ -22,6 +23,10 @@ export const Characters = () => {
   const params = new URLSearchParams(location.search);
   const bookId = params.get('book');
   // const navigate = useNavigate();
+
+  // const [searchTerm, setSearchTerm] = useState('');
+
+  // const { books } = useSelector((state: RootState) => state.book, shallowEqual);
 
   const { characters, loading, error } = useSelector(
     (state: RootState) => state.character,
