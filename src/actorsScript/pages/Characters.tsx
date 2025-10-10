@@ -1,4 +1,4 @@
-import { useEffect, useMemo, /* useState */ } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/types';
 import {
@@ -10,7 +10,8 @@ import { CharacterCard } from '../components/characters/CharacterCard';
 import Groups3OutlinedIcon from '@mui/icons-material/Groups3Outlined';
 import { PageHeader } from '../components/PageHeader';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
 // import { Button } from '@mui/material';
 // import { books } from '../../../tests/data/books';
 
@@ -22,16 +23,16 @@ export const Characters = () => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const bookId = params.get('book');
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
-  // const [searchTerm, setSearchTerm] = useState('');
-
-  // const { books } = useSelector((state: RootState) => state.book, shallowEqual);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const { characters, loading, error } = useSelector(
     (state: RootState) => state.character,
     shallowEqual
   );
+
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     if (bookId) {
@@ -41,17 +42,54 @@ export const Characters = () => {
     }
   }, [dispatch, bookId]);
 
+  const filteredCharacters = useMemo(() => {
+    const term = searchTerm.toLowerCase().trim();
+    if (!term) return characters;
+
+    return characters.filter((character) => {
+      return (
+        character.name.toLowerCase().includes(term) ||
+        character.book?.title.toLowerCase().includes(term) ||
+        character.book?.author.name.toLowerCase().includes(term)
+      );
+    });
+  }, [searchTerm, characters]);
+
   const characterCards = useMemo(
     () =>
-      characters.map((character: Character) => (
+      filteredCharacters.map((character: Character) => (
         <CharacterCard key={character.id} {...character} />
       )),
-    [characters]
+    [filteredCharacters]
   );
 
   return (
     <div className="page">
       <PageHeader icon={<Groups3OutlinedIcon />} title={t('characters')} />
+
+      <input
+        type="text"
+        placeholder={`${t('search')} ${t('characters')} / ${t('books')} / ${t('author')}`}
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="search-input"
+      />
+
+      <Button
+        variant="outlined"
+        color="info"
+        onClick={() => {
+          if (bookId) {
+            navigate('/characters');
+          }
+          setSearchTerm('');
+        }}
+        className="reset-filter-button"
+        size="small"
+        sx={{ ml: '1rem' }}
+      >
+        {t('seeAll')}
+      </Button>
 
       {loading && (
         <p>

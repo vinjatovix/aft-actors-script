@@ -51,12 +51,14 @@ export const Relation = ({
       key={relation.character.id}
       sx={{ mt: 1 }}
     >
-      <DeleteButton
-        handleOnClick={() => handleRemoveRelation(index)}
-        testid={`remove-relation-${index}`}
-      />
+      <Grid size={{ xs: 1 }}>
+        <DeleteButton
+          handleOnClick={() => handleRemoveRelation(index)}
+          testid={`remove-relation-${index}`}
+        />
+      </Grid>
 
-      <Grid size={{ xs: 4 }}>
+      <Grid size={{ xs: 3 }}>
         {relation.character.id ? (
           <Typography variant="body1">{relation.character.name}</Typography>
         ) : (
@@ -104,11 +106,13 @@ export const Relation = ({
           </FormControl>
         )}
       </Grid>
-      <Grid size={{ xs: 7 }}>
+      <Grid size={{ xs: 8 }}>
         <TextField
           fullWidth
           label={t('circumstance')}
           variant="filled"
+          multiline
+          minRows={1} // cantidad mínima de líneas visibles
           value={relation.circumstance}
           onChange={(e) =>
             handleRelationChange(index, 'circumstance', e.target.value)

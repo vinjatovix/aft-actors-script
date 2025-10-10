@@ -124,9 +124,10 @@ export const CharacterBuildingView = ({
             <TextField
               key={field}
               name={field}
-              type="text"
               variant="filled"
               fullWidth
+              multiline
+              minRows={1} // cantidad mínima de líneas visibles
               placeholder={t(`${field}.placeholder`)}
               label={t(`${field}.label`)}
               value={formData[field]}
@@ -135,26 +136,28 @@ export const CharacterBuildingView = ({
           );
         })}
 
-        <RelationshipCircumstances
-          relations={relations}
-          setRelations={setRelations}
-          handleRelationChange={handleRelationChange}
-          characters={characterBuilding.scene.characters.filter(
-            (character) => character.id !== characterBuilding.character.id
-          )}
-          setFormData={setFormData}
-        />
+        <Grid container size={{ xs: 12 }}>
+          <RelationshipCircumstances
+            relations={relations}
+            setRelations={setRelations}
+            handleRelationChange={handleRelationChange}
+            characters={characterBuilding.scene.characters.filter(
+              (character) => character.id !== characterBuilding.character.id
+            )}
+            setFormData={setFormData}
+          />
 
-        <ActionUnits formData={formData} setFormData={setFormData} />
-      </Grid>
+          <ActionUnits formData={formData} setFormData={setFormData} />
+        </Grid>
 
-      <Grid size={{ xs: 12 }} sx={{ mt: 10 }}>
-        <Button variant="contained" color="error" onClick={handleDelete}>
-          <Delete sx={{ fontSize: 30, mr: 1 }} />
-          <Typography fontSize={14} fontWeight="bold" color="secondary.main">
-            {t('delete')}
-          </Typography>
-        </Button>
+        <Grid size={{ xs: 12 }} sx={{ mt: 10 }}>
+          <Button variant="contained" color="error" onClick={handleDelete}>
+            <Delete sx={{ fontSize: 30, mr: 1 }} />
+            <Typography fontSize={14} fontWeight="bold" color="secondary.main">
+              {t('delete')}
+            </Typography>
+          </Button>
+        </Grid>
       </Grid>
     </Grid>
   );
