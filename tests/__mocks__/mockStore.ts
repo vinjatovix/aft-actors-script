@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from '../../src/redux/slices/authSlice';
+import authorReducer from '../../src/redux/slices/authorSlice';
 import bookReducer from '../../src/redux/slices/bookSlice';
 import characterReducer from '../../src/redux/slices/characterSlice';
 import sceneReducer from '../../src/redux/slices/sceneSlice';
@@ -12,6 +13,7 @@ export const mockStore = (
   configureStore({
     reducer: {
       auth: authReducer,
+      author: authorReducer,
       book: bookReducer,
       character: characterReducer,
       scene: sceneReducer,

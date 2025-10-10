@@ -28,6 +28,11 @@ describe('characterBuildingThunks', () => {
       loading: false,
       error: null
     },
+    author: {
+      authors: [],
+      loading: false,
+      error: null
+    },
     characterBuilding: {
       characterBuildings: [],
       loading: false,
@@ -213,6 +218,11 @@ describe('characterBuildingThunks', () => {
           loading: false,
           error: null
         },
+        author: {
+          authors: [],
+          loading: false,
+          error: null
+        },
         characterBuilding: {
           characterBuildings: [],
           loading: false,
@@ -256,6 +266,11 @@ describe('characterBuildingThunks', () => {
             roles: [],
             email: null
           },
+          loading: false,
+          error: null
+        },
+        author: {
+          authors: [],
           loading: false,
           error: null
         },

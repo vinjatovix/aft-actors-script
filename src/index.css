@@ -207,3 +207,23 @@ body {
   transition: box-shadow 0.3s ease;
   transform: scale(1.02);
 }
+
+.search-input {
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+.search-input:focus {
+  outline: none;
+  border-color: #000000;
+}
+.search-input::placeholder {
+  color: #aaa;
+}
+.search-input:disabled {
+  background-color: #f0f0f0;
+  cursor: not-allowed;
+}

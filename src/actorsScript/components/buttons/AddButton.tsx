@@ -20,7 +20,9 @@ export const AddButton = ({ icon, handleClick }: {
                 backgroundColor: 'white',
                 boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
             },
-        }} onClick={handleClick}>
+        }} onClick={handleClick}
+            aria-label="add"
+        >
 
             <Add />
             {icon}

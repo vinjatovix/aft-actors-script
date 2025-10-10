@@ -18,5 +18,7 @@
   "login": "Entrar",
   "loading": "Carregando",
   "noAvailable": "Não há disponíveis",
-  "updatedBy": "Atualizado por"
+  "updatedBy": "Atualizado por",
+  "seeAll": "Ver tudo",
+  "search": "Pesquisar"
 }

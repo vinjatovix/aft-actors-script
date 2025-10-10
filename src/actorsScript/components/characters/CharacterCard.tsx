@@ -11,6 +11,7 @@ export const CharacterCard = React.memo((character: Character) => {
 
   return (
     <div className="card">
+      <h2>{character.name}</h2>
       {character.metadata && (
         <Typography variant="body2" color="textSecondary">
           {t('updatedBy')} {character.metadata.updatedBy}{' '}
@@ -18,9 +19,8 @@ export const CharacterCard = React.memo((character: Character) => {
         </Typography>
       )}
 
-      <h2>{character.name}</h2>
-      <p>Obra: {character.book?.title}</p>
-      <p>Autor: {character.book?.author.name}</p>
+      {/* <p>Obra: {character.book?.title}</p> */}
+      {/* <p>Autor: {character.book?.author.name}</p> */}
     </div>
   );
 });

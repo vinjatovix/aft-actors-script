@@ -6,9 +6,11 @@ import { CharacterState } from './interfaces/characterInterfaces';
 import { SceneState } from './interfaces/sceneInterfaces';
 import { CharacterBuildingState } from './interfaces/characterBuildingInterfaces';
 import { LangState } from './interfaces/langInterfaces';
+import { AuthorState } from './interfaces/authorInterfaces';
 
 export type RootState = {
   auth: AuthState;
+  author: AuthorState;
   book: BookState;
   character: CharacterState;
   scene: SceneState;

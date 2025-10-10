@@ -23,20 +23,21 @@ import {
   createCharacterBuilding,
   getAllCharacterBuildings
 } from '../../../redux/thunks/characterBuildingThunks';
-import { authors } from '../../../../tests/data';
+
 import { useTranslation } from 'react-i18next';
+import { getAllAuthors } from '../../../redux/thunks/authorThunks';
 
 const style = {
   position: 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '90%', // Use width 90% for responsiveness
-  maxWidth: 600, // Max width to avoid it getting too big on larger screens
+  width: '90%',
+  maxWidth: 600,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
-  p: 4, // Padding inside the modal
+  p: 4
 };
 
 export const CreateCharacterBuildingModal = ({
@@ -63,9 +64,14 @@ export const CreateCharacterBuildingModal = ({
     characters: { id: string; name: string }[];
   } | null>(null);
 
+  const { authors } = useSelector((state: RootState) => state.author);
   const { books } = useSelector((state: RootState) => state.book);
   const { characters } = useSelector((state: RootState) => state.character);
   const { scenes } = useSelector((state: RootState) => state.scene);
+
+  useEffect(() => {
+    dispatch(getAllAuthors());
+  }, [dispatch]);
 
   useEffect(() => {
     if (author?.id) {

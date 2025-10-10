@@ -14,6 +14,10 @@ jest.mock('react-redux', () => ({
   useSelector: jest.fn()
 }));
 
+jest.mock('../../../../src/redux/thunks/authorThunks', () => ({
+  getAllAuthors: jest.fn(() => () => Promise.resolve(authors)),
+}));
+
 jest.mock('../../../../src/redux/thunks/bookThunks', () => ({
   getBooksByAuthorId: jest.fn((authorId) => () => Promise.resolve(authorId))
 }));
